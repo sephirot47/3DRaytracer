@@ -1,5 +1,18 @@
 #include "Sphere.h"
 
+Sphere::Sphere()
+{
+  radius = 1.0f;
+}
+
+Sphere::Sphere(const glm::vec3& center, float radius)
+{
+  this->center = center;
+  this->radius = radius;
+}
+    
+Sphere::~Sphere() {}
+    
 bool Sphere::GetIntersection(const Ray &ray, glm::vec3 &intersectionPoint, glm::vec3 &normal)
 {
     glm::vec3 rayFarPoint = ray.origin + ray.dir * 99999.9f;
