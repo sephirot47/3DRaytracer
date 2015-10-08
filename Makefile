@@ -1,22 +1,23 @@
 all: main.exe
 
-main.o: main.cpp
-	g++ -O2 -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system -c main.cpp -o main.o
+main.exe: obj/main.o obj/Scene.o obj/Sphere.o obj/Ray.o obj/Primitive.o
+	g++ -O2 obj/main.o obj/Scene.o obj/Primitive.o obj/Sphere.o obj/Ray.o -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o main.exe
+	./main.exe
 	
-main.exe: main.o Scene.o Sphere.o Ray.o Primitive.o
-	g++ -O2 main.o Scene.o Primitive.o Sphere.o Ray.o -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o main.exe
+obj/main.o: src/main.cpp
+	g++ -O2 -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system -c src/main.cpp -o obj/main.o
 	
-Primitive.o: Primitive.cpp
-	g++ -O2 -c Primitive.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o Primitive.o
+obj/Primitive.o: src/Primitive.cpp
+	g++ -O2 -c src/Primitive.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o obj/Primitive.o
 	
-Sphere.o: Sphere.cpp
-	g++ -O2 -c Sphere.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o Sphere.o
+obj/Sphere.o: src/Sphere.cpp
+	g++ -O2 -c src/Sphere.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o obj/Sphere.o
 	
-Scene.o: Scene.cpp
-	g++ -O2 -c Scene.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o Scene.o
+obj/Scene.o: src/Scene.cpp
+	g++ -O2 -c src/Scene.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o obj/Scene.o
 
-Ray.o: Ray.cpp
-	g++ -O2 -c Ray.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o Ray.o	
+obj/Ray.o: src/Ray.cpp
+	g++ -O2 -c src/Ray.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o obj/Ray.o	
 
 clean:
-	rm -rf *.o *.exe
+	rm -rf obj/*.o obj/*.exe

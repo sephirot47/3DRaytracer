@@ -3,9 +3,7 @@
 #include "glm/glm.hpp"
 #include <SFML/Graphics.hpp>
 
-#include "Scene.h"
-#include "Sphere.h"
-#include "Ray.h"
+#include "../include/Scene.h"
 
 using namespace std;
 

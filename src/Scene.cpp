@@ -1,4 +1,4 @@
-#include "Scene.h"
+#include "../include/Scene.h"
 
 int Scene::WindowWidth  = 450;
 int Scene::WindowHeight = 350;
