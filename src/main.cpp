@@ -19,7 +19,6 @@ int main()
     {
       if (event.type == sf::Event::Closed) window.close();
     }
-
     scene.Draw(window);
   }
   return 0;

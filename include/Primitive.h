@@ -2,6 +2,7 @@
 #define PRIMITIVE_H
 
 #include "glm/glm.hpp"
+#include "Intersection.h"
 #include "Ray.h"
 
 class Primitive

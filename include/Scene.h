@@ -3,9 +3,11 @@
 
 #include "glm/glm.hpp"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <vector>
 
 #include "Sphere.h"
+#include "Cube.h"
 #include "Ray.h"
 
 using namespace std;
@@ -20,10 +22,15 @@ private:
 
   void GetRayFromPixel(int pixelX, int pixelY, Ray &ray);
   
+  void ClearDepthBuffer();
+  float GetDepthAt(int pixelX, int pixelY);
+  void SetDepthAt(int pixelX, int pixelY, float depth);
+  
 public:
   static int WindowWidth, WindowHeight;
     
   vector<Primitive*> primitives;
+  vector<float> depthBuffer;
   float timeCount;
     
   Scene();
