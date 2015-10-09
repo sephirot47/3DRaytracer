@@ -10,7 +10,7 @@ class Primitive
 public:
     Primitive();
     virtual ~Primitive();
-    
+
     glm::vec3 center;
 
     virtual bool GetIntersection(const Ray &ray, Intersection &intersectionResult) = 0;
