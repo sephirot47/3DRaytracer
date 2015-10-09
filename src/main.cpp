@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "glm/glm.hpp"
+#include "../include/glm/glm.hpp"
 #include <SFML/Graphics.hpp>
 
 #include "../include/Scene.h"

@@ -12,7 +12,7 @@ public:
     
     glm::vec3 center;
 
-    virtual bool GetIntersection(const Ray &ray, glm::vec3 &intersectionPoint, glm::vec3 &normal) = 0;
+    virtual bool GetIntersection(const Ray &ray, Intersection &intersectionResult) = 0;
 };
 
 #endif

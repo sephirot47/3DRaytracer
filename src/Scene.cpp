@@ -52,11 +52,11 @@ void Scene::Draw(sf::RenderWindow &window)
       for(Primitive *primitive : primitives) 
       {
 	sf::Color pixelColor;
-	glm::vec3 intersection, normal;
-	if(primitive->GetIntersection(ray, intersection, normal))
+        Intersection intersection;
+	if(primitive->GetIntersection(ray, intersection))
 	{
 	    pixelColor = sf::Color(255, 0, 0);
-	    float dot = glm::dot(-lightDir, normal);
+	    float dot = glm::dot(-lightDir, intersection.normal);
 	    dot = dot < 0.0f ? 0.0f : (dot > 1.0f ? 1.0f : dot);
 	    pixelColor = sf::Color(pixelColor.r * dot, pixelColor.g * dot, pixelColor.b * dot);
 	}

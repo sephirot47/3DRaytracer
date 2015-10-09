@@ -20,4 +20,4 @@ obj/Ray.o: src/Ray.cpp
 	g++ -O2 -c src/Ray.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o obj/Ray.o	
 
 clean:
-	rm -rf obj/*.o obj/*.exe
+	rm -rf obj/*.o *.exe

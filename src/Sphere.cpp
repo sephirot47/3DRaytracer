@@ -13,7 +13,7 @@ Sphere::Sphere(const glm::vec3& center, float radius)
     
 Sphere::~Sphere() {}
     
-bool Sphere::GetIntersection(const Ray &ray, glm::vec3 &intersectionPoint, glm::vec3 &normal)
+bool Sphere::GetIntersection(const Ray &ray, Intersection &intersectionResult)
 {
     glm::vec3 rayFarPoint = ray.origin + ray.dir * 99999.9f;
     
@@ -34,8 +34,8 @@ bool Sphere::GetIntersection(const Ray &ray, glm::vec3 &intersectionPoint, glm::
 
     if ( D < 0.0f )
     {
-        intersectionPoint = glm::vec3(0.0f);
-        normal = glm::normalize(intersectionPoint - center);
+        intersectionResult.point = glm::vec3(0.0f);
+        intersectionResult.normal = glm::normalize(intersectionResult.point - center);
         return false;
     }
 
@@ -47,8 +47,8 @@ bool Sphere::GetIntersection(const Ray &ray, glm::vec3 &intersectionPoint, glm::
     
     if ( D == 0.0f ) 
     { 
-        intersectionPoint = solution1;
-        normal = glm::normalize(intersectionPoint - center);
+        intersectionResult.point = solution1;
+        intersectionResult.normal = glm::normalize(intersectionResult.point - center);
         return true;
     }
     
@@ -57,11 +57,10 @@ bool Sphere::GetIntersection(const Ray &ray, glm::vec3 &intersectionPoint, glm::
                                      ray.origin.y * ( 1.0f - t2 ) + t2 * rayFarPoint.y,
                                      ray.origin.z * ( 1.0f - t2 ) + t2 * rayFarPoint.z );
 
-    if (glm::length(ray.origin - solution1) < glm::length(ray.origin - solution2)) intersectionPoint = solution1; 
-    else intersectionPoint = solution2;
+    if (glm::length(ray.origin - solution1) < glm::length(ray.origin - solution2)) intersectionResult.point = solution1; 
+    else intersectionResult.point = solution2;
     
-    
-    normal = glm::normalize(intersectionPoint - center);
+    intersectionResult.normal = glm::normalize(intersectionResult.point - center);
     return true;
 }
  
