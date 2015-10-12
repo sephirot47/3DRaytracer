@@ -18,13 +18,13 @@ Scene::Scene()
     timeCount = 0.0f;
 
     Sphere *sphere = new Sphere(glm::vec3(sin(timeCount) * 2.5f, 0.0f, 10.0f),  0.5f);
-    primitives.push_back(sphere);
+    //primitives.push_back(sphere);
 
     Sphere *sphere2 = new Sphere(glm::vec3(0.0f, 0.0f, 10.0f),  0.5f);
-    primitives.push_back(sphere2);
+    //primitives.push_back(sphere2);
 
-    //Cube *cube = new Cube(glm::vec3(0.0f, 0.0f, 12.0f),  0.1f);
-    //primitives.push_back(cube);
+    Cube *cube = new Cube(glm::vec3(0.0f, 0.0f, 10.0f),  0.5f);
+    primitives.push_back(cube);
 
     depthBuffer = vector<float>(WindowWidth * WindowHeight);
     ClearDepthBuffer();
