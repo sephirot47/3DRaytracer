@@ -9,6 +9,7 @@
 #include "Sphere.h"
 #include "Cube.h"
 #include "Ray.h"
+#include "Light.h"
 
 using namespace std;
 
@@ -31,6 +32,7 @@ public:
   static int WindowWidth, WindowHeight;
 
   vector<Primitive*> primitives;
+  vector<Light*> lights;
   vector<float> depthBuffer;
   float timeCount;
 
@@ -38,6 +40,7 @@ public:
   virtual ~Scene();
 
   void Draw(sf::RenderWindow &window);
+  bool RayTrace(const Ray& ray, Intersection &intersection) const;
 };
 
 #endif
