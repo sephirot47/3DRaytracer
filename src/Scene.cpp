@@ -108,8 +108,8 @@ void Scene::Draw(sf::RenderWindow &window)
     ClearDepthBuffer();
 
     timeCount += 0.005f;
-    //primitives[0]->center = glm::dvec3(sin(timeCount) * 2.5f, -cos(timeCount) * 2.5f, 10.0);
-    //primitives[1]->center = glm::dvec3(-sin(timeCount * 2.0) * 2.5f, cos(timeCount * 3.0) * 2.5f, 10.0);
+    primitives[0]->center = glm::dvec3(-2.5f, cos(timeCount*2.0) * 2.5f, 10.0);
+    primitives[1]->center = glm::dvec3( 2.5f, cos(timeCount*2.0) * 2.5f, 10.0);
     //primitives[2]->center = glm::dvec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0) * 2.5f, 10.0);
 
     for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
@@ -132,7 +132,9 @@ void Scene::Draw(sf::RenderWindow &window)
             }
         }
     }
-
+  
+  for (int i = 0; i < WindowWidth; ++i) frameBuffer.setPixel(i,WindowHeight/2, sf::Color::Green);
+  for (int i = 0; i < WindowHeight; ++i) frameBuffer.setPixel(WindowWidth/2,i, sf::Color::Green);
   sf::Texture texture; texture.loadFromImage(frameBuffer);
 
   sf::Sprite sprite; sprite.setTexture(texture);
