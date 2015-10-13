@@ -17,14 +17,14 @@ Scene::Scene()
     frameBuffer.create(WindowWidth, WindowHeight);
     timeCount = 0.0;
 
-    Sphere *sphere = new Sphere(glm::dvec3(sin(timeCount) * 2.5f, 0.0, 10.0),  0.5f);
+    Sphere *sphere = new Sphere(glm::dvec3(2.5f, 0.1, 10.0),  0.5f);
     primitives.push_back(sphere);
 
-    Sphere *sphere2 = new Sphere(glm::dvec3(0.0, 5.0, 10.0),  0.5f);
+    Sphere *sphere2 = new Sphere(glm::dvec3(-2.5f, 0.0, 10.0),  0.5f);
     primitives.push_back(sphere2);
 
     Cube *cube = new Cube(glm::dvec3(0.0, 0.0, 10.0),  0.5f);
-    primitives.push_back(cube);
+    //primitives.push_back(cube);
 
     Light *light = new Light();
     light->type = LightType::Directional;
@@ -32,7 +32,14 @@ Scene::Scene()
     light->intensity = 5.0;
     light->center = glm::dvec3(0.0, 0.0, 7.0);
     light->dir = glm::dvec3(0.0, -1.0, 0.0);
-    lights.push_back(light);
+    //lights.push_back(light);
+
+    Light *light2 = new Light();
+    light2->type = LightType::Point;
+    light2->range = 0.4f;
+    light2->intensity = 5.0;
+    light2->center = glm::dvec3(0.0, 0.0, 10.0);
+    lights.push_back(light2);
 
     depthBuffer = vector<double>(WindowWidth * WindowHeight);
     ClearDepthBuffer();
@@ -101,9 +108,9 @@ void Scene::Draw(sf::RenderWindow &window)
     ClearDepthBuffer();
 
     timeCount += 0.005f;
-    primitives[0]->center = glm::dvec3(sin(timeCount) * 2.5f, -cos(timeCount) * 2.5f, 10.0);
-    primitives[1]->center = glm::dvec3(-sin(timeCount * 2.0) * 2.5f, cos(timeCount * 3.0) * 2.5f, 10.0);
-    primitives[2]->center = glm::dvec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0) * 2.5f, 10.0);
+    //primitives[0]->center = glm::dvec3(sin(timeCount) * 2.5f, -cos(timeCount) * 2.5f, 10.0);
+    //primitives[1]->center = glm::dvec3(-sin(timeCount * 2.0) * 2.5f, cos(timeCount * 3.0) * 2.5f, 10.0);
+    //primitives[2]->center = glm::dvec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0) * 2.5f, 10.0);
 
     for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
     {
