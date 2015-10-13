@@ -25,7 +25,7 @@ bool Cube::GetIntersection(const Ray &ray, Intersection &intersectionResult)
   //https://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm
   glm::dvec3 lowestCorner = GetLowestCorner();
   glm::dvec3 highestCorner = GetHighestCorner();
-  double Tnear = -999999.0, Tfar = 999999.9;
+  double Tnear = -99999.0, Tfar = 99999.9;
   for(int i = 0; i < 3; ++i)
   {
     if (ray.dir[i] == 0)
@@ -45,7 +45,7 @@ bool Cube::GetIntersection(const Ray &ray, Intersection &intersectionResult)
   }
 
   //with intersection point Tnear and exit point Tfar.
-  intersectionResult.point = ray.dir * Tnear;
+  intersectionResult.point = ray.origin + ray.dir * Tnear;
 
   glm::dvec3 p = intersectionResult.point;
   double epsilon = 0.001;
