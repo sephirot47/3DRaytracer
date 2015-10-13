@@ -6,10 +6,10 @@
 class Sphere : public Primitive
 {
 public:
-    float radius;
+    double radius;
     
     Sphere();
-    Sphere(const glm::vec3& center, float radius);
+    Sphere(const glm::dvec3& center, double radius);
     virtual ~Sphere();
     
     virtual bool GetIntersection(const Ray &ray, Intersection &intersectionResult) override;

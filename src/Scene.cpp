@@ -3,38 +3,38 @@
 int Scene::WindowWidth  = 800;
 int Scene::WindowHeight = 600;
 
-float Scene::AspectRatio = float(Scene::WindowWidth) / Scene::WindowHeight;
+double Scene::AspectRatio = double(Scene::WindowWidth) / Scene::WindowHeight;
 
-float Scene::Fov  = 60; //degrees
-float Scene::RFov = Scene::Fov * 3.1415926535f/180.0f; //rads
+double Scene::Fov  = 60; //degrees
+double Scene::RFov = Scene::Fov * 3.1415926535f/180.0; //rads
 
-float Scene::ZNear = 5.0f;
-float Scene::ViewportWidth  = Scene::ZNear * tan(Scene::RFov/2);
-float Scene::ViewportHeight = Scene::ViewportWidth / Scene::AspectRatio;
+double Scene::ZNear = 5.0;
+double Scene::ViewportWidth  = Scene::ZNear * tan(Scene::RFov/2);
+double Scene::ViewportHeight = Scene::ViewportWidth / Scene::AspectRatio;
 
 Scene::Scene()
 {
     frameBuffer.create(WindowWidth, WindowHeight);
-    timeCount = 0.0f;
+    timeCount = 0.0;
 
-    Sphere *sphere = new Sphere(glm::vec3(sin(timeCount) * 2.5f, 0.0f, 10.0f),  0.5f);
+    Sphere *sphere = new Sphere(glm::dvec3(sin(timeCount) * 2.5f, 0.0, 10.0),  0.5f);
     primitives.push_back(sphere);
 
-    Sphere *sphere2 = new Sphere(glm::vec3(0.0f, 5.0f, 10.0f),  0.5f);
+    Sphere *sphere2 = new Sphere(glm::dvec3(0.0, 5.0, 10.0),  0.5f);
     primitives.push_back(sphere2);
 
-    Cube *cube = new Cube(glm::vec3(0.0f, 0.0f, 10.0f),  0.5f);
+    Cube *cube = new Cube(glm::dvec3(0.0, 0.0, 10.0),  0.5f);
     primitives.push_back(cube);
 
     Light *light = new Light();
     light->type = LightType::Directional;
     light->range = 0.4f;
-    light->intensity = 5.0f;
-    light->center = glm::vec3(0.0f, 0.0f, 7.0f);
-    light->dir = glm::vec3(0.0f, -1.0f, 0.0f);
+    light->intensity = 5.0;
+    light->center = glm::dvec3(0.0, 0.0, 7.0);
+    light->dir = glm::dvec3(0.0, -1.0, 0.0);
     lights.push_back(light);
 
-    depthBuffer = vector<float>(WindowWidth * WindowHeight);
+    depthBuffer = vector<double>(WindowWidth * WindowHeight);
     ClearDepthBuffer();
 }
 
@@ -46,16 +46,16 @@ Scene::~Scene()
 
 void Scene::GetRayFromPixel(int pixelX, int pixelY, Ray &ray)
 {
-  float x =  ViewportWidth  * ( float(pixelX) / (WindowWidth /2) );
-  float y = -ViewportHeight * ( float(pixelY) / (WindowHeight/2) );
-  float z = ZNear;
+  double x =  ViewportWidth  * ( double(pixelX) / (WindowWidth /2) );
+  double y = -ViewportHeight * ( double(pixelY) / (WindowHeight/2) );
+  double z = ZNear;
 
-  ray.dir = glm::vec3(x,y,z);
+  ray.dir = glm::dvec3(x,y,z);
 }
 
 void Scene::ClearDepthBuffer()
 {
-    for(int i = 0; i < depthBuffer.size(); ++i) depthBuffer[i] = 999999999.0f;
+    for(int i = 0; i < depthBuffer.size(); ++i) depthBuffer[i] = 999999999.0;
 }
 
 void Scene::ClearFrameBuffer(sf::Color clearColor) {
@@ -63,26 +63,26 @@ void Scene::ClearFrameBuffer(sf::Color clearColor) {
 }
 
 
-float Scene::GetDepthAt(int pixelX, int pixelY)
+double Scene::GetDepthAt(int pixelX, int pixelY)
 {
     return depthBuffer[pixelX + WindowWidth/2 + (pixelY + WindowHeight/2) * WindowWidth];
 }
 
-void Scene::SetDepthAt(int pixelX, int pixelY, float depth)
+void Scene::SetDepthAt(int pixelX, int pixelY, double depth)
 {
     depthBuffer[pixelX + WindowWidth/2 + (pixelY + WindowHeight/2) * WindowWidth] = depth;
 }
 
 bool Scene::RayTrace(const Ray& ray, Intersection &intersection) const
 {
-  float minDist;
+  double minDist;
   Intersection inter;
   bool intersected = false;
   for(Primitive *primitive : primitives)
   {
       if(primitive->GetIntersection(ray, inter))
       {
-        float dist = glm::length(ray.origin-inter.point);
+        double dist = glm::length(ray.origin - inter.point);
         if (dist < minDist || !intersected) {
           minDist = dist;
           intersection = inter;
@@ -101,9 +101,9 @@ void Scene::Draw(sf::RenderWindow &window)
     ClearDepthBuffer();
 
     timeCount += 0.005f;
-    primitives[0]->center = glm::vec3(sin(timeCount) * 2.5f, -cos(timeCount) * 2.5f, 10.0f);
-    primitives[1]->center = glm::vec3(-sin(timeCount * 2.0f) * 2.5f, cos(timeCount * 3.0f) * 2.5f, 10.0f);
-    primitives[2]->center = glm::vec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0f) * 2.5f, 10.0f);
+    primitives[0]->center = glm::dvec3(sin(timeCount) * 2.5f, -cos(timeCount) * 2.5f, 10.0);
+    primitives[1]->center = glm::dvec3(-sin(timeCount * 2.0) * 2.5f, cos(timeCount * 3.0) * 2.5f, 10.0);
+    primitives[2]->center = glm::dvec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0) * 2.5f, 10.0);
 
     for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
     {

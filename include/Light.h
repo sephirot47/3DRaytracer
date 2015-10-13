@@ -15,10 +15,10 @@ class Light
 public:
     LightType type;
 
-    glm::vec3 center;
-    glm::vec3 dir;
+    glm::dvec3 center;
+    glm::dvec3 dir;
 
-    float range, intensity;
+    double range, intensity;
     sf::Color color;
 
     Light();

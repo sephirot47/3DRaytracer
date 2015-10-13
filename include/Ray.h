@@ -7,11 +7,11 @@
 class Ray
 {
 public:
-    glm::vec3 origin;
-    glm::vec3 dir;
+    glm::dvec3 origin;
+    glm::dvec3 dir;
 
     Ray();
-    Ray(const glm::vec3 &origin,  const glm::vec3 &dir);
+    Ray(const glm::dvec3 &origin,  const glm::dvec3 &dir);
     virtual ~Ray();
 
     Ray reflect(const Intersection &intersection);
