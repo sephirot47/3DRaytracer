@@ -61,7 +61,7 @@ sf::Color Light::LightIt(const Scene& scene, const sf::Color& color, const Inter
     return sf::Color(r,g,b);
   }
 
-  double shadow = 0.0f;
+  double shadow = 0.1;
   unsigned char r = (unsigned char) glm::clamp(color.r * shadow, .0, 255.0);
   unsigned char g = (unsigned char) glm::clamp(color.g * shadow, .0, 255.0);
   unsigned char b = (unsigned char) glm::clamp(color.b * shadow, .0, 255.0);
