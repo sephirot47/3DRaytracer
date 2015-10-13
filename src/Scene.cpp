@@ -18,10 +18,10 @@ Scene::Scene()
     timeCount = 0.0f;
 
     Sphere *sphere = new Sphere(glm::vec3(sin(timeCount) * 2.5f, 0.0f, 10.0f),  0.5f);
-    //primitives.push_back(sphere);
+    primitives.push_back(sphere);
 
-    Sphere *sphere2 = new Sphere(glm::vec3(0.0f, 0.0f, 10.0f),  0.5f);
-    //primitives.push_back(sphere2);
+    Sphere *sphere2 = new Sphere(glm::vec3(0.0f, 5.0f, 10.0f),  0.5f);
+    primitives.push_back(sphere2);
 
     Cube *cube = new Cube(glm::vec3(0.0f, 0.0f, 10.0f),  0.5f);
     primitives.push_back(cube);
@@ -71,8 +71,10 @@ void Scene::Draw(sf::RenderWindow &window)
     ClearDepthBuffer();
 
     timeCount += 0.005f;
-    primitives[0]->center = glm::vec3(sin(timeCount) * 2.5f, 0.0f, 10.0f);
-    glm::vec3 lightDir = glm::normalize(glm::vec3(1.0f, 0.0f, 1.0f));
+    primitives[0]->center = glm::vec3(sin(timeCount) * 2.5f, -cos(timeCount) * 2.5f, 10.0f);
+    primitives[1]->center = glm::vec3(-sin(timeCount * 2.0f) * 2.5f, cos(timeCount * 3.0f) * 2.5f, 10.0f);
+    primitives[2]->center = glm::vec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0f) * 2.5f, 10.0f);
+    glm::vec3 lightDir = glm::normalize(glm::vec3(2.0f, 1.0f, 1.0f));
 
     for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
     {
