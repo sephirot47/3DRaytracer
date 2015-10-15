@@ -24,22 +24,19 @@ Scene::Scene()
     primitives.push_back(sphere2);
 
     Cube *cube = new Cube(glm::dvec3(0.0, 0.0, 10.0),  0.5f);
-    //primitives.push_back(cube);
+    primitives.push_back(cube);
 
-    Light *light = new Light();
-    light->type = LightType::Directional;
+    PointLight *light = new PointLight();
     light->range = 0.4f;
     light->intensity = 5.0;
     light->center = glm::dvec3(0.0, 0.0, 7.0);
-    light->dir = glm::dvec3(0.0, -1.0, 0.0);
-    //lights.push_back(light);
+    lights.push_back(light);
 
-    Light *light2 = new Light();
-    light2->type = LightType::Point;
+    /*Light *light2 = new Light();
     light2->range = 0.4f;
     light2->intensity = 5.0;
     light2->center = glm::dvec3(0.0, 0.0, 10.0);
-    lights.push_back(light2);
+    lights.push_back(light2);*/
 
     depthBuffer = vector<double>(WindowWidth * WindowHeight);
     ClearDepthBuffer();
@@ -108,9 +105,9 @@ void Scene::Draw(sf::RenderWindow &window)
     ClearDepthBuffer();
 
     timeCount += 0.005f;
-    primitives[0]->center = glm::dvec3(-2.5f, cos(timeCount*2.0) * 2.5f, 10.0);
-    primitives[1]->center = glm::dvec3( 2.5f, cos(timeCount*2.0) * 2.5f, 10.0);
-    //primitives[2]->center = glm::dvec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0) * 2.5f, 10.0);
+    primitives[0]->center = glm::dvec3(-2.5f, cos(timeCount*2.0) * 2.5f, 10.0 + cos(timeCount * 2.0) * 3.0);
+    primitives[1]->center = glm::dvec3( 2.5f, cos(timeCount*2.0) * 2.5f, 10.0 + sin(timeCount * 4.0) * 2.5);
+    primitives[2]->center = glm::dvec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0) * 2.5f, 10.0 + sin(timeCount * 3.0) * 2.0);
 
     for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
     {
@@ -132,7 +129,7 @@ void Scene::Draw(sf::RenderWindow &window)
             }
         }
     }
-  
+
   for (int i = 0; i < WindowWidth; ++i) frameBuffer.setPixel(i,WindowHeight/2, sf::Color::Green);
   for (int i = 0; i < WindowHeight; ++i) frameBuffer.setPixel(WindowWidth/2,i, sf::Color::Green);
   sf::Texture texture; texture.loadFromImage(frameBuffer);

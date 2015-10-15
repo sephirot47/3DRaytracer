@@ -6,17 +6,11 @@ using namespace std;
 Light::Light()
 {
   center = glm::dvec3(0.0);
-  dir = glm::dvec3(0.0, 0.0, 1.0);
-  range = 5.0;
-  intensity = 5.0;
   color = sf::Color(255, 255, 255);
-
-  type = LightType::Directional;
 }
-
 Light::~Light() {}
 
-sf::Color Light::LightIt(const Scene& scene, const sf::Color& color, const Intersection& intersection)
+/*sf::Color Light::LightIt(const Scene& scene, const sf::Color& color, const Intersection& intersection)
 {
 
   Ray ray;
@@ -68,4 +62,4 @@ sf::Color Light::LightIt(const Scene& scene, const sf::Color& color, const Inter
   unsigned char g = (unsigned char) glm::clamp(color.g * shadow, .0, 255.0);
   unsigned char b = (unsigned char) glm::clamp(color.b * shadow, .0, 255.0);
   return sf::Color(r,g,b);
-}
+}*/

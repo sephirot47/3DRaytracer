@@ -10,13 +10,13 @@ Sphere::Sphere(const glm::dvec3& center, double radius)
   this->center = center;
   this->radius = radius;
 }
-    
+
 Sphere::~Sphere() {}
-    
+
 bool Sphere::GetIntersection(const Ray &ray, Intersection &intersectionResult)
 {
     glm::dvec3 rayFarPoint = ray.origin + ray.dir * 99999.9;
-    
+
     double cx = center.x, cy = center.y, cz = center.z;
     double px = ray.origin.x, py = ray.origin.y, pz = ray.origin.z;
 
@@ -32,6 +32,7 @@ bool Sphere::GetIntersection(const Ray &ray, Intersection &intersectionResult)
     // discriminant
     double D = B * B - 4.0 * A * C;
 
+    double epsilon = 0.1;
     if ( D < 0.0 )
     {
         intersectionResult.point = glm::dvec3(0.0);
@@ -44,23 +45,29 @@ bool Sphere::GetIntersection(const Ray &ray, Intersection &intersectionResult)
     glm::dvec3 solution1 = glm::dvec3( ray.origin.x * ( 1.0 - t1 ) + t1 * rayFarPoint.x,
                                      ray.origin.y * ( 1.0 - t1 ) + t1 * rayFarPoint.y,
                                      ray.origin.z * ( 1.0 - t1 ) + t1 * rayFarPoint.z );
-    
-    if ( D == 0.0 ) 
-    { 
+
+    glm::dvec3 solutionDir = glm::normalize(solution1 - ray.origin);
+    if(glm::dot(ray.dir, solutionDir) < 0.9) return false;
+
+    if ( abs(D) < epsilon )
+    {
         intersectionResult.point = solution1;
         intersectionResult.normal = glm::normalize(intersectionResult.point - center);
         return true;
     }
-    
+
     double t2 = ( -B + sqrt( D ) ) / ( 2.0 * A );
     glm::dvec3 solution2 = glm::dvec3( ray.origin.x * ( 1.0 - t2 ) + t2 * rayFarPoint.x,
                                      ray.origin.y * ( 1.0 - t2 ) + t2 * rayFarPoint.y,
                                      ray.origin.z * ( 1.0 - t2 ) + t2 * rayFarPoint.z );
 
-    if (glm::length(ray.origin - solution1) < glm::length(ray.origin - solution2)) intersectionResult.point = solution1; 
+    solutionDir = glm::normalize(solution2 - ray.origin);
+    if(glm::dot(ray.dir, solutionDir) < 0.9) return false;
+
+    if (glm::length(ray.origin - solution1) < glm::length(ray.origin - solution2)) intersectionResult.point = solution1;
     else intersectionResult.point = solution2;
-    
+
+
     intersectionResult.normal = glm::normalize(intersectionResult.point - center);
     return true;
 }
- 

@@ -9,7 +9,7 @@
 #include "Sphere.h"
 #include "Cube.h"
 #include "Ray.h"
-#include "Light.h"
+#include "PointLight.h"
 
 using namespace std;
 

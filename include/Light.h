@@ -8,23 +8,16 @@
 
 class Scene;
 
-enum LightType { Directional, Point };
-
 class Light
 {
 public:
-    LightType type;
-
     glm::dvec3 center;
-    glm::dvec3 dir;
-
-    double range, intensity;
     sf::Color color;
 
     Light();
     virtual ~Light();
 
-    sf::Color LightIt(const Scene& scene, const sf::Color& color, const Intersection& intersection);
+    virtual sf::Color LightIt(const Scene& scene, const sf::Color& color, const Intersection& intersection) = 0;
 };
 
 #endif
