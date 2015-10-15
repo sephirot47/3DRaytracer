@@ -1,5 +1,5 @@
-#ifndef POINT_LIGHT_H
-#define POINT_LIGHT_H
+#ifndef DIRECTIONAL_LIGHT_H
+#define DIRECTIONAL_LIGHT_H
 
 #include "glm/glm.hpp"
 #include "Intersection.h"

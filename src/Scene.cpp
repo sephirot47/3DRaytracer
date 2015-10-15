@@ -1,4 +1,5 @@
 #include "../include/Scene.h"
+#include "../include/PointLight.h"
 
 int Scene::WindowWidth  = 800;
 int Scene::WindowHeight = 600;
@@ -31,8 +32,14 @@ Scene::Scene()
 
     DirectionalLight *light = new DirectionalLight();
     light->intensity = 2.0f;
-    light->dir = glm::dvec3(1.0, 0.0, 0.0);
+    light->dir = glm::dvec3(1.0, 0.1, 0.2);
     lights.push_back(light);
+
+    PointLight *light2 = new PointLight();
+    light2->center = glm::dvec3(0.0,0.0,2.0);
+    light2->range = 10.0;
+    light2->intensity = 0.1;
+    lights.push_back(light2);
 
     depthBuffer = vector<double>(WindowWidth * WindowHeight);
     ClearDepthBuffer();
