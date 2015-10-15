@@ -18,25 +18,21 @@ Scene::Scene()
     timeCount = 0.0;
 
     Sphere *sphere = new Sphere(glm::dvec3(2.5f, 0.1, 10.0),  0.5f);
+    sphere->material.color = sf::Color(255, 0, 0);
     primitives.push_back(sphere);
 
     Sphere *sphere2 = new Sphere(glm::dvec3(-2.5f, 0.0, 10.0),  0.5f);
+    sphere2->material.color = sf::Color(255, 255, 0);
     primitives.push_back(sphere2);
 
     Cube *cube = new Cube(glm::dvec3(0.0, 0.0, 10.0),  0.5f);
+    cube->material.color = sf::Color(0, 255, 0);
     primitives.push_back(cube);
 
-    PointLight *light = new PointLight();
-    light->range = 0.4f;
-    light->intensity = 5.0;
-    light->center = glm::dvec3(0.0, 0.0, 7.0);
+    DirectionalLight *light = new DirectionalLight();
+    light->intensity = 2.0f;
+    light->dir = glm::dvec3(1.0, 0.0, 0.0);
     lights.push_back(light);
-
-    /*Light *light2 = new Light();
-    light2->range = 0.4f;
-    light2->intensity = 5.0;
-    light2->center = glm::dvec3(0.0, 0.0, 10.0);
-    lights.push_back(light2);*/
 
     depthBuffer = vector<double>(WindowWidth * WindowHeight);
     ClearDepthBuffer();
@@ -114,17 +110,15 @@ void Scene::Draw(sf::RenderWindow &window)
         for(int y = -WindowHeight/2; y < WindowHeight/2; ++y)
         {
             Ray ray; GetRayFromPixel(x, y, ray);
-            sf::Color pixelColor;
             Intersection intersection;
             if(RayTrace(ray, intersection))
             {
+                sf::Color pixelColor;
                 SetDepthAt(x, y, intersection.point.z);
-                pixelColor = sf::Color(255, 0, 0);
                 for(Light *light : lights)
                 {
-                  pixelColor = light->LightIt(*this, pixelColor, intersection);
+                  pixelColor = light->LightIt(*this, intersection);
                 }
-
                 frameBuffer.setPixel(x + WindowWidth/2, y + WindowHeight/2, pixelColor);
             }
         }

@@ -8,10 +8,11 @@
 class Primitive
 {
 public:
+    glm::dvec3 center;
+    Material material;
+
     Primitive();
     virtual ~Primitive();
-
-    glm::dvec3 center;
 
     virtual bool GetIntersection(const Ray &ray, Intersection &intersectionResult) = 0;
 };

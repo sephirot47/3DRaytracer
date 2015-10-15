@@ -12,12 +12,13 @@ class Scene;
 class PointLight : public Light
 {
 public:
-    double range, intensity;
-    
+    glm::dvec3 center;
+    double range;
+
     PointLight();
     virtual ~PointLight();
 
-    sf::Color LightIt(const Scene& scene, const sf::Color& color, const Intersection& intersection) override;
+    sf::Color LightIt(const Scene& scene, const Intersection& intersection) override;
 };
 
 #endif

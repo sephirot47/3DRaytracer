@@ -1,4 +1,5 @@
 #include "../include/Sphere.h"
+#include <iostream>
 
 Sphere::Sphere()
 {
@@ -53,6 +54,7 @@ bool Sphere::GetIntersection(const Ray &ray, Intersection &intersectionResult)
     {
         intersectionResult.point = solution1;
         intersectionResult.normal = glm::normalize(intersectionResult.point - center);
+        intersectionResult.material = &material;
         return true;
     }
 
@@ -69,5 +71,6 @@ bool Sphere::GetIntersection(const Ray &ray, Intersection &intersectionResult)
 
 
     intersectionResult.normal = glm::normalize(intersectionResult.point - center);
+    intersectionResult.material = &material;
     return true;
 }

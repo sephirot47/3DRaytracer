@@ -11,13 +11,13 @@ class Scene;
 class Light
 {
 public:
-    glm::dvec3 center;
+    float intensity;
     sf::Color color;
 
     Light();
     virtual ~Light();
 
-    virtual sf::Color LightIt(const Scene& scene, const sf::Color& color, const Intersection& intersection) = 0;
+    virtual sf::Color LightIt(const Scene& scene, const Intersection& intersection) = 0;
 };
 
 #endif

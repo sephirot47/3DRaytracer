@@ -1,7 +1,7 @@
 all: main.exe
 
-main.exe: obj/main.o obj/Scene.o obj/Sphere.o obj/Ray.o obj/Primitive.o obj/Cube.o obj/DirectionalLight.o obj/PointLight.o  obj/Light.o
-	g++ -O2 obj/main.o obj/Scene.o obj/Primitive.o obj/Sphere.o obj/Cube.o obj/Ray.o obj/DirectionalLight.o obj/PointLight.o obj/Light.o -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o main.exe
+main.exe: obj/main.o obj/Scene.o obj/Sphere.o obj/Ray.o obj/Primitive.o obj/Cube.o obj/DirectionalLight.o obj/PointLight.o  obj/Light.o obj/Material.o
+	g++ -O2 obj/main.o obj/Scene.o obj/Primitive.o obj/Sphere.o obj/Cube.o obj/Ray.o obj/DirectionalLight.o obj/PointLight.o obj/Light.o obj/Material.o -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o main.exe
 	./main.exe
 
 obj/main.o: src/main.cpp
@@ -30,6 +30,9 @@ obj/DirectionalLight.o: src/DirectionalLight.cpp
 
 obj/PointLight.o: src/PointLight.cpp
 	g++ -O2 -c src/PointLight.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o obj/PointLight.o
+
+obj/Material.o: src/Material.cpp
+	g++ -O2 -c src/Material.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o obj/Material.o
 
 clean:
 	rm -rf obj/*.o *.exe

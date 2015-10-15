@@ -12,10 +12,10 @@ DirectionalLight::DirectionalLight()
 
 DirectionalLight::~DirectionalLight() {}
 
-sf::Color DirectionalLight::LightIt(const Scene& scene, const sf::Color& color, const Intersection& intersection)
+sf::Color DirectionalLight::LightIt(const Scene& scene, const Intersection& intersection)
 {
+  sf::Color color = intersection.material->color;
   Ray ray;
-
   ray.origin = intersection.point - this->dir * 9999.9;
   ray.dir = this->dir;
 
@@ -30,6 +30,7 @@ sf::Color DirectionalLight::LightIt(const Scene& scene, const sf::Color& color, 
   if(!isInShadow)
   {
     double f = glm::dot(-this->dir, intersection.normal);
+    f*= intensity;
     f += shadow;
     f = glm::clamp(f, 0.0, 1.0);
     unsigned char r = (unsigned char) glm::clamp(color.r * f, .0, 255.0);

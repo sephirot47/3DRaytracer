@@ -7,14 +7,15 @@ using namespace std;
 
 PointLight::PointLight()
 {
+  center = glm::dvec3(0.0);
   range = 5.0;
-  intensity = 5.0;
 }
 
 PointLight::~PointLight() {}
 
-sf::Color PointLight::LightIt(const Scene& scene, const sf::Color& color, const Intersection& intersection)
+sf::Color PointLight::LightIt(const Scene& scene, const Intersection& intersection)
 {
+  sf::Color color = intersection.material->color;
 
   Ray ray;
   ray.origin = this->center;
