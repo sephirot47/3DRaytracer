@@ -17,7 +17,7 @@ public:
     DirectionalLight();
     virtual ~DirectionalLight();
 
-    sf::Color LightIt(const Scene& scene, const Intersection& intersection) override;
+    sf::Color LightIt(const Scene& scene, sf::Color pixelColor, const Intersection& intersection) override;
 };
 
 #endif

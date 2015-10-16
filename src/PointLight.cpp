@@ -13,9 +13,9 @@ PointLight::PointLight()
 
 PointLight::~PointLight() {}
 
-sf::Color PointLight::LightIt(const Scene& scene, const Intersection& intersection)
+sf::Color PointLight::LightIt(const Scene& scene, sf::Color lightColor, const Intersection& intersection)
 {
-  sf::Color color = intersection.material->color;
+  sf::Color color = lightColor;
 
   Ray ray;
   ray.origin = this->center;

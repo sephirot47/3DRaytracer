@@ -17,7 +17,7 @@ public:
     Light();
     virtual ~Light();
 
-    virtual sf::Color LightIt(const Scene& scene, const Intersection& intersection) = 0;
+    virtual sf::Color LightIt(const Scene& scene, sf::Color lightColor, const Intersection& intersection) = 0;
 };
 
 #endif

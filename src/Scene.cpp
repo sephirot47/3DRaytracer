@@ -120,12 +120,13 @@ void Scene::Draw(sf::RenderWindow &window)
             Intersection intersection;
             if(RayTrace(ray, intersection))
             {
-                sf::Color pixelColor;
+                sf::Color pixelColor, lightColor = sf::Color::Red;
                 SetDepthAt(x, y, intersection.point.z);
                 for(Light *light : lights)
                 {
-                  pixelColor = light->LightIt(*this, intersection);
+                  lightColor = light->LightIt(*this, lightColor, intersection);
                 }
+                pixelColor = intersection.material->color * lightColor;
                 frameBuffer.setPixel(x + WindowWidth/2, y + WindowHeight/2, pixelColor);
             }
         }
