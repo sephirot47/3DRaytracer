@@ -5,7 +5,10 @@ using namespace std;
 
 Material::Material()
 {
-  color = sf::Color(255, 0, 0);
+  ambient = glm::vec3(0.25f);
+  diffuse = glm::vec3(0.5f);
+  specular = glm::vec3(1.0f);
+
   roughness = 1.0;
   shininess = 30.0;
 }

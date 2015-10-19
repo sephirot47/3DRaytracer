@@ -6,7 +6,7 @@ using namespace std;
 Light::Light()
 {
   intensity = 5.0;
-  color = sf::Color(255, 255, 255);
+  color = glm::vec3(255, 255, 255);
 }
 
 Light::~Light() {}

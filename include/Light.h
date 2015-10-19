@@ -12,12 +12,12 @@ class Light
 {
 public:
     float intensity;
-    sf::Color color;
+    glm::vec3 color;
 
     Light();
     virtual ~Light();
 
-    virtual sf::Color LightIt(const Scene& scene, sf::Color lightColor, const Intersection& intersection) = 0;
+    virtual glm::vec3 LightIt(const Scene& scene, glm::vec3 lightColor, const Intersection& intersection) = 0;
 };
 
 #endif

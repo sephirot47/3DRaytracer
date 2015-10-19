@@ -19,27 +19,33 @@ Scene::Scene()
     timeCount = 0.0;
 
     Sphere *sphere = new Sphere(glm::dvec3(2.5f, 0.1, 10.0),  0.5f);
-    sphere->material.color = sf::Color(255, 0, 0);
+    sphere->material.diffuse = glm::vec3(0,1,1);
     primitives.push_back(sphere);
 
     Sphere *sphere2 = new Sphere(glm::dvec3(-2.5f, 0.0, 10.0),  0.5f);
-    sphere2->material.color = sf::Color(255, 255, 0);
     primitives.push_back(sphere2);
 
     Cube *cube = new Cube(glm::dvec3(0.0, 0.0, 10.0),  0.5f);
-    cube->material.color = sf::Color(0, 255, 0);
     primitives.push_back(cube);
 
     DirectionalLight *light = new DirectionalLight();
-    light->intensity = 2.0f;
-    light->dir = glm::dvec3(1.0, 0.1, 0.2);
-    lights.push_back(light);
+    light->intensity = 0.8f;
+    light->color = glm::vec3(0, 0, 1);
+    light->dir = glm::dvec3(1.0, 0.0, 0.0);
+    //lights.push_back(light);
 
-    PointLight *light2 = new PointLight();
-    light2->center = glm::dvec3(0.0,0.0,2.0);
-    light2->range = 10.0;
-    light2->intensity = 0.1;
-    lights.push_back(light2);
+    DirectionalLight *light2 = new DirectionalLight();
+    light2->intensity = .2f;
+    light2->color = glm::vec3(0, 0, 1);
+    light2->dir = glm::dvec3(0.0, -1.0, 0.0);
+    //lights.push_back(light2);
+
+    PointLight *light3 = new PointLight();
+    light3->center = glm::dvec3(0.0,0.0,2.0);
+    light3->color = glm::vec3(1, 1, 0);
+    light3->range = 1.0;
+    light3->intensity = 0.8;
+    lights.push_back(light3);
 
     depthBuffer = vector<double>(WindowWidth * WindowHeight);
     ClearDepthBuffer();
@@ -100,6 +106,13 @@ bool Scene::RayTrace(const Ray& ray, Intersection &intersection) const
   return intersected;
 }
 
+sf::Color Scene::Vec3ToColor(glm::vec3 color)
+{
+  unsigned char r = (unsigned char) glm::clamp(color.r * 255.0f, 0.0f, 255.0f);
+  unsigned char g = (unsigned char) glm::clamp(color.g * 255.0f, 0.0f, 255.0f);
+  unsigned char b = (unsigned char) glm::clamp(color.b * 255.0f, 0.0f, 255.0f);
+  return sf::Color(r,g,b);
+}
 
 
 void Scene::Draw(sf::RenderWindow &window)
@@ -120,14 +133,13 @@ void Scene::Draw(sf::RenderWindow &window)
             Intersection intersection;
             if(RayTrace(ray, intersection))
             {
-                sf::Color pixelColor, lightColor = sf::Color::Red;
+                glm::vec3 pixelColor = glm::vec3(0);
                 SetDepthAt(x, y, intersection.point.z);
                 for(Light *light : lights)
                 {
-                  lightColor = light->LightIt(*this, lightColor, intersection);
+                  pixelColor = light->LightIt(*this, pixelColor, intersection);
                 }
-                pixelColor = intersection.material->color * lightColor;
-                frameBuffer.setPixel(x + WindowWidth/2, y + WindowHeight/2, pixelColor);
+                frameBuffer.setPixel(x + WindowWidth/2, y + WindowHeight/2, Vec3ToColor(pixelColor));
             }
         }
     }

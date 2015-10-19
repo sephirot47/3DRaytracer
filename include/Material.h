@@ -10,7 +10,7 @@ public:
     Material();
     virtual ~Material();
 
-    sf::Color color;
+    glm::vec3 ambient, diffuse, specular;
 
     double shininess;
     double roughness;

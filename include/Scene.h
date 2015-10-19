@@ -42,6 +42,7 @@ public:
 
   void Draw(sf::RenderWindow &window);
   bool RayTrace(const Ray& ray, Intersection &intersection) const;
+  static sf::Color Vec3ToColor(glm::vec3 color);
 };
 
 #endif
