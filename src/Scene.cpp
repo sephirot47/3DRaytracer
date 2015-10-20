@@ -1,10 +1,10 @@
 #include "../include/Scene.h"
 #include "../include/PointLight.h"
 
-int Scene::WindowWidth  = 800;
-int Scene::WindowHeight = 600;
+int Scene::WindowWidth  = 1400;
+int Scene::WindowHeight = 1000;
 
-glm::vec3 Scene::ClearColor = glm::vec3(1.0, 1.0, 1.0);
+glm::vec3 Scene::ClearColor = glm::vec3(0.5, 0.5, 1.0);
 
 double Scene::AspectRatio = double(Scene::WindowWidth) / Scene::WindowHeight;
 
@@ -20,24 +20,47 @@ Scene::Scene()
     frameBuffer.create(WindowWidth, WindowHeight);
     timeCount = 0.0;
 
-    Sphere *sphere = new Sphere(glm::dvec3(0, 0, 10.0),  1.0f);
-    sphere->material.ambient = glm::vec3(0.2,0,0.2);
-    sphere->material.diffuse = glm::vec3(0.6,0,0.6);
+    glm::dvec3 dimensions(8.0, 0.1, 8.0);
+    Cube *floor = new Cube(glm::dvec3(0, -2.0, 10.0), dimensions);
+    floor->material.ambient = glm::vec3(0.2,0.2,0.2) * 0.3f;
+    floor->material.diffuse = glm::vec3(0.6,0.6,0.6) * 0.3f;
+    floor->material.specular = glm::vec3(1,1,1);
+    floor->material.roughness = 0.95;
+    primitives.push_back(floor);
+    
+    dimensions = glm::dvec3(8.0, 8.0, 0.1);
+    Cube *backWall = new Cube(glm::dvec3(0, 4.0, 18.0), dimensions);
+    backWall->material.ambient = glm::vec3(0.2,0.2,0.2) * 0.3f;
+    backWall->material.diffuse = glm::vec3(0.6,0.6,0.6) * 0.3f;
+    backWall->material.specular = glm::vec3(1,1,1);
+    backWall->material.roughness = 0.95;
+    primitives.push_back(backWall);
+
+    Sphere *bigSphere = new Sphere(glm::dvec3(3.0, 0.0, 10.0),  2.0f);
+    bigSphere->material.roughness = 0.5;
+    primitives.push_back(bigSphere);
+    
+    Sphere *sphere = new Sphere(glm::dvec3(0.0, -1.0, 10.0),  1.0f);
+    sphere->material.ambient = glm::vec3(0.2,0,0.0);
+    sphere->material.diffuse = glm::vec3(0.6,0,0.0);
     sphere->material.specular = glm::vec3(1,1,1);
-    sphere->material.roughness = 1.0;
+    sphere->material.roughness = 0.8;
     primitives.push_back(sphere);
 
-    glm::dvec3 dimensions(0.3, 10.0, 10.0);
-    Cube *sphere2 = new Cube(glm::dvec3(0, 0.0, 10.0), dimensions);
-    sphere2->material.ambient = glm::vec3(0.2,0.2,0);
-    sphere2->material.diffuse = glm::vec3(0.6,0.6,0);
-    sphere2->material.specular = glm::vec3(1,1,1);
-    sphere2->material.roughness = 0.1;
-    primitives.push_back(sphere2);
-
-    Sphere *cube = new Sphere(glm::dvec3(3.0, 5.0, 10.0),  2.0f);
-    cube->material.roughness = 0.5;
-    primitives.push_back(cube);
+    Sphere *littleSphere = new Sphere(glm::dvec3(1, 0.6, 7.5),  0.3f);
+    littleSphere->material.ambient = glm::vec3(0.2,0.2,0);
+    littleSphere->material.diffuse = glm::vec3(0.6,0.6,0);
+    littleSphere->material.roughness = 0.5;
+    primitives.push_back(littleSphere);
+    
+    /*
+    dimensions = glm::dvec3(0.5, 0.5, 1.0);
+    Cube *littleCube = new Cube(glm::dvec3(-1.0, -1.5, 8.0),  dimensions);
+    littleCube->material.ambient = glm::vec3(0.0,0.0,0.1);
+    littleCube->material.diffuse = glm::vec3(0.0,0.0,0.3);
+    littleCube->material.roughness = 0.6;
+    primitives.push_back(littleCube);
+    */
     
     DirectionalLight *light4 = new DirectionalLight();
     //light4->center = glm::dvec3(0.0,0.0,2.0);
@@ -56,7 +79,7 @@ Scene::Scene()
     PointLight *light2 = new PointLight();
     light2->color = glm::vec3(1, 1, 1);
     light2->range = 15.0;
-    light2->center = glm::vec3(2, 0, 10);
+    light2->center = glm::vec3(2, 0, 6);
     //light2->dir = glm::dvec3(-1, 1, 1);
     light2->intensity = 0.5;
     lights.push_back(light2);
@@ -155,7 +178,6 @@ void Scene::Draw(sf::RenderWindow &window)
     ClearDepthBuffer();
 
     timeCount += 0.01f;
-    primitives[1]->center = glm::dvec3(-cos(timeCount) * 3.0, 0.0, sin(timeCount) * 3.0 + 10.0);
     //((PointLight*)lights[2])->center = primitives[1]->center;
     //primitives[0]->center = glm::dvec3(-sin(timeCount*2.0) * 1.5f, cos(timeCount*2.0) * 1.5f, 10.0);
     //primitives[1]->center = glm::dvec3( 2.5f, cos(timeCount*2.0) * 2.5f, 10.0 + sin(timeCount * 4.0) * 2.5);
