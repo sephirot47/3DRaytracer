@@ -41,6 +41,8 @@ public:
   virtual ~Scene();
 
   void Draw(sf::RenderWindow &window);
+  
+  glm::vec3 GetPixelColor(Ray& ray, int bounces);
   bool RayTrace(const Ray& ray, Intersection &intersection) const;
   static sf::Color Vec3ToColor(glm::vec3 color);
 };

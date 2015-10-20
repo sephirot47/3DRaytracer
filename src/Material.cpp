@@ -9,7 +9,7 @@ Material::Material()
   diffuse = glm::vec3(0.5f);
   specular = glm::vec3(1.0f);
 
-  roughness = 1.0;
+  roughness = 0.5;
   shininess = 30.0;
 }
 

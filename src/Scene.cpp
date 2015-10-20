@@ -121,6 +121,32 @@ sf::Color Scene::Vec3ToColor(glm::vec3 color)
   return sf::Color(r,g,b);
 }
 
+glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces)
+{
+    Intersection intersection;
+    bool rayIntersected = false;
+    if(bounces <= 3)
+    {
+        rayIntersected = RayTrace(ray, intersection);
+        if(rayIntersected)
+        {
+            if(intersection.material->roughness < 1.0)
+            {
+                Ray bounceRay = ray.reflect(intersection);
+                glm::vec3 bounceColor = GetPixelColor(bounceRay, bounces + 1);
+                glm::vec3 pixelColor = intersection.material->ambient;
+                for(Light *light : lights)
+                {
+                    pixelColor = light->LightIt(*this, pixelColor, intersection);
+                }
+                float r = float(intersection.material->roughness);
+                return r * pixelColor + (1.0f-r) * bounceColor;
+            }
+        }
+    }
+    
+    return rayIntersected ? intersection.material->ambient : glm::vec3(0);
+}
 
 void Scene::Draw(sf::RenderWindow &window)
 {
@@ -142,12 +168,8 @@ void Scene::Draw(sf::RenderWindow &window)
             Intersection intersection;
             if(RayTrace(ray, intersection))
             {
-                glm::vec3 pixelColor = intersection.material->ambient;
+                glm::vec3 pixelColor = GetPixelColor(ray, 0);
                 SetDepthAt(x, y, intersection.point.z);
-                for(Light *light : lights)
-                {
-                  pixelColor = light->LightIt(*this, pixelColor, intersection);
-                }
                 frameBuffer.setPixel(x + WindowWidth/2, y + WindowHeight/2, Vec3ToColor(pixelColor));
             }
         }
