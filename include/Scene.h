@@ -31,6 +31,7 @@ private:
 
 public:
   static int WindowWidth, WindowHeight;
+  static glm::vec3 ClearColor;
 
   vector<Primitive*> primitives;
   vector<Light*> lights;

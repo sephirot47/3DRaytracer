@@ -4,6 +4,8 @@
 int Scene::WindowWidth  = 800;
 int Scene::WindowHeight = 600;
 
+glm::vec3 Scene::ClearColor = glm::vec3(1.0, 1.0, 1.0);
+
 double Scene::AspectRatio = double(Scene::WindowWidth) / Scene::WindowHeight;
 
 double Scene::Fov  = 60; //degrees
@@ -22,21 +24,24 @@ Scene::Scene()
     sphere->material.ambient = glm::vec3(0.2,0,0.2);
     sphere->material.diffuse = glm::vec3(0.6,0,0.6);
     sphere->material.specular = glm::vec3(1,1,1);
+    sphere->material.roughness = 1.0;
     primitives.push_back(sphere);
 
     Sphere *sphere2 = new Sphere(glm::dvec3(0, 0.0, 10.0),  0.5f);
     sphere2->material.ambient = glm::vec3(0.2,0.2,0);
     sphere2->material.diffuse = glm::vec3(0.6,0.6,0);
     sphere2->material.specular = glm::vec3(1,1,1);
+    sphere2->material.roughness = 1.0;
     primitives.push_back(sphere2);
 
-    Cube *cube = new Cube(glm::dvec3(0.0, 0.0, 10.0),  0.5f);
-   // primitives.push_back(cube);
+    Sphere *cube = new Sphere(glm::dvec3(3.0, 5.0, 10.0),  2.0f);
+    cube->material.roughness = 0.5;
+    primitives.push_back(cube);
     
     DirectionalLight *light4 = new DirectionalLight();
     //light4->center = glm::dvec3(0.0,0.0,2.0);
-    light4->color = glm::vec3(1, 0, 0);
-    light4->dir = glm::dvec3(-1, 0, 1);
+    light4->color = glm::vec3(1, 0.5, 0.5);
+    light4->dir = glm::dvec3(0, 1, 0);
     light4->intensity = 0.8;
     lights.push_back(light4);
     
@@ -48,10 +53,11 @@ Scene::Scene()
     lights.push_back(light);
     
     PointLight *light2 = new PointLight();
-    light2->color = glm::vec3(1, 1, 0);
+    light2->color = glm::vec3(1, 1, 1);
     light2->range = 15.0;
+    light2->center = glm::vec3(4, 0, 10);
     //light2->dir = glm::dvec3(-1, 1, 1);
-    light2->intensity = 0.8;
+    light2->intensity = 0.5;
     lights.push_back(light2);
 
     depthBuffer = vector<double>(WindowWidth * WindowHeight);
@@ -124,38 +130,33 @@ sf::Color Scene::Vec3ToColor(glm::vec3 color)
 glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces)
 {
     Intersection intersection;
-    bool rayIntersected = false;
-    if(bounces <= 3)
+    glm::vec3 pixelColor;
+    bool rayIntersected = RayTrace(ray, intersection);
+    if(rayIntersected)
     {
-        rayIntersected = RayTrace(ray, intersection);
-        if(rayIntersected)
+        bool calcBounceColor = (bounces < 15 || intersection.material->roughness < 1.0);
+        Ray bounceRay = ray.reflect(intersection);
+        glm::vec3 bounceColor = calcBounceColor ? GetPixelColor(bounceRay, bounces + 1) : ClearColor;
+        pixelColor = intersection.material->ambient;
+        for(Light *light : lights)
         {
-            if(intersection.material->roughness < 1.0)
-            {
-                Ray bounceRay = ray.reflect(intersection);
-                glm::vec3 bounceColor = GetPixelColor(bounceRay, bounces + 1);
-                glm::vec3 pixelColor = intersection.material->ambient;
-                for(Light *light : lights)
-                {
-                    pixelColor = light->LightIt(*this, pixelColor, intersection);
-                }
-                float r = float(intersection.material->roughness);
-                return r * pixelColor + (1.0f-r) * bounceColor;
-            }
+            pixelColor = light->LightIt(*this, pixelColor, intersection);
         }
+        float r = float(intersection.material->roughness);
+        return (r * pixelColor + (1.0f-r) * bounceColor);
     }
     
-    return rayIntersected ? intersection.material->ambient : glm::vec3(0);
+    return rayIntersected ? pixelColor : ClearColor;
 }
 
 void Scene::Draw(sf::RenderWindow &window)
 {
-    ClearFrameBuffer(sf::Color::Black);
+    ClearFrameBuffer( Vec3ToColor(ClearColor) );
     ClearDepthBuffer();
 
     timeCount += 0.01f;
-    primitives[1]->center = glm::dvec3(-cos(timeCount) * 5.0, 0.0, sin(timeCount) * 5.0 + 10.0);
-    ((PointLight*)lights[2])->center = primitives[1]->center;
+    primitives[1]->center = glm::dvec3(-cos(timeCount) * 3.0, 0.0, sin(timeCount) * 3.0 + 10.0);
+    //((PointLight*)lights[2])->center = primitives[1]->center;
     //primitives[0]->center = glm::dvec3(-sin(timeCount*2.0) * 1.5f, cos(timeCount*2.0) * 1.5f, 10.0);
     //primitives[1]->center = glm::dvec3( 2.5f, cos(timeCount*2.0) * 2.5f, 10.0 + sin(timeCount * 4.0) * 2.5);
     //primitives[2]->center = glm::dvec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0) * 2.5f, 10.0 + sin(timeCount * 3.0) * 2.0);
