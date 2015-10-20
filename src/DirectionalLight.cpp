@@ -4,7 +4,6 @@
 
 using namespace std;
 
-
 DirectionalLight::DirectionalLight()
 {
   dir = glm::dvec3(0.0, 0.0, 1.0);
@@ -33,12 +32,22 @@ glm::vec3 DirectionalLight::LightIt(const Scene& scene, glm::vec3 pixelColor, co
   bool isInShadow = abs(d2 - d1) > epsilon;
   if(!isInShadow)
   {
-    double f = glm::dot(-this->dir, intersection.normal);
-    f*= intensity;
+    //Diffuse
+    double dot = glm::dot(-this->dir, glm::normalize(intersection.normal));
+    double f = dot * intensity;
     f = glm::clamp(f, 0.0, 1.0);
     diffuse = intersection.material->diffuse * float(f);
+    
+    //Specular
+    glm::dvec3 reflectDir = glm::normalize(ray.reflect(intersection).dir);
+    glm::dvec3 camToPointDir = glm::normalize(glm::dvec3(0) - intersection.point);
+    dot = glm::dot(-reflectDir, camToPointDir);
+    dot = glm::pow(dot, intersection.material->shininess);
+    f = dot * this->intensity;
+    specular = intersection.material->specular * float(f);
+    if(dot > 0.1) cout << dot << ", " << "(" << specular.x << ", " << specular.y << ", " << specular.z << ")" << endl;
   }
 
-  color = (ambient + diffuse + specular) * this->color;
+  color = ambient + (diffuse) * this->color;// + specular;
   return pixelColor + color;
 }

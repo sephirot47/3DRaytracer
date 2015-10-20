@@ -19,14 +19,16 @@ Scene::Scene()
     timeCount = 0.0;
 
     Sphere *sphere = new Sphere(glm::dvec3(2.5f, 0.1, 10.0),  0.5f);
+    sphere->material.ambient = glm::vec3(0,0.2,0.2);
     sphere->material.diffuse = glm::vec3(0,1,1);
+    sphere->material.specular = glm::vec3(1,1,1);
     primitives.push_back(sphere);
 
     Sphere *sphere2 = new Sphere(glm::dvec3(-2.5f, 0.0, 10.0),  0.5f);
-    primitives.push_back(sphere2);
+    //primitives.push_back(sphere2);
 
     Cube *cube = new Cube(glm::dvec3(0.0, 0.0, 10.0),  0.5f);
-    primitives.push_back(cube);
+   // primitives.push_back(cube);
 
     DirectionalLight *light = new DirectionalLight();
     light->intensity = 0.8f;
@@ -42,10 +44,17 @@ Scene::Scene()
 
     PointLight *light3 = new PointLight();
     light3->center = glm::dvec3(0.0,0.0,2.0);
-    light3->color = glm::vec3(1, 1, 0);
-    light3->range = 1.0;
+    light3->color = glm::vec3(1, 1, 1);
+    light3->range = 10.0;
     light3->intensity = 0.8;
-    lights.push_back(light3);
+    //lights.push_back(light3);
+    
+    DirectionalLight *light4 = new DirectionalLight();
+    //light4->center = glm::dvec3(0.0,0.0,2.0);
+    light4->color = glm::vec3(1, 1, 1);
+    light4->dir = glm::dvec3(0,0,1);
+    light4->intensity = 0.8;
+    lights.push_back(light4);
 
     depthBuffer = vector<double>(WindowWidth * WindowHeight);
     ClearDepthBuffer();
@@ -121,9 +130,9 @@ void Scene::Draw(sf::RenderWindow &window)
     ClearDepthBuffer();
 
     timeCount += 0.005f;
-    primitives[0]->center = glm::dvec3(-2.5f, cos(timeCount*2.0) * 2.5f, 10.0 + cos(timeCount * 2.0) * 3.0);
-    primitives[1]->center = glm::dvec3( 2.5f, cos(timeCount*2.0) * 2.5f, 10.0 + sin(timeCount * 4.0) * 2.5);
-    primitives[2]->center = glm::dvec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0) * 2.5f, 10.0 + sin(timeCount * 3.0) * 2.0);
+    primitives[0]->center = glm::dvec3(-sin(timeCount*2.0) * 1.5f, cos(timeCount*2.0) * 1.5f, 10.0);
+    //primitives[1]->center = glm::dvec3( 2.5f, cos(timeCount*2.0) * 2.5f, 10.0 + sin(timeCount * 4.0) * 2.5);
+    //primitives[2]->center = glm::dvec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0) * 2.5f, 10.0 + sin(timeCount * 3.0) * 2.0);
 
     for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
     {

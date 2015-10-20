@@ -69,7 +69,6 @@ bool Sphere::GetIntersection(const Ray &ray, Intersection &intersectionResult)
     if (glm::length(ray.origin - solution1) < glm::length(ray.origin - solution2)) intersectionResult.point = solution1;
     else intersectionResult.point = solution2;
 
-
     intersectionResult.normal = glm::normalize(intersectionResult.point - center);
     intersectionResult.material = &material;
     return true;

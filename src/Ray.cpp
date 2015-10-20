@@ -16,7 +16,7 @@ Ray Ray::reflect(const Intersection &intersection)
 {
   Ray r;
   r.origin = intersection.point;
-  r.dir = this->dir - 2 * (glm::dot(this->dir,intersection.normal)) * intersection.normal;
+  r.dir = glm::normalize(this->dir) - 2 * (glm::dot(this->dir, glm::normalize(intersection.normal))) * glm::normalize(intersection.normal);
   r.dir = glm::normalize(r.dir);
 }
 

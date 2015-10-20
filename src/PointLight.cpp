@@ -44,11 +44,11 @@ glm::vec3 PointLight::LightIt(const Scene& scene, glm::vec3 pixelColor, const In
     diffuse = intersection.material->diffuse * float(f);
 
     //Specular
-    glm::dvec3 reflectDir = glm::normalize(ray.reflect(lightInter).dir);
+    glm::dvec3 reflectDir = glm::normalize(ray.reflect(intersection).dir);
     glm::dvec3 camToPointDir = glm::normalize(glm::dvec3(0) - intersection.point);
     dot = glm::dot(reflectDir, camToPointDir);
-    //dot = glm::pow(dot, intersection.material->shininess);
-    f = dot /** attenuation*/ * this->intensity;
+    dot = glm::pow(dot, intersection.material->shininess);
+    f = dot /** attenuation * this->intensity*/;
     f = glm::clamp(f, 0.0, 1.0);
     specular = intersection.material->specular * float(f);
   }
