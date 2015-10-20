@@ -6,6 +6,7 @@
 #include "../include/Scene.h"
 
 using namespace std;
+bool paused = false;
 
 int main()
 {
@@ -18,8 +19,16 @@ int main()
     while (window.pollEvent(event))
     {
       if (event.type == sf::Event::Closed) window.close();
+      
+        if (event.type == sf::Event::KeyPressed)
+        {
+            if (event.key.code == sf::Keyboard::Space)
+            {
+                paused = !paused;
+            }
+        }
     }
-    scene.Draw(window);
+    if(!paused) scene.Draw(window);
   }
   return 0;
 }
