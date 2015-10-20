@@ -34,12 +34,8 @@ bool Sphere::GetIntersection(const Ray &ray, Intersection &intersectionResult)
     double D = B * B - 4.0 * A * C;
 
     double epsilon = 0.1;
-    if ( D < 0.0 )
-    {
-        intersectionResult.point = glm::dvec3(0.0);
-        intersectionResult.normal = glm::normalize(intersectionResult.point - center);
-        return false;
-    }
+    if ( D < 0.0 ) return false;
+    
 
     double t1 = ( -B - sqrt( D ) ) / ( 2.0 * A );
 

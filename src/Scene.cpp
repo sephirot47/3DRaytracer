@@ -27,11 +27,12 @@ Scene::Scene()
     sphere->material.roughness = 1.0;
     primitives.push_back(sphere);
 
-    Sphere *sphere2 = new Sphere(glm::dvec3(0, 0.0, 10.0),  0.5f);
+    glm::dvec3 dimensions(0.3, 10.0, 10.0);
+    Cube *sphere2 = new Cube(glm::dvec3(0, 0.0, 10.0), dimensions);
     sphere2->material.ambient = glm::vec3(0.2,0.2,0);
     sphere2->material.diffuse = glm::vec3(0.6,0.6,0);
     sphere2->material.specular = glm::vec3(1,1,1);
-    sphere2->material.roughness = 1.0;
+    sphere2->material.roughness = 0.1;
     primitives.push_back(sphere2);
 
     Sphere *cube = new Sphere(glm::dvec3(3.0, 5.0, 10.0),  2.0f);
@@ -55,7 +56,7 @@ Scene::Scene()
     PointLight *light2 = new PointLight();
     light2->color = glm::vec3(1, 1, 1);
     light2->range = 15.0;
-    light2->center = glm::vec3(4, 0, 10);
+    light2->center = glm::vec3(2, 0, 10);
     //light2->dir = glm::dvec3(-1, 1, 1);
     light2->intensity = 0.5;
     lights.push_back(light2);
@@ -131,10 +132,10 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces)
 {
     Intersection intersection;
     glm::vec3 pixelColor;
-    bool rayIntersected = RayTrace(ray, intersection);
-    if(rayIntersected)
+    if(RayTrace(ray, intersection))
     {
-        bool calcBounceColor = (bounces < 15 || intersection.material->roughness < 1.0);
+        bool calcBounceColor = (bounces < 6 && intersection.material->roughness < 1.0);
+        //cout << boolalpha << calcBounceColor << endl;
         Ray bounceRay = ray.reflect(intersection);
         glm::vec3 bounceColor = calcBounceColor ? GetPixelColor(bounceRay, bounces + 1) : ClearColor;
         pixelColor = intersection.material->ambient;
@@ -145,8 +146,7 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces)
         float r = float(intersection.material->roughness);
         return (r * pixelColor + (1.0f-r) * bounceColor);
     }
-    
-    return rayIntersected ? pixelColor : ClearColor;
+    return ClearColor;
 }
 
 void Scene::Draw(sf::RenderWindow &window)

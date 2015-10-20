@@ -25,10 +25,11 @@ bool Cube::GetIntersection(const Ray &ray, Intersection &intersectionResult)
   //https://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm
   glm::dvec3 lowestCorner = GetLowestCorner();
   glm::dvec3 highestCorner = GetHighestCorner();
-  double Tnear = -99999.0, Tfar = 99999.9;
+  double Tnear = -9999999.0, Tfar = 9999999.9;
+  double epsilon = 0.000001;
   for(int i = 0; i < 3; ++i)
   {
-    if (ray.dir[i] == 0)
+    if (abs(ray.dir[i]) < epsilon)
     {
       if (ray.origin[i] < lowestCorner[i] or ray.origin[i] > highestCorner[i]) return false;
     }
@@ -40,7 +41,7 @@ bool Cube::GetIntersection(const Ray &ray, Intersection &intersectionResult)
       if(T1 > Tnear) Tnear = T1; /* want largest Tnear */
       if(T2 < Tfar) Tfar = T2; /* want smallest Tfar */
 
-      if(Tnear > Tfar || Tfar < 0) return false;
+      if(Tnear > Tfar || Tfar < -epsilon) return false;
     }
   }
 
@@ -48,13 +49,18 @@ bool Cube::GetIntersection(const Ray &ray, Intersection &intersectionResult)
   intersectionResult.point = ray.origin + ray.dir * Tnear;
 
   glm::dvec3 p = intersectionResult.point;
-  double epsilon = 0.001;
+    if(glm::dot(ray.dir, glm::normalize(p - ray.origin)) < 0.9) return false;
+
   if      (abs(p.x - lowestCorner.x) < epsilon) intersectionResult.normal = glm::dvec3(-1.0, 0.0, 0.0);
   else if (abs(p.x - highestCorner.x) < epsilon) intersectionResult.normal = glm::dvec3(1.0,  0.0, 0.0);
   else if (abs(p.y - lowestCorner.y) < epsilon) intersectionResult.normal = glm::dvec3(0.0, -1.0, 0.0);
   else if (abs(p.y - highestCorner.y) < epsilon) intersectionResult.normal = glm::dvec3(0.0,  1.0, 0.0);
   else if (abs(p.z - lowestCorner.z) < epsilon) intersectionResult.normal = glm::dvec3(0.0, 0.0, -1.0);
   else intersectionResult.normal = glm::dvec3(0.0,  0.0, 1.0);
+
+  //intersectionResult.normal = glm::dvec3(0.0, 0.0, -1.0);
+
+
   intersectionResult.material = &material;
   return true;
 }
