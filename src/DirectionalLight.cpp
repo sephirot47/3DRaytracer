@@ -14,8 +14,7 @@ DirectionalLight::~DirectionalLight() {}
 glm::vec3 DirectionalLight::LightIt(const Scene& scene, glm::vec3 pixelColor, const Intersection& intersection)
 {
   glm::vec3 color = glm::vec3(0.0f);
-  glm::vec3 ambient, diffuse, specular;
-  ambient = intersection.material->ambient;
+  glm::vec3 diffuse, specular;
   diffuse = glm::vec3(0.0f);
   specular = glm::vec3(0.0f);
 
@@ -26,7 +25,7 @@ glm::vec3 DirectionalLight::LightIt(const Scene& scene, glm::vec3 pixelColor, co
   Intersection lightInter = intersection;
   scene.RayTrace(ray, lightInter);
 
-  double epsilon = 0.0001;
+  double epsilon = 0.00001;
   double d1 = glm::length(intersection.point - ray.origin);
   double d2 = glm::length(lightInter.point - ray.origin);
   bool isInShadow = abs(d2 - d1) > epsilon;
@@ -40,14 +39,14 @@ glm::vec3 DirectionalLight::LightIt(const Scene& scene, glm::vec3 pixelColor, co
     
     //Specular
     glm::dvec3 reflectDir = glm::normalize(ray.reflect(intersection).dir);
-    glm::dvec3 camToPointDir = glm::normalize(glm::dvec3(0) - intersection.point);
-    dot = glm::dot(-reflectDir, camToPointDir);
+    glm::dvec3 pointToCamDir = glm::normalize(glm::dvec3(0) - intersection.point);
+    dot = glm::dot(reflectDir, pointToCamDir);
     dot = glm::pow(dot, intersection.material->shininess);
     f = dot * this->intensity;
+    f = glm::clamp(f, 0.0, 1.0);
     specular = intersection.material->specular * float(f);
-    if(dot > 0.1) cout << dot << ", " << "(" << specular.x << ", " << specular.y << ", " << specular.z << ")" << endl;
   }
 
-  color = ambient + (diffuse) * this->color;// + specular;
+  color = (diffuse + specular) * this->color;
   return pixelColor + color;
 }

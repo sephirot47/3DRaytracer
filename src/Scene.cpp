@@ -18,43 +18,42 @@ Scene::Scene()
     frameBuffer.create(WindowWidth, WindowHeight);
     timeCount = 0.0;
 
-    Sphere *sphere = new Sphere(glm::dvec3(2.5f, 0.1, 10.0),  0.5f);
-    sphere->material.ambient = glm::vec3(0,0.2,0.2);
-    sphere->material.diffuse = glm::vec3(0,1,1);
+    Sphere *sphere = new Sphere(glm::dvec3(2.5f, 0.1, 10.0),  1.0f);
+    sphere->material.ambient = glm::vec3(0.2,0,0.2);
+    sphere->material.diffuse = glm::vec3(0.6,0,0.6);
     sphere->material.specular = glm::vec3(1,1,1);
     primitives.push_back(sphere);
 
     Sphere *sphere2 = new Sphere(glm::dvec3(-2.5f, 0.0, 10.0),  0.5f);
-    //primitives.push_back(sphere2);
+    sphere2->material.ambient = glm::vec3(0.2,0.2,0);
+    sphere2->material.diffuse = glm::vec3(0.6,0.6,0);
+    sphere2->material.specular = glm::vec3(1,1,1);
+    primitives.push_back(sphere2);
 
     Cube *cube = new Cube(glm::dvec3(0.0, 0.0, 10.0),  0.5f);
    // primitives.push_back(cube);
-
-    DirectionalLight *light = new DirectionalLight();
-    light->intensity = 0.8f;
-    light->color = glm::vec3(0, 0, 1);
-    light->dir = glm::dvec3(1.0, 0.0, 0.0);
-    //lights.push_back(light);
-
-    DirectionalLight *light2 = new DirectionalLight();
-    light2->intensity = .2f;
-    light2->color = glm::vec3(0, 0, 1);
-    light2->dir = glm::dvec3(0.0, -1.0, 0.0);
-    //lights.push_back(light2);
-
-    PointLight *light3 = new PointLight();
-    light3->center = glm::dvec3(0.0,0.0,2.0);
-    light3->color = glm::vec3(1, 1, 1);
-    light3->range = 10.0;
-    light3->intensity = 0.8;
-    //lights.push_back(light3);
     
     DirectionalLight *light4 = new DirectionalLight();
     //light4->center = glm::dvec3(0.0,0.0,2.0);
-    light4->color = glm::vec3(1, 1, 1);
-    light4->dir = glm::dvec3(0,0,1);
+    light4->color = glm::vec3(1, 0, 0);
+    light4->dir = glm::dvec3(-1, 0, 1);
     light4->intensity = 0.8;
     lights.push_back(light4);
+    
+    DirectionalLight *light = new DirectionalLight();
+    //light4->center = glm::dvec3(0.0,0.0,2.0);
+    light->color = glm::vec3(0, 1, 0);
+    light->dir = glm::dvec3(-1, -1, 1);
+    light->intensity = 0.8;
+    lights.push_back(light);
+    
+    PointLight *light2 = new PointLight();
+    light2->color = glm::vec3(0, 0, 1);
+    light2->center = glm::dvec3(0.0,0.0,5.0);
+    light2->range = 10.0;
+    //light2->dir = glm::dvec3(-1, 1, 1);
+    light2->intensity = 0.8;
+    lights.push_back(light2);
 
     depthBuffer = vector<double>(WindowWidth * WindowHeight);
     ClearDepthBuffer();
@@ -126,12 +125,12 @@ sf::Color Scene::Vec3ToColor(glm::vec3 color)
 
 void Scene::Draw(sf::RenderWindow &window)
 {
-    ClearFrameBuffer(sf::Color::Blue);
+    ClearFrameBuffer(sf::Color::Black);
     ClearDepthBuffer();
 
-    timeCount += 0.005f;
+    timeCount += 0.01f;
     primitives[0]->center = glm::dvec3(-sin(timeCount*2.0) * 1.5f, cos(timeCount*2.0) * 1.5f, 10.0);
-    //primitives[1]->center = glm::dvec3( 2.5f, cos(timeCount*2.0) * 2.5f, 10.0 + sin(timeCount * 4.0) * 2.5);
+    primitives[1]->center = glm::dvec3( 2.5f, cos(timeCount*2.0) * 2.5f, 10.0 + sin(timeCount * 4.0) * 2.5);
     //primitives[2]->center = glm::dvec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0) * 2.5f, 10.0 + sin(timeCount * 3.0) * 2.0);
 
     for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
@@ -142,7 +141,7 @@ void Scene::Draw(sf::RenderWindow &window)
             Intersection intersection;
             if(RayTrace(ray, intersection))
             {
-                glm::vec3 pixelColor = glm::vec3(0);
+                glm::vec3 pixelColor = intersection.material->ambient;
                 SetDepthAt(x, y, intersection.point.z);
                 for(Light *light : lights)
                 {
@@ -153,8 +152,8 @@ void Scene::Draw(sf::RenderWindow &window)
         }
     }
 
-  for (int i = 0; i < WindowWidth; ++i) frameBuffer.setPixel(i,WindowHeight/2, sf::Color::Green);
-  for (int i = 0; i < WindowHeight; ++i) frameBuffer.setPixel(WindowWidth/2,i, sf::Color::Green);
+  //for (int i = 0; i < WindowWidth; ++i) frameBuffer.setPixel(i,WindowHeight/2, sf::Color::Green);
+  //for (int i = 0; i < WindowHeight; ++i) frameBuffer.setPixel(WindowWidth/2,i, sf::Color::Green);
   sf::Texture texture; texture.loadFromImage(frameBuffer);
 
   sf::Sprite sprite; sprite.setTexture(texture);
