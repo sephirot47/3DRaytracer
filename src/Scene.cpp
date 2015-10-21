@@ -1,14 +1,14 @@
 #include "../include/Scene.h"
 #include "../include/PointLight.h"
 
-int Scene::WindowWidth  = 1400;
-int Scene::WindowHeight = 1000;
+int Scene::WindowWidth  = 400;
+int Scene::WindowHeight = 400;
 
 glm::vec3 Scene::ClearColor = glm::vec3(0.5, 0.5, 1.0);
 
 double Scene::AspectRatio = double(Scene::WindowWidth) / Scene::WindowHeight;
 
-double Scene::Fov  = 60; //degrees
+double Scene::Fov  = 70; //degrees
 double Scene::RFov = Scene::Fov * 3.1415926535f/180.0; //rads
 
 double Scene::ZNear = 5.0;
@@ -20,22 +20,72 @@ Scene::Scene()
     frameBuffer.create(WindowWidth, WindowHeight);
     timeCount = 0.0;
 
-    glm::dvec3 dimensions(8.0, 0.1, 8.0);
+    double wallsRoughness = 0.95;
+    
+    //MIRROR
+    glm::dvec3 dimensions(3.0, 0.1, 3.0);
+    Cube *mirror = new Cube(glm::dvec3(2.0, 5.0, 10.0), dimensions);
+    mirror->material.ambient = glm::vec3(1,1,1);
+    mirror->material.diffuse = glm::vec3(1,1,1);
+    mirror->material.specular = glm::vec3(0,0,0);
+    mirror->material.roughness = 0.0;
+    primitives.push_back(mirror);
+    
+    //FLOOR
+    dimensions = glm::dvec3(10.0, 0.1, 10.0);
     Cube *floor = new Cube(glm::dvec3(0, -2.0, 10.0), dimensions);
     floor->material.ambient = glm::vec3(0.2,0.2,0.2) * 0.3f;
     floor->material.diffuse = glm::vec3(0.6,0.6,0.6) * 0.3f;
-    floor->material.specular = glm::vec3(1,1,1);
-    floor->material.roughness = 0.95;
+    floor->material.specular = glm::vec3(0);
+    floor->material.roughness = wallsRoughness;
     primitives.push_back(floor);
     
-    dimensions = glm::dvec3(8.0, 8.0, 0.1);
+    //FRONT WALL
+    dimensions = glm::dvec3(10.0, 10.0, 0.1);
+    Cube *frontWall = new Cube(glm::dvec3(0, 4.0, 0.0), dimensions);
+    frontWall->material.ambient = glm::vec3(0.2,0.2,0.2) * 0.3f;
+    frontWall->material.diffuse = glm::vec3(0.6,0.6,0.6) * 0.3f;
+    frontWall->material.specular = glm::vec3(0);
+    frontWall->material.roughness = wallsRoughness;
+    primitives.push_back(frontWall);
+    
+    //BACK WALL
+    dimensions = glm::dvec3(10.0, 10.0, 0.1);
     Cube *backWall = new Cube(glm::dvec3(0, 4.0, 18.0), dimensions);
     backWall->material.ambient = glm::vec3(0.2,0.2,0.2) * 0.3f;
     backWall->material.diffuse = glm::vec3(0.6,0.6,0.6) * 0.3f;
-    backWall->material.specular = glm::vec3(1,1,1);
-    backWall->material.roughness = 0.95;
+    backWall->material.specular = glm::vec3(0);
+    backWall->material.roughness = wallsRoughness;
     primitives.push_back(backWall);
 
+    //RIGHT WALL
+    dimensions = glm::dvec3(0.1, 10.0, 10.0);
+    Cube *rightWall = new Cube(glm::dvec3(7.0, 0.0, 10.0), dimensions);
+    rightWall->material.ambient = glm::vec3(0.2,0.2,0.2) * 0.3f;
+    rightWall->material.diffuse = glm::vec3(0.6,0.6,0.6) * 0.3f;
+    rightWall->material.specular = glm::vec3(0);
+    rightWall->material.roughness = wallsRoughness;
+    primitives.push_back(rightWall);
+
+    //LEFT WALL
+    dimensions = glm::dvec3(0.1, 10.0, 10.0);
+    Cube *leftWall = new Cube(glm::dvec3(-7.0, 0.0, 10.0), dimensions);
+    leftWall->material.ambient = glm::vec3(0.2,0.2,0.2) * 0.3f;
+    leftWall->material.diffuse = glm::vec3(0.6,0.6,0.6) * 0.3f;
+    leftWall->material.specular = glm::vec3(0);
+    leftWall->material.roughness = wallsRoughness;
+    primitives.push_back(leftWall);
+    
+    //CEIL
+    dimensions = glm::dvec3(10.0, 0.1, 10.0);
+    Cube *ceil = new Cube(glm::dvec3(0.0, 8.0, 10.0), dimensions);
+    ceil->material.ambient = glm::vec3(0.2,0.2,0.2) * 0.3f;
+    ceil->material.diffuse = glm::vec3(0.6,0.6,0.6) * 0.3f;
+    ceil->material.specular = glm::vec3(0);
+    ceil->material.roughness = wallsRoughness;
+    primitives.push_back(ceil);
+    
+    
     Sphere *bigSphere = new Sphere(glm::dvec3(3.0, 0.0, 10.0),  2.0f);
     bigSphere->material.roughness = 0.5;
     primitives.push_back(bigSphere);
@@ -67,14 +117,14 @@ Scene::Scene()
     light4->color = glm::vec3(1, 0.5, 0.5);
     light4->dir = glm::dvec3(0, 1, 0);
     light4->intensity = 0.8;
-    lights.push_back(light4);
+    //lights.push_back(light4);
     
     DirectionalLight *light = new DirectionalLight();
     //light4->center = glm::dvec3(0.0,0.0,2.0);
     light->color = glm::vec3(0, 1, 1);
     light->dir = glm::dvec3(-1, -1, 1);
     light->intensity = 0.8;
-    lights.push_back(light);
+    //lights.push_back(light);
     
     PointLight *light2 = new PointLight();
     light2->color = glm::vec3(1, 1, 1);
