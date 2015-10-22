@@ -92,11 +92,13 @@ Scene::Scene()
     bigSphere->material.roughness = 0.5;
     primitives.push_back(bigSphere);
     
-    Sphere *sphere = new Sphere(glm::dvec3(0.0, -1.0, 10.0),  1.0f);
+    //RED SPHERE
+    Sphere *sphere = new Sphere(glm::dvec3(3.0, -1.0, 7.0),  1.0f);
     sphere->material.ambient = glm::vec3(0.2,0,0.0);
     sphere->material.diffuse = glm::vec3(0.6,0,0.0);
     sphere->material.specular = glm::vec3(1,1,1);
     sphere->material.roughness = 0.8;
+    sphere->material.alpha = 0.7;
     primitives.push_back(sphere);
 
     Sphere *littleSphere = new Sphere(glm::dvec3(1, 0.6, 7.5),  0.3f);
@@ -218,17 +220,34 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces)
         bool calcBounceColor = (bounces < 6 && intersection.material->roughness < 1.0);
         float r = float(intersection.material->roughness);
         
+        //Apply reflection
         Ray bounceRay = ray.reflect(intersection);
+        
+        //Apply random vector of roughness to the ray bounce direction
         glm::dvec3 roughnessVector = (GetRandomVector() * double(r) * 0.01);
         bounceRay.dir = glm::normalize( bounceRay.dir + roughnessVector);
         
         glm::vec3 bounceColor = calcBounceColor ? GetPixelColor(bounceRay, bounces + 1) : ClearColor;
         pixelColor = intersection.material->ambient;
+        //Apply light
         for(Light *light : lights)
         {
             pixelColor = light->LightIt(*this, pixelColor, intersection);
         }
-        return (r * pixelColor + (1.0f-r) * bounceColor);
+        
+        pixelColor = (r * pixelColor + (1.0f-r) * bounceColor);
+        
+        //Apply refraction
+        double alpha = intersection.material->alpha;
+        if(alpha < 1.0)
+        {
+            double epsilon = 0.01;
+            Ray refractionRay = ray;
+            refractionRay.origin = intersection.point + epsilon * refractionRay.dir;
+            pixelColor = float(alpha) * pixelColor + float(1.0-alpha) * GetPixelColor(refractionRay, bounces+1);
+        }
+        
+        return pixelColor;
     }
     return ClearColor;
 }

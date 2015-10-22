@@ -14,6 +14,7 @@ public:
 
     double shininess;
     double roughness;
+    double alpha; //1.0 means totally opaque, 0.0 totally transparent 
 };
 
 #endif
