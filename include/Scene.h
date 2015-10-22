@@ -3,6 +3,7 @@
 
 #include "glm/glm.hpp"
 #include <SFML/Graphics.hpp>
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 
@@ -43,9 +44,12 @@ public:
 
   void Draw(sf::RenderWindow &window);
   
+  glm::dvec3 GetRandomVector();
+  
   glm::vec3 GetPixelColor(Ray& ray, int bounces);
   bool RayTrace(const Ray& ray, Intersection &intersection) const;
   static sf::Color Vec3ToColor(glm::vec3 color);
+  static double GetRand() { return double(rand()%10000)/10000; }
 };
 
 #endif

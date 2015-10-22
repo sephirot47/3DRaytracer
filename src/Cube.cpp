@@ -26,7 +26,7 @@ bool Cube::GetIntersection(const Ray &ray, Intersection &intersectionResult)
   glm::dvec3 lowestCorner = GetLowestCorner();
   glm::dvec3 highestCorner = GetHighestCorner();
   double Tnear = -9999999.0, Tfar = 9999999.9;
-  double epsilon = 0.000001;
+  double epsilon = 0.0001;
   for(int i = 0; i < 3; ++i)
   {
     if (abs(ray.dir[i]) < epsilon)
@@ -57,9 +57,6 @@ bool Cube::GetIntersection(const Ray &ray, Intersection &intersectionResult)
   else if (abs(p.y - highestCorner.y) < epsilon) intersectionResult.normal = glm::dvec3(0.0,  1.0, 0.0);
   else if (abs(p.z - lowestCorner.z) < epsilon) intersectionResult.normal = glm::dvec3(0.0, 0.0, -1.0);
   else intersectionResult.normal = glm::dvec3(0.0,  0.0, 1.0);
-
-  //intersectionResult.normal = glm::dvec3(0.0, 0.0, -1.0);
-
 
   intersectionResult.material = &material;
   return true;

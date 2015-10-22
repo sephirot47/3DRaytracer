@@ -12,7 +12,8 @@ int main()
 {
   Scene scene;
   sf::RenderWindow window(sf::VideoMode(Scene::WindowWidth, Scene::WindowHeight), "3D Raycaster");
-
+  
+  scene.Draw(window);
   while (window.isOpen())
   {
     sf::Event event;
@@ -28,7 +29,6 @@ int main()
             }
         }
     }
-    if(!paused) scene.Draw(window);
   }
   return 0;
 }

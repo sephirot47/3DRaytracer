@@ -1,14 +1,14 @@
 #include "../include/Scene.h"
 #include "../include/PointLight.h"
 
-int Scene::WindowWidth  = 400;
-int Scene::WindowHeight = 400;
+int Scene::WindowWidth  = 800;
+int Scene::WindowHeight = 800;
 
 glm::vec3 Scene::ClearColor = glm::vec3(0.5, 0.5, 1.0);
 
 double Scene::AspectRatio = double(Scene::WindowWidth) / Scene::WindowHeight;
 
-double Scene::Fov  = 70; //degrees
+double Scene::Fov  = 90; //degrees
 double Scene::RFov = Scene::Fov * 3.1415926535f/180.0; //rads
 
 double Scene::ZNear = 5.0;
@@ -17,19 +17,21 @@ double Scene::ViewportHeight = Scene::ViewportWidth / Scene::AspectRatio;
 
 Scene::Scene()
 {
+    srand(time(0));
+    
     frameBuffer.create(WindowWidth, WindowHeight);
     timeCount = 0.0;
 
     double wallsRoughness = 0.95;
     
     //MIRROR
-    glm::dvec3 dimensions(3.0, 0.1, 3.0);
-    Cube *mirror = new Cube(glm::dvec3(2.0, 5.0, 10.0), dimensions);
+    glm::dvec3 dimensions = glm::dvec3(6.0, 6.0, 0.1) * 0.9;
+    Cube *mirror = new Cube(glm::dvec3(0.0, 4.0, 17.0), dimensions);
     mirror->material.ambient = glm::vec3(1,1,1);
     mirror->material.diffuse = glm::vec3(1,1,1);
-    mirror->material.specular = glm::vec3(0,0,0);
-    mirror->material.roughness = 0.0;
-    primitives.push_back(mirror);
+    mirror->material.specular = glm::vec3(1,1,1);
+    mirror->material.roughness = 0.1;
+    //primitives.push_back(mirror);
     
     //FLOOR
     dimensions = glm::dvec3(10.0, 0.1, 10.0);
@@ -51,7 +53,7 @@ Scene::Scene()
     
     //BACK WALL
     dimensions = glm::dvec3(10.0, 10.0, 0.1);
-    Cube *backWall = new Cube(glm::dvec3(0, 4.0, 18.0), dimensions);
+    Cube *backWall = new Cube(glm::dvec3(0, 0.0, 18.0), dimensions);
     backWall->material.ambient = glm::vec3(0.2,0.2,0.2) * 0.3f;
     backWall->material.diffuse = glm::vec3(0.6,0.6,0.6) * 0.3f;
     backWall->material.specular = glm::vec3(0);
@@ -83,7 +85,7 @@ Scene::Scene()
     ceil->material.diffuse = glm::vec3(0.6,0.6,0.6) * 0.3f;
     ceil->material.specular = glm::vec3(0);
     ceil->material.roughness = wallsRoughness;
-    primitives.push_back(ceil);
+    //primitives.push_back(ceil);
     
     
     Sphere *bigSphere = new Sphere(glm::dvec3(3.0, 0.0, 10.0),  2.0f);
@@ -117,19 +119,19 @@ Scene::Scene()
     light4->color = glm::vec3(1, 0.5, 0.5);
     light4->dir = glm::dvec3(0, 1, 0);
     light4->intensity = 0.8;
-    //lights.push_back(light4);
+    lights.push_back(light4);
     
     DirectionalLight *light = new DirectionalLight();
     //light4->center = glm::dvec3(0.0,0.0,2.0);
-    light->color = glm::vec3(0, 1, 1);
-    light->dir = glm::dvec3(-1, -1, 1);
-    light->intensity = 0.8;
-    //lights.push_back(light);
+    light->color = glm::vec3(1, 1, 1);
+    light->dir = glm::dvec3(0, -1, 0);
+    light->intensity = 0.4;
+    lights.push_back(light);
     
     PointLight *light2 = new PointLight();
     light2->color = glm::vec3(1, 1, 1);
     light2->range = 15.0;
-    light2->center = glm::vec3(2, 0, 6);
+    light2->center = glm::vec3(2, 4, 15);
     //light2->dir = glm::dvec3(-1, 1, 1);
     light2->intensity = 0.5;
     lights.push_back(light2);
@@ -201,6 +203,12 @@ sf::Color Scene::Vec3ToColor(glm::vec3 color)
   return sf::Color(r,g,b);
 }
 
+glm::dvec3 Scene::GetRandomVector()
+{
+    glm::dvec3 randVector(GetRand(), GetRand(), GetRand());
+    return glm::normalize(randVector);
+}
+
 glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces)
 {
     Intersection intersection;
@@ -208,15 +216,18 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces)
     if(RayTrace(ray, intersection))
     {
         bool calcBounceColor = (bounces < 6 && intersection.material->roughness < 1.0);
-        //cout << boolalpha << calcBounceColor << endl;
+        float r = float(intersection.material->roughness);
+        
         Ray bounceRay = ray.reflect(intersection);
+        glm::dvec3 roughnessVector = (GetRandomVector() * double(r) * 0.01);
+        bounceRay.dir = glm::normalize( bounceRay.dir + roughnessVector);
+        
         glm::vec3 bounceColor = calcBounceColor ? GetPixelColor(bounceRay, bounces + 1) : ClearColor;
         pixelColor = intersection.material->ambient;
         for(Light *light : lights)
         {
             pixelColor = light->LightIt(*this, pixelColor, intersection);
         }
-        float r = float(intersection.material->roughness);
         return (r * pixelColor + (1.0f-r) * bounceColor);
     }
     return ClearColor;
@@ -233,6 +244,7 @@ void Scene::Draw(sf::RenderWindow &window)
     //primitives[1]->center = glm::dvec3( 2.5f, cos(timeCount*2.0) * 2.5f, 10.0 + sin(timeCount * 4.0) * 2.5);
     //primitives[2]->center = glm::dvec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0) * 2.5f, 10.0 + sin(timeCount * 3.0) * 2.0);
 
+    float lastShownPercentage = 0.0f; float percentageStep = 0.005f;
     for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
     {
         for(int y = -WindowHeight/2; y < WindowHeight/2; ++y)
@@ -245,6 +257,11 @@ void Scene::Draw(sf::RenderWindow &window)
                 SetDepthAt(x, y, intersection.point.z);
                 frameBuffer.setPixel(x + WindowWidth/2, y + WindowHeight/2, Vec3ToColor(pixelColor));
             }
+            
+            //Print percentage
+            float percentage = float((x+WindowWidth/2) * WindowHeight + y + WindowHeight/2) / (WindowWidth*WindowHeight);
+            if(percentage - lastShownPercentage > percentageStep) 
+            { lastShownPercentage = percentage; cout << (percentage*100.0f) << "%" << endl; }
         }
     }
 
