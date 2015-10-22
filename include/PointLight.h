@@ -17,8 +17,10 @@ public:
 
     PointLight();
     virtual ~PointLight();
-
-    glm::vec3 LightIt(const Scene& scene, glm::vec3 pixelColor, const Intersection& intersection) override;
+    
+    float GetDiffuse(const Scene& scene, const Intersection &intersection) override;
+    float GetSpecular(const Scene& scene, const Intersection &intersection) override;
+    Ray GetLightRay(const Scene& scene, const Intersection &intersection) override;
 };
 
 #endif
