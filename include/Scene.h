@@ -46,7 +46,7 @@ public:
   
   glm::dvec3 GetRandomVector();
   
-  glm::vec3 GetPixelColor(Ray& ray, int bounces);
+  glm::vec3 GetPixelColor(Ray& ray, int bounces, bool inVoid);
   bool RayTrace(const Ray& ray, Intersection &intersection) const;
   static sf::Color Vec3ToColor(glm::vec3 color);
   static double GetRand() { return double(rand()%10000)/10000; }

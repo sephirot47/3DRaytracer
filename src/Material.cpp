@@ -12,6 +12,7 @@ Material::Material()
   roughness = 0.5;
   shininess = 30.0;
   alpha = 1.0;
+  refraction = 2.5;
 }
 
 Material::~Material() {}

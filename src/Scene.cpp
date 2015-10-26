@@ -1,8 +1,8 @@
 #include "../include/Scene.h"
 #include "../include/PointLight.h"
 
-int Scene::WindowWidth  = 800;
-int Scene::WindowHeight = 800;
+int Scene::WindowWidth  = 1000;
+int Scene::WindowHeight = 1000;
 
 glm::vec3 Scene::ClearColor = glm::vec3(0.5, 0.5, 1.0);
 
@@ -67,7 +67,7 @@ Scene::Scene()
     rightWall->material.diffuse = glm::vec3(0.6,0.6,0.6) * 0.3f;
     rightWall->material.specular = glm::vec3(0);
     rightWall->material.roughness = wallsRoughness;
-    primitives.push_back(rightWall);
+    //primitives.push_back(rightWall);
 
     //LEFT WALL
     dimensions = glm::dvec3(0.1, 10.0, 10.0);
@@ -93,7 +93,7 @@ Scene::Scene()
     primitives.push_back(bigSphere);
     
     //RED SPHERE
-    Sphere *sphere = new Sphere(glm::dvec3(3.0, -1.0, 7.0),  1.0f);
+    Sphere *sphere = new Sphere(glm::dvec3(3.0, 1.0, 7.0),  1.0f);
     sphere->material.ambient = glm::vec3(0.2,0,0.0);
     sphere->material.diffuse = glm::vec3(0.6,0,0.0);
     sphere->material.specular = glm::vec3(1,1,1);
@@ -118,7 +118,7 @@ Scene::Scene()
     
     DirectionalLight *light4 = new DirectionalLight();
     //light4->center = glm::dvec3(0.0,0.0,2.0);
-    light4->color = glm::vec3(1, 0.5, 0.5);
+    light4->color = glm::vec3(1, 0., 0.5);
     light4->dir = glm::dvec3(0, 1, 0);
     light4->intensity = 0.8;
     //lights.push_back(light4);
@@ -126,7 +126,7 @@ Scene::Scene()
     DirectionalLight *light = new DirectionalLight();
     //light4->center = glm::dvec3(0.0,0.0,2.0);
     light->color = glm::vec3(1, 1, 1);
-    light->dir = glm::normalize( glm::dvec3(1.0, -1, 0.1) );
+    light->dir = glm::normalize( glm::dvec3(-0.8, -1, 0.8) );
     light->intensity = 0.4;
     lights.push_back(light);
     
@@ -211,7 +211,7 @@ glm::dvec3 Scene::GetRandomVector()
     return glm::normalize(randVector);
 }
 
-glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces)
+glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces, bool inVoid)
 {
     Intersection intersection;
     glm::vec3 pixelColor;
@@ -227,7 +227,7 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces)
         glm::dvec3 roughnessVector = (GetRandomVector() * double(r) * 0.01);
         bounceRay.dir = glm::normalize( bounceRay.dir + roughnessVector);
         
-        glm::vec3 bounceColor = calcBounceColor ? GetPixelColor(bounceRay, bounces + 1) : ClearColor;
+        glm::vec3 bounceColor = calcBounceColor ? GetPixelColor(bounceRay, bounces + 1, inVoid) : ClearColor;
         pixelColor = intersection.material->ambient;
         //Apply light
         for(Light *light : lights)
@@ -241,10 +241,10 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces)
         double alpha = intersection.material->alpha;
         if(alpha < 1.0)
         {
-            double epsilon = 0.01;
-            Ray refractionRay = ray;
+            double epsilon = 0.0001;
+            Ray refractionRay = ray.refract(intersection, inVoid);
             refractionRay.origin = intersection.point + epsilon * refractionRay.dir;
-            pixelColor = float(alpha) * pixelColor + float(1.0-alpha) * GetPixelColor(refractionRay, bounces+1);
+            pixelColor = float(alpha) * pixelColor + float(1.0-alpha) * GetPixelColor(refractionRay, bounces+1, !inVoid);
         }
         
         return pixelColor;
@@ -272,8 +272,8 @@ void Scene::Draw(sf::RenderWindow &window)
             Intersection intersection;
             if(RayTrace(ray, intersection))
             {
-                glm::vec3 pixelColor = GetPixelColor(ray, 0);
                 SetDepthAt(x, y, intersection.point.z);
+                glm::vec3 pixelColor = GetPixelColor(ray, 0, true);
                 frameBuffer.setPixel(x + WindowWidth/2, y + WindowHeight/2, Vec3ToColor(pixelColor));
             }
             

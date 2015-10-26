@@ -17,4 +17,12 @@ Ray Ray::reflect(const Intersection &intersection) const
     Ray r; r.origin = intersection.point; r.dir = glm::normalize(glm::reflect(dir, intersection.normal)); return r;
 }
 
+Ray Ray::refract(const Intersection &intersection, bool fromVoid) const
+{
+    Ray r; r.origin = intersection.point; 
+    double refr = fromVoid ? intersection.material->refraction : 1.0 / intersection.material->refraction;
+    r.dir = glm::normalize(glm::refract(dir, intersection.normal, refr)); 
+    return r;
+}
+
 Ray::~Ray() {}

@@ -15,6 +15,7 @@ public:
     virtual ~Ray();
 
     Ray reflect(const Intersection &intersection) const;
+    Ray refract(const Intersection &intersection, bool fromVoid) const;
 };
 
 #endif
