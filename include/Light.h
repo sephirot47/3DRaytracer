@@ -18,9 +18,10 @@ public:
     virtual ~Light();
 
     glm::vec3 LightIt(const Scene& scene, glm::vec3 pixelColor, const Intersection& intersection);
-    virtual float GetDiffuse(const Scene& scene, const Intersection &intersection) = 0;
-    virtual float GetSpecular(const Scene& scene, const Intersection &intersection) = 0;
-    virtual Ray GetLightRay(const Scene& scene, const Intersection &intersection) = 0;
+    
+    virtual float GetDiffuse(const Scene& scene, const Intersection& intersection, const Ray &ray) = 0;
+    virtual float GetSpecular(const Scene& scene, const Intersection& intersection, const Ray &ray) = 0;
+    virtual Ray GetLightRay(const Intersection& intersection) = 0;
 };
 
 #endif

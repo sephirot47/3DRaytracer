@@ -33,9 +33,7 @@ bool Sphere::GetIntersection(const Ray &ray, Intersection &intersectionResult)
     // discriminant
     double D = B * B - 4.0 * A * C;
 
-    double epsilon = 0.1;
-    if ( D < 0.0 ) return false;
-    
+    if ( D < 0.0 ) return false;    
 
     double t1 = ( -B - sqrt( D ) ) / ( 2.0 * A );
 
@@ -46,6 +44,7 @@ bool Sphere::GetIntersection(const Ray &ray, Intersection &intersectionResult)
     glm::dvec3 solutionDir = glm::normalize(solution1 - ray.origin);
     if(glm::dot(ray.dir, solutionDir) < 0.9) return false;
 
+    double epsilon = 0.1;
     if ( abs(D) < epsilon )
     {
         intersectionResult.point = solution1;

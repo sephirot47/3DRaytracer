@@ -14,7 +14,7 @@ public:
     Ray(const glm::dvec3 &origin,  const glm::dvec3 &dir);
     virtual ~Ray();
 
-    Ray reflect(const Intersection &intersection);
+    Ray reflect(const Intersection &intersection) const;
 };
 
 #endif

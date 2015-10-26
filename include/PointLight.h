@@ -17,10 +17,10 @@ public:
 
     PointLight();
     virtual ~PointLight();
-    
-    float GetDiffuse(const Scene& scene, const Intersection &intersection) override;
-    float GetSpecular(const Scene& scene, const Intersection &intersection) override;
-    Ray GetLightRay(const Scene& scene, const Intersection &intersection) override;
+
+    float GetDiffuse(const Scene& scene, const Intersection& intersection, const Ray &ray) override;
+    float GetSpecular(const Scene& scene, const Intersection& intersection, const Ray &ray) override;
+    Ray GetLightRay(const Intersection& intersection) override;
 };
 
 #endif

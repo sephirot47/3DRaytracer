@@ -121,14 +121,14 @@ Scene::Scene()
     light4->color = glm::vec3(1, 0.5, 0.5);
     light4->dir = glm::dvec3(0, 1, 0);
     light4->intensity = 0.8;
-    //lights.push_back(light4);
+    lights.push_back(light4);
     
     DirectionalLight *light = new DirectionalLight();
     //light4->center = glm::dvec3(0.0,0.0,2.0);
     light->color = glm::vec3(1, 1, 1);
-    light->dir = glm::dvec3(0.1, -1, 0.1);
+    light->dir = glm::dvec3(0, -1, 0);
     light->intensity = 0.4;
-    //lights.push_back(light);
+    lights.push_back(light);
     
     PointLight *light2 = new PointLight();
     light2->color = glm::vec3(1, 1, 1);
@@ -225,7 +225,7 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces)
         
         //Apply random vector of roughness to the ray bounce direction
         glm::dvec3 roughnessVector = (GetRandomVector() * double(r) * 0.01);
-        //bounceRay.dir = glm::normalize( bounceRay.dir + roughnessVector);
+        bounceRay.dir = glm::normalize( bounceRay.dir + roughnessVector);
         
         glm::vec3 bounceColor = calcBounceColor ? GetPixelColor(bounceRay, bounces + 1) : ClearColor;
         pixelColor = intersection.material->ambient;

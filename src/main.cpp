@@ -1,5 +1,7 @@
 #include <iostream>
 
+#define EPSILON 0.00001
+
 #include "../include/glm/glm.hpp"
 #include <SFML/Graphics.hpp>
 

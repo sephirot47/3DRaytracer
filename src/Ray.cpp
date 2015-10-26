@@ -12,7 +12,7 @@ Ray::Ray(const glm::dvec3 &origin,  const glm::dvec3 &dir)
   this->dir = glm::normalize(dir);
 }
 
-Ray Ray::reflect(const Intersection &intersection)
+Ray Ray::reflect(const Intersection &intersection) const
 {
     Ray r; r.origin = intersection.point; r.dir = glm::normalize(glm::reflect(dir, intersection.normal)); return r;
 }

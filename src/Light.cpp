@@ -13,24 +13,43 @@ Light::~Light() {}
 
 glm::vec3 Light::LightIt(const Scene& scene, glm::vec3 pixelColor, const Intersection& intersection)
 {
-  glm::vec3 color = glm::vec3(0.0f);
-  glm::vec3 diffuse = glm::vec3(0.0f);
+  glm::vec3 colorSubstraction = glm::vec3(0.0f);
+  glm::vec3 diffuse = glm::vec3(0.0f); 
   glm::vec3 specular = glm::vec3(0.0f);
 
-  Intersection lightInter = intersection;
-  Ray ray = GetLightRay(scene, intersection);
-  scene.RayTrace(ray, lightInter);
-  
-  double epsilon = 0.00001;
-  double d1 = glm::length(intersection.point - ray.origin);
-  double d2 = glm::length(lightInter.point - ray.origin);
-  bool isInShadow = abs(d2 - d1) > epsilon;
-  if(!isInShadow)
-  {
-    diffuse = intersection.material->diffuse * GetDiffuse(scene, intersection);
-    specular = intersection.material->specular * GetSpecular(scene, intersection);
-  }
+  Ray lightRay = GetLightRay(intersection);
+  Intersection lightInter;
+  lightInter.point = lightRay.origin;
 
-  color = (diffuse + specular) * this->color;
-  return pixelColor + color;
+  double epsilon = 0.00001;
+  double d1 = glm::length(intersection.point - lightRay.origin);
+  double d2;
+  bool isInShadow;
+  do
+  {
+    lightRay.origin = lightInter.point + lightRay.dir * epsilon;
+    scene.RayTrace(lightRay, lightInter);
+    
+    d2 = glm::length(lightInter.point - lightRay.origin);
+    isInShadow = abs(d2 - d1) > epsilon && (lightInter.material->alpha >= 1.0);
+      
+    glm::vec3 colorSubs = glm::vec3(1.0f) - lightInter.material->diffuse;
+    colorSubs *= lightInter.material->alpha;
+    
+    colorSubstraction += colorSubs;
+  }
+  while(!isInShadow);
+  
+  if( abs(d2 - d1) <= epsilon )
+  {
+    diffuse = lightInter.material->diffuse * GetDiffuse(scene, lightInter, lightRay);
+    specular = lightInter.material->specular * GetSpecular(scene, lightInter, lightRay);
+  }
+  
+  glm::vec3 finalApportation = (diffuse + specular) * (this->color - colorSubstraction);
+  finalApportation.x = glm::clamp(0.0f, 1.0f, finalApportation.x);
+  finalApportation.y = glm::clamp(0.0f, 1.0f, finalApportation.y);
+  finalApportation.z = glm::clamp(0.0f, 1.0f, finalApportation.z);
+  
+  return pixelColor + finalApportation; 
 }

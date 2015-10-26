@@ -11,29 +11,31 @@ DirectionalLight::DirectionalLight()
 
 DirectionalLight::~DirectionalLight() {}
 
-float DirectionalLight::GetDiffuse(const Scene& scene, const Intersection &intersection)
+float DirectionalLight::GetDiffuse(const Scene& scene, const Intersection& intersection, const Ray &ray)
 {
-    double dot = glm::dot(-this->dir, glm::normalize(intersection.normal));
-    double f = dot * intensity;
-    f = glm::clamp(f, 0.0, 1.0);
-    return float(f);
+  //Diffuse
+  double dot = glm::dot(-this->dir, glm::normalize(intersection.normal));
+  double f = dot * intensity;
+  f = glm::clamp(f, 0.0, 1.0);
+  return float(f);
 }
 
-float DirectionalLight::GetSpecular(const Scene& scene, const Intersection &intersection)
+float DirectionalLight::GetSpecular(const Scene& scene, const Intersection& intersection, const Ray &ray)
 {
-    Ray ray = GetLightRay(scene, intersection);
-    glm::dvec3 reflectDir = glm::normalize(ray.reflect(intersection).dir);
-    glm::dvec3 pointToCamDir = glm::normalize(glm::dvec3(0) - intersection.point);
-    double dot = glm::dot(reflectDir, pointToCamDir);
-    dot = glm::pow(dot, intersection.material->shininess);
-    double f = dot * this->intensity;
-    f = glm::clamp(f, 0.0, 1.0);
-    return float(f);
+  //Specular
+  glm::dvec3 reflectDir = glm::normalize(ray.reflect(intersection).dir);
+  glm::dvec3 pointToCamDir = glm::normalize(glm::dvec3(0) - intersection.point);
+  double dot = glm::dot(reflectDir, pointToCamDir);
+  dot = glm::pow(dot, intersection.material->shininess);
+  double f = dot * this->intensity;
+  f = glm::clamp(f, 0.0, 1.0);
+  return float(f);
 }
 
-Ray DirectionalLight::GetLightRay(const Scene& scene, const Intersection &intersection)
+Ray DirectionalLight::GetLightRay(const Intersection& intersection)
 {
   Ray ray;
   ray.origin = intersection.point - this->dir * 9999.9;
   ray.dir = this->dir;
+  return ray;
 }
