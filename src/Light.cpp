@@ -21,26 +21,29 @@ glm::vec3 Light::LightIt(const Scene& scene, glm::vec3 pixelColor, const Interse
   Intersection lightInter;
   lightInter.point = lightRay.origin;
 
+  glm::dvec3 lightRayOrigin = lightRay.origin;
   double epsilon = 0.00001;
-  double d1 = glm::length(intersection.point - lightRay.origin);
+  double d1 = glm::length(intersection.point - lightRayOrigin);
   double d2;
-  bool isInShadow;
+  bool arrivedToDest;
   do
   {
     lightRay.origin = lightInter.point + lightRay.dir * epsilon;
     scene.RayTrace(lightRay, lightInter);
     
-    d2 = glm::length(lightInter.point - lightRay.origin);
-    isInShadow = abs(d2 - d1) > epsilon && (lightInter.material->alpha >= 1.0);
-      
-    glm::vec3 colorSubs = glm::vec3(1.0f) - lightInter.material->diffuse;
-    colorSubs *= lightInter.material->alpha;
-    
-    colorSubstraction += colorSubs;
+    d2 = glm::length(lightInter.point - lightRayOrigin);
+    arrivedToDest = abs(d2 - d1) <= epsilon || (lightInter.material->alpha >= 1.0);
+    if(!arrivedToDest)
+    {
+        glm::vec3 colorSubs = glm::vec3(1.0f) - lightInter.material->diffuse;
+        colorSubs *= lightInter.material->alpha;
+        
+        colorSubstraction += colorSubs;   
+    }
   }
-  while(!isInShadow);
+  while(!arrivedToDest);
   
-  if( abs(d2 - d1) <= epsilon )
+  if( abs(d2 - d1) <= epsilon)
   {
     diffuse = lightInter.material->diffuse * GetDiffuse(scene, lightInter, lightRay);
     specular = lightInter.material->specular * GetSpecular(scene, lightInter, lightRay);

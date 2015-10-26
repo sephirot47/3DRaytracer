@@ -98,7 +98,7 @@ Scene::Scene()
     sphere->material.diffuse = glm::vec3(0.6,0,0.0);
     sphere->material.specular = glm::vec3(1,1,1);
     sphere->material.roughness = 0.8;
-    sphere->material.alpha = 0.7;
+    sphere->material.alpha = 0.5;
     primitives.push_back(sphere);
 
     Sphere *littleSphere = new Sphere(glm::dvec3(1, 0.6, 7.5),  0.3f);
@@ -121,19 +121,19 @@ Scene::Scene()
     light4->color = glm::vec3(1, 0.5, 0.5);
     light4->dir = glm::dvec3(0, 1, 0);
     light4->intensity = 0.8;
-    lights.push_back(light4);
+    //lights.push_back(light4);
     
     DirectionalLight *light = new DirectionalLight();
     //light4->center = glm::dvec3(0.0,0.0,2.0);
     light->color = glm::vec3(1, 1, 1);
-    light->dir = glm::dvec3(0, -1, 0);
+    light->dir = glm::normalize( glm::dvec3(1.0, -1, 0.1) );
     light->intensity = 0.4;
     lights.push_back(light);
     
     PointLight *light2 = new PointLight();
     light2->color = glm::vec3(1, 1, 1);
     light2->range = 15.0;
-    light2->center = glm::vec3(2, 4, 15);
+    light2->center = glm::vec3(2, 4, 10);
     //light2->dir = glm::dvec3(-1, 1, 1);
     light2->intensity = 0.5;
     lights.push_back(light2);
