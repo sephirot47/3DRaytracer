@@ -31,6 +31,7 @@ private:
   void SetDepthAt(int pixelX, int pixelY, double depth);
 
 public:
+  static int MSAA;
   static int WindowWidth, WindowHeight;
   static glm::vec3 ClearColor;
 

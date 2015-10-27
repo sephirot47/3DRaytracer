@@ -1,8 +1,9 @@
 #include "../include/Scene.h"
 #include "../include/PointLight.h"
 
-int Scene::WindowWidth  = 1000;
-int Scene::WindowHeight = 1000;
+int Scene::MSAA = 2;
+int Scene::WindowWidth  = 1000 * MSAA;
+int Scene::WindowHeight = 1000 * MSAA;
 
 glm::vec3 Scene::ClearColor = glm::vec3(0.5, 0.5, 1.0);
 
@@ -287,8 +288,9 @@ void Scene::Draw(sf::RenderWindow &window)
   //for (int i = 0; i < WindowWidth; ++i) frameBuffer.setPixel(i,WindowHeight/2, sf::Color::Green);
   //for (int i = 0; i < WindowHeight; ++i) frameBuffer.setPixel(WindowWidth/2,i, sf::Color::Green);
   sf::Texture texture; texture.loadFromImage(frameBuffer);
-
+  texture.setSmooth(true);
   sf::Sprite sprite; sprite.setTexture(texture);
+  sprite.setScale(1.0f/MSAA, 1.0f/MSAA);
   window.draw(sprite);
   window.display();
 }

@@ -13,7 +13,7 @@ bool paused = false;
 int main()
 {
   Scene scene;
-  sf::RenderWindow window(sf::VideoMode(Scene::WindowWidth, Scene::WindowHeight), "3D Raycaster");
+  sf::RenderWindow window(sf::VideoMode(Scene::WindowWidth/Scene::MSAA, Scene::WindowHeight/Scene::MSAA), "3D Raycaster");
   
   scene.Draw(window);
   while (window.isOpen())
