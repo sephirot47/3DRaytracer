@@ -5,7 +5,6 @@
 #include <map>
 #include <vector>
 #include <tuple>
-#include "../include/SceneReader.h"
 
 using namespace std;
 

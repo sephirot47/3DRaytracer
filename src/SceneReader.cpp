@@ -1,5 +1,5 @@
 #include "../include/SceneReader.h"
-#include "../src/Scene.cpp"
+#include "Scene.cpp"
 
 void SceneReader::ReadScene(Scene& scene, string filename)
 {
@@ -27,16 +27,18 @@ void SceneReader::ReadScene(Scene& scene, string filename)
   fclose(f);
 }
 
-glm::vec3 SceneReader::ReadVec3 (AST* vec)
+glm::vec3 SceneReader::ReadVec3 (void* v)
 {
+  AST *vec = (AST*)v;
   float x = atof(vec->down->text.c_str());
   float y = atof(vec->down->right->text.c_str());
   float z = atof(vec->down->right->right->text.c_str());
   return glm::vec3(x,y,z);
 }
 
-glm::dvec3 SceneReader::ReadDVec3 (AST* vec)
+glm::dvec3 SceneReader::ReadDVec3 (void* v)
 {
+  AST *vec = (AST*)v;
   double x = atof(vec->down->text.c_str());
   double y = atof(vec->down->right->text.c_str());
   double z = atof(vec->down->right->right->text.c_str());

@@ -19,14 +19,13 @@
 using namespace std;
 
 class Scene;
-//struct AST;
 
 class SceneReader
 {
 private:
   SceneReader() {}
-  static glm::vec3 ReadVec3 (AST* vec);
-  static glm::dvec3 ReadDVec3 (AST* vec);
+  static glm::vec3 ReadVec3 (void* vec);
+  static glm::dvec3 ReadDVec3 (void* vec);
   
 public:
   virtual ~SceneReader() {}
