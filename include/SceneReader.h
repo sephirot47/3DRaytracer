@@ -20,9 +20,11 @@ using namespace std;
 
 class Scene;
 
+
 class SceneReader
 {
 private:
+    
   SceneReader() {}
   static glm::vec3 ReadVec3 (void* vec);
   static glm::dvec3 ReadDVec3 (void* vec);

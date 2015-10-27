@@ -70,16 +70,6 @@ SCENE
 		NLA = SCENE;
 	>>
 
-Sphere
-	<<
-		NLA = SPHERE;
-	>>
-
-Cube
-	<<
-		NLA = CUBE;
-	>>
-
 \(
 	<<
 		NLA = LPAREN;
@@ -88,6 +78,21 @@ Cube
 \)
 	<<
 		NLA = RPAREN;
+	>>
+
+\{
+	<<
+		NLA = LBRACE;
+	>>
+
+\}
+	<<
+		NLA = RBRACE;
+	>>
+
+\=
+	<<
+		NLA = EQUAL;
 	>>
 
 ,
@@ -114,6 +119,31 @@ Cube
 	<<
 		NLA = SPACE;
     zzskip();  
+	>>
+
+Cube
+	<<
+		NLA = CUBE;
+	>>
+
+Sphere
+	<<
+		NLA = SPHERE;
+	>>
+
+DLight
+	<<
+		NLA = DLIGHT;
+	>>
+
+PLight
+	<<
+		NLA = PLIGHT;
+	>>
+
+Material
+	<<
+		NLA = MATERIAL;
 	>>
 
 %%

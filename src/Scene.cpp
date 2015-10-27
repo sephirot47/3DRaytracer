@@ -43,7 +43,7 @@ Scene::Scene()
     light2->center = glm::vec3(2, 4, 10);
     //light2->dir = glm::dvec3(-1, 1, 1);
     light2->intensity = 0.5;
-    lights.push_back(light2);
+    //lights.push_back(light2);
     
     /*glm::dvec3 center(0,0,10);
       glm::dvec3 dimensions(1,1,1);

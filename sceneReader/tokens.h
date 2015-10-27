@@ -10,15 +10,21 @@
  */
 #define zzEOF_TOKEN 1
 #define SCENE 2
-#define SPHERE 3
-#define CUBE 4
-#define LPAREN 5
-#define RPAREN 6
-#define COMMA 7
-#define ID 8
-#define FLOAT 9
-#define INT 10
-#define SPACE 11
+#define LPAREN 3
+#define RPAREN 4
+#define LBRACE 5
+#define RBRACE 6
+#define EQUAL 7
+#define COMMA 8
+#define ID 9
+#define FLOAT 10
+#define INT 11
+#define SPACE 12
+#define CUBE 13
+#define SPHERE 14
+#define DLIGHT 15
+#define PLIGHT 16
+#define MATERIAL 17
 
 #ifdef __USE_PROTOS
 void program(AST**_root);
@@ -33,21 +39,15 @@ extern void object();
 #endif
 
 #ifdef __USE_PROTOS
-void primitive(AST**_root);
+void propertyList(AST**_root);
 #else
-extern void primitive();
+extern void propertyList();
 #endif
 
 #ifdef __USE_PROTOS
-void cube(AST**_root);
+void property(AST**_root);
 #else
-extern void cube();
-#endif
-
-#ifdef __USE_PROTOS
-void sphere(AST**_root);
-#else
-extern void sphere();
+extern void property();
 #endif
 
 #ifdef __USE_PROTOS
@@ -65,4 +65,5 @@ extern void vec3();
 #endif
 extern SetWordType zzerr1[];
 extern SetWordType zzerr2[];
+extern SetWordType zzerr3[];
 extern SetWordType setwd1[];

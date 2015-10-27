@@ -46,21 +46,29 @@ AST* createASTnode(Attrib* attr, int ttype,  char *textt);
 #include "dlgdef.h"
 #include "err.h"
 
-ANTLRChar *zztokens[12]={
+ANTLRChar *zztokens[18]={
 	/* 00 */	"Invalid",
 	/* 01 */	"@",
 	/* 02 */	"SCENE",
-	/* 03 */	"SPHERE",
-	/* 04 */	"CUBE",
-	/* 05 */	"LPAREN",
-	/* 06 */	"RPAREN",
-	/* 07 */	"COMMA",
-	/* 08 */	"ID",
-	/* 09 */	"FLOAT",
-	/* 10 */	"INT",
-	/* 11 */	"SPACE"
+	/* 03 */	"LPAREN",
+	/* 04 */	"RPAREN",
+	/* 05 */	"LBRACE",
+	/* 06 */	"RBRACE",
+	/* 07 */	"EQUAL",
+	/* 08 */	"COMMA",
+	/* 09 */	"ID",
+	/* 10 */	"FLOAT",
+	/* 11 */	"INT",
+	/* 12 */	"SPACE",
+	/* 13 */	"CUBE",
+	/* 14 */	"SPHERE",
+	/* 15 */	"DLIGHT",
+	/* 16 */	"PLIGHT",
+	/* 17 */	"MATERIAL"
 };
-SetWordType zzerr1[4] = {0x18,0x0,0x0,0x0};
-SetWordType zzerr2[4] = {0x0,0x6,0x0,0x0};
-SetWordType setwd1[12] = {0x0,0xfe,0x0,0xfd,0xfd,0x80,0x40,
-	0x40,0x0,0x80,0x80,0x0};
+SetWordType zzerr1[4] = {0x40,0x2,0x0,0x0};
+SetWordType zzerr2[4] = {0x8,0xc,0x0,0x0};
+SetWordType zzerr3[4] = {0x0,0xc,0x0,0x0};
+SetWordType setwd1[18] = {0x0,0x7,0x0,0x0,0x20,0x0,0x70,
+	0x0,0x70,0x6,0x8,0x8,0x0,0x0,0x0,
+	0x0,0x0,0x0};

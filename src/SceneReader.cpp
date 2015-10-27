@@ -13,20 +13,45 @@ void SceneReader::ReadScene(Scene& scene, string filename)
   AST* object = root->down;
   while (object != nullptr) 
   {
-    cout << (object->kind) << endl;
-    if (object->kind == "Cube") 
+    if (object->kind == "id")
     {
-      glm::dvec3 center = ReadDVec3(object->down);
-      glm::dvec3 dimensions = ReadDVec3(object->down->right);
-      Cube *c = new Cube(center, dimensions);
-      scene.primitives.push_back(c);
-    }
-    else if (object->kind == "Sphere") 
-    {
-      glm::dvec3 center = ReadDVec3(object->down);
-      double radius = atof(object->down->right->kind.c_str());
-      Sphere *s = new Sphere(center, radius);
-      scene.primitives.push_back(s);
+        if(object->text == "Cube")
+        {
+            Cube *obj = new Cube();
+            AST *property = object->down;
+            while(property  != nullptr)
+            {
+                if(property->text == "center") obj->center = ReadDVec3(property->down);
+                else if(property->text == "dimensions") obj->dimensions = ReadDVec3(property->down);
+                property = property->right;
+            }
+            scene.primitives.push_back(obj);
+        }
+        else if (object->text == "Sphere") 
+        {
+            Sphere *obj = new Sphere();
+            AST *property = object->down;
+            while(property != nullptr)
+            {
+                if(property->text == "center") obj->center = ReadDVec3(property->down);
+                else if(property->text == "radius") obj->radius = atof(property->down->kind.c_str());
+                property = property->right;
+            }
+            scene.primitives.push_back(obj);
+        }
+        else if (object->text == "DLight") 
+        {
+            DirectionalLight *obj = new DirectionalLight();
+            AST *property = object->down;
+            while(property != nullptr)
+            {
+                if(property->text == "dir") obj->dir = glm::normalize(ReadDVec3(property->down));
+                else if(property->text == "intensity") obj->intensity = atof(property->down->kind.c_str());
+                else if(property->text == "color") obj->color = ReadVec3(property->down);
+                property = property->right;
+            }
+            scene.lights.push_back(obj);
+        }
     }
     object = object->right;
   }

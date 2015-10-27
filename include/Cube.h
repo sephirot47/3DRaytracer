@@ -12,10 +12,11 @@ private:
     bool inline Intersects(double fDst1, double fDst2, const glm::dvec3& P1, const glm::dvec3& P2, glm::dvec3 &Hit);
     bool inline InBox(const glm::dvec3& Hit, const glm::dvec3& B1, const glm::dvec3& B2, const int Axis);
     int CheckIntersection(const glm::dvec3& B1, const glm::dvec3& B2, const glm::dvec3& L1, const glm::dvec3& L2, glm::dvec3 &Hit);
-    glm::dvec3 dimensions;
 
 public:
-
+    
+    glm::dvec3 dimensions;
+    
     Cube();
     Cube(const glm::dvec3& center, double size);
     Cube(const glm::dvec3& center, const glm::dvec3 &dimensions);

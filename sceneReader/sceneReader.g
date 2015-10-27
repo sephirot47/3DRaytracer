@@ -135,12 +135,12 @@ int main()
 
 #token SCENE "SCENE"
 
-#token SPHERE "Sphere"
-#token CUBE "Cube"
-
 //General stuff
   #token LPAREN "\("
   #token RPAREN "\)"
+  #token LBRACE "\{"
+  #token RBRACE "\}"
+  #token EQUAL "\="
   #token COMMA ","
   #token ID "[a-zA-Z]([a-zA-Z]|[0-9])*"
   #token FLOAT "([\-]|[])[0-9]+.[0-9]+"
@@ -148,19 +148,32 @@ int main()
   #token SPACE "[\ \n]" << zzskip();>>
 //
 
+/////////////////////////////////
+#token CUBE "Cube"
+#token SPHERE "Sphere"
+#token DLIGHT "DLight"
+#token PLIGHT "PLight"
+#token MATERIAL "Material"
+//////////////////////////////////
+
 
 /////////////
 program: SCENE^ (object)*;
 
-object: primitive;
-  primitive: (cube | sphere);
-    cube: CUBE^ vec3 vec3;
-    sphere: SPHERE^ vec3 number;
-    
+object: ID^ propertyList;
+
+propertyList: LBRACE! (property (COMMA! property)* | ) RBRACE!;
+    property: ID^ EQUAL! (number | vec3);
     
 number: (FLOAT | INT);
 vec3: LPAREN^ number COMMA! number COMMA! number RPAREN!;
 
+/*
+center=(0,0,0),
+dir=(0,0,0),
+dimensions=(0,0,0)
+radius=0
+*/
 
 
 
