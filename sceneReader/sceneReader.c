@@ -19,7 +19,7 @@
 #include <map>
 #include <vector>
 #include <tuple>
-
+#include "../include/Scene.h"
 using namespace std;
 
 // struct to store information about tokens
@@ -28,8 +28,6 @@ typedef struct
   string kind;
   string text;
 } Attrib;
-
-typedef std::tuple<int, int, int> i3tuple;
 
 // function to fill token information (predeclaration)
 void zzcr_attr(Attrib *attr,  int type,  char *text);
@@ -64,10 +62,9 @@ ANTLR_INFO
 
 #include <cstdlib>
 #include <cmath>
+AST* root;
 
 //global structures: AST
-AST *root;
-
 // function to fill token information
 void zzcr_attr(Attrib *attr,  int type,  char *text) 
 {
@@ -113,17 +110,6 @@ AST *findDefinition(string id)
   return n->down->right;
 }
 
-//get nth child of a tree. Count starts at 0.
-//if no such child,  returns NULL
-AST* child(AST *a, int n) 
-{
-  AST *c=a->down;
-  for (int i = 0; c != NULL && i < n; i++ ) c = c->right;
-  return c;
-}
-
-
-
 //print AST,  recursively,  with indentation
 void ASTPrintIndent(AST *a, string s)
 {
@@ -160,12 +146,19 @@ void ASTPrint(AST *a)
   }
 }
 
+#ifndef MEC
+#define MEC
+#include "../src/SceneReader.cpp"
+#endif
+
+/*
 int main() 
 {
   root = NULL;
   ANTLR(program(&root),  stdin);
   ASTPrint(root);
 }
+*/
 
 void
 #ifdef __USE_PROTOS

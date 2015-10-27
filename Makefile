@@ -1,9 +1,9 @@
-OPTIONS=-O2 -I/usr/include/pccts -Wno-write-strings 
+OPTIONS=-O2 -I/usr/include/pccts
 	
 all: main.exe
 
-main.exe: obj/main.o obj/Scene.o obj/Sphere.o obj/Ray.o obj/Primitive.o obj/Cube.o obj/DirectionalLight.o obj/PointLight.o  obj/Light.o obj/Material.o obj/SceneReader.o
-	g++ $(OPTIONS) obj/main.o obj/Scene.o obj/Primitive.o obj/Sphere.o obj/Cube.o obj/Ray.o obj/DirectionalLight.o obj/PointLight.o obj/Light.o obj/Material.o obj/SceneReader.o -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o main.exe
+main.exe: obj/main.o obj/Scene.o obj/Sphere.o obj/Ray.o obj/Primitive.o obj/Cube.o obj/DirectionalLight.o obj/PointLight.o  obj/Light.o obj/Material.o obj/SceneReader.o  sceneReader/scan.o sceneReader/err.o
+	g++ $(OPTIONS) obj/main.o obj/Scene.o obj/Primitive.o obj/Sphere.o obj/Cube.o obj/Ray.o obj/DirectionalLight.o obj/PointLight.o obj/Light.o obj/Material.o obj/SceneReader.o sceneReader/scan.o sceneReader/err.o -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o main.exe
 	./main.exe
 
 obj/main.o: src/main.cpp
@@ -36,17 +36,9 @@ obj/PointLight.o: src/PointLight.cpp
 obj/Material.o: src/Material.cpp
 	g++ $(OPTIONS) -c src/Material.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o obj/Material.o
 
-obj/SceneReader.o: src/SceneReader.cpp obj/parser.o
-	g++ $(OPTIONS) -c src/SceneReader.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  obj/parser.o -o obj/SceneReader.o 
-
-obj/parser.o: dlg sceneReader/scan.c sceneReader/mode.h
-	g++ -std=c++11 -Wno-write-strings -I/usr/include/pccts -o obj/parser.o sceneReader/sceneReader.c sceneReader/scan.c sceneReader/err.c
-	
-antlr: sceneReader/sceneReader.g
-	cd sceneReader; antlr -gt sceneReader.g
-	
-dlg: antlr sceneReader/err.c sceneReader/tokens.h sceneReader/parser.dlg
-	cd sceneReader; dlg -ci parser.dlg scan.c
+obj/SceneReader.o: 
+	cd sceneReader; make
+	g++ $(OPTIONS) -c sceneReader/sceneReader.c -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system -o obj/SceneReader.o 
 
 clean:
 	rm -rf obj/*.o *.exe

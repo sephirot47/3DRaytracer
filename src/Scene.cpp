@@ -1,7 +1,7 @@
 #include "../include/Scene.h"
 #include "../include/PointLight.h"
 
-int Scene::MSAA = 2;
+int Scene::MSAA = 1;
 int Scene::WindowWidth  = 1000 * MSAA;
 int Scene::WindowHeight = 1000 * MSAA;
 

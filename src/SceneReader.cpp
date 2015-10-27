@@ -1,14 +1,13 @@
 #include "../include/SceneReader.h"
-//#include "../sceneReader/sceneReader.c"
 
 void SceneReader::ReadScene(const Scene& scene, string filename)
 {
-  ifstream input;
-  input.open(filename.c_str());
+  FILE *f;
+  f = fopen(filename.c_str(), "r");
   
-  root = NULL;
-  ANTLR(program(&root),  stdin);
+  AST *root = NULL;
+  ANTLR(program(&root),  f);
   ASTPrint(root);
   
-  input.close();
+  fclose(f);
 }

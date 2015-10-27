@@ -18,7 +18,7 @@
 #include <map>
 #include <vector>
 #include <tuple>
-
+#include "../include/Scene.h"
 using namespace std;
 
 // struct to store information about tokens
@@ -27,8 +27,6 @@ typedef struct
   string kind;
   string text;
 } Attrib;
-
-typedef std::tuple<int, int, int> i3tuple;
 
 // function to fill token information (predeclaration)
 void zzcr_attr(Attrib *attr,  int type,  char *text);
