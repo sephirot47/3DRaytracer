@@ -1,6 +1,6 @@
 all: sceneReader.o scan.o err.o
 
-sceneReader.o: dlg scan.c mode.h
+sceneReader.o: dlg scan.c mode.h sceneReader.g
 	g++ -std=c++11 -Wno-write-strings -I/usr/include/pccts -c sceneReader.c -o sceneReader.o
 
 scan.o: dlg scan.c

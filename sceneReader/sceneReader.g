@@ -142,9 +142,9 @@ int main()
   #token LPAREN "\("
   #token RPAREN "\)"
   #token COMMA ","
-  #token ID "[a-zA-Z]"
-  #token FLOAT "[0-9]+.[0-9]+"
-  #token INT "[0-9]+"
+  #token ID "[a-zA-Z]([a-zA-Z]|[0-9])*"
+  #token FLOAT "([\-]|[])[0-9]+.[0-9]+"
+  #token INT "([\-]|[])[0-9]+"
   #token SPACE "[\ \n]" << zzskip();>>
 //
 

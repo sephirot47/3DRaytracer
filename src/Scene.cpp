@@ -1,7 +1,7 @@
 #include "../include/Scene.h"
 #include "../include/PointLight.h"
 
-int Scene::MSAA = 1;
+int Scene::MSAA = 2;
 int Scene::WindowWidth  = 1000 * MSAA;
 int Scene::WindowHeight = 1000 * MSAA;
 
@@ -23,8 +23,6 @@ Scene::Scene()
     frameBuffer.create(WindowWidth, WindowHeight);
     timeCount = 0.0;
 
-    double wallsRoughness = 0.95;
-    
     DirectionalLight *light4 = new DirectionalLight();
     //light4->center = glm::dvec3(0.0,0.0,2.0);
     light4->color = glm::vec3(1, 0., 0.5);
@@ -37,7 +35,7 @@ Scene::Scene()
     light->color = glm::vec3(1, 1, 1);
     light->dir = glm::normalize( glm::dvec3(-0.8, -1, 0.8) );
     light->intensity = 0.4;
-    lights.push_back(light);
+    //lights.push_back(light);
     
     PointLight *light2 = new PointLight();
     light2->color = glm::vec3(1, 1, 1);
@@ -46,7 +44,12 @@ Scene::Scene()
     //light2->dir = glm::dvec3(-1, 1, 1);
     light2->intensity = 0.5;
     lights.push_back(light2);
-
+    
+    /*glm::dvec3 center(0,0,10);
+      glm::dvec3 dimensions(1,1,1);
+      Cube *c = new Cube(center, dimensions);
+      primitives.push_back(c);*/
+      
     depthBuffer = vector<double>(WindowWidth * WindowHeight);
     ClearDepthBuffer();
 }
@@ -155,7 +158,6 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces, bool inVoid)
             refractionRay.origin = intersection.point + epsilon * refractionRay.dir;
             pixelColor = float(alpha) * pixelColor + float(1.0-alpha) * GetPixelColor(refractionRay, bounces+1, !inVoid);
         }
-        
         return pixelColor;
     }
     return ClearColor;
@@ -167,10 +169,6 @@ void Scene::Draw(sf::RenderWindow &window)
     ClearDepthBuffer();
 
     timeCount += 0.01f;
-    //((PointLight*)lights[2])->center = primitives[1]->center;
-    //primitives[0]->center = glm::dvec3(-sin(timeCount*2.0) * 1.5f, cos(timeCount*2.0) * 1.5f, 10.0);
-    //primitives[1]->center = glm::dvec3( 2.5f, cos(timeCount*2.0) * 2.5f, 10.0 + sin(timeCount * 4.0) * 2.5);
-    //primitives[2]->center = glm::dvec3(-sin(timeCount * 1.5f) * 2.5f, cos(timeCount * 2.0) * 2.5f, 10.0 + sin(timeCount * 3.0) * 2.0);
 
     float lastShownPercentage = 0.0f; float percentageStep = 0.005f;
     for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
@@ -193,12 +191,10 @@ void Scene::Draw(sf::RenderWindow &window)
         }
     }
 
-  //for (int i = 0; i < WindowWidth; ++i) frameBuffer.setPixel(i,WindowHeight/2, sf::Color::Green);
-  //for (int i = 0; i < WindowHeight; ++i) frameBuffer.setPixel(WindowWidth/2,i, sf::Color::Green);
-  sf::Texture texture; texture.loadFromImage(frameBuffer);
-  texture.setSmooth(true);
-  sf::Sprite sprite; sprite.setTexture(texture);
-  sprite.setScale(1.0f/MSAA, 1.0f/MSAA);
-  window.draw(sprite);
-  window.display();
+    sf::Texture texture; texture.loadFromImage(frameBuffer);
+    texture.setSmooth(true);
+    sf::Sprite sprite; sprite.setTexture(texture);
+    sprite.setScale(1.0f / MSAA, 1.0f / MSAA);
+    window.draw(sprite);
+    window.display();
 }
