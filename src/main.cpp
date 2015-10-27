@@ -6,14 +6,17 @@
 #include <SFML/Graphics.hpp>
 
 #include "../include/Scene.h"
+#include "../include/SceneReader.h"
 
 using namespace std;
 bool paused = false;
 
 int main()
-{
+{ 
   Scene scene;
   sf::RenderWindow window(sf::VideoMode(Scene::WindowWidth/Scene::MSAA, Scene::WindowHeight/Scene::MSAA), "3D Raycaster");
+  
+  SceneReader::ReadScene(scene, "./sceneReader/scene.txt");
   
   scene.Draw(window);
   while (window.isOpen())

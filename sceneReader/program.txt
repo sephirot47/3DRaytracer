@@ -1,0 +1,35 @@
+MATERIALS
+DefaultMaterial = 
+{
+	ambient = (0.5,0.5,0.5),
+	diffuse = (0.5,0.5,0.5),
+	specular = (0.5,0.5,0.5),	
+	shininess = 30,
+	roughness = 0.5,
+	refraction =  2.0,
+	alpha = 1.0
+}	 
+
+LIGHTS
+pl1 = 
+{
+	PointLight
+}
+
+dl1 =
+{
+	DirectionalLight (0,0,)
+}
+
+PRIMITIVES
+Patricio =
+{
+	Sphere (0,0,0) 5 DefaultMaterial
+	Cube (0,0,0) (1,1,2) DefaultMaterial
+}
+
+
+SCENE
+Patricio (0,0,0)
+Cube (0,5,0)
+
