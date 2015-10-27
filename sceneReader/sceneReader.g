@@ -5,7 +5,8 @@
 #include <map>
 #include <vector>
 #include <tuple>
-#include "../include/Scene.h"
+#include "../include/SceneReader.h"
+
 using namespace std;
 
 // struct to store information about tokens
