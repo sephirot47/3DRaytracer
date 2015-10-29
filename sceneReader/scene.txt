@@ -32,21 +32,21 @@ Sphere
 
 Cube 
 { 
-    center = (-5.0,0,15.0),
+    center = (-5.0,0,10.0),
     dimensions = (1.5,1.5,1.2),
     material = MatRed
 }
 
 Cube 
 { 
-    center = (7.0,5.0,15.0), 
+    center = (7.0,5.0,6.0), 
     dimensions = (0.5,3.0,0.2),
     material = MatBlue
 }
 
 Cube
 { 
-    center = (3.0,-5.0,15.0),
+    center = (3.0,-5.0,35.0),
     dimensions = (0.5,5.0,0.2),
     material = MatBlue 
 }

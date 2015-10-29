@@ -29,6 +29,8 @@ private:
   void ClearFrameBuffer(sf::Color clearColor);
   double GetDepthAt(int pixelX, int pixelY);
   void SetDepthAt(int pixelX, int pixelY, double depth);
+  void DepthOfField(double focusDepth);
+  void GetGaussianKernel(int r, vector < vector<double> >& kernel);
 
 public:
   static int MSAA;
@@ -50,6 +52,7 @@ public:
   glm::vec3 GetPixelColor(Ray& ray, int bounces, bool inVoid);
   bool RayTrace(const Ray& ray, Intersection &intersection) const;
   static sf::Color Vec3ToColor(glm::vec3 color);
+  static glm::vec3 ColorToVec3(sf::Color color);
   static double GetRand() { return double(rand()%10000)/10000; }
 };
 

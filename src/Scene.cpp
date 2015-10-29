@@ -2,8 +2,8 @@
 #include "../include/PointLight.h"
 
 int Scene::MSAA = 2;
-int Scene::WindowWidth  = 1000 * MSAA;
-int Scene::WindowHeight = 1000 * MSAA;
+int Scene::WindowWidth  = 700 * MSAA;
+int Scene::WindowHeight = 500 * MSAA;
 
 glm::vec3 Scene::ClearColor = glm::vec3(0.5, 0.5, 1.0);
 
@@ -109,6 +109,14 @@ bool Scene::RayTrace(const Ray& ray, Intersection &intersection) const
   return intersected;
 }
 
+glm::vec3 Scene::ColorToVec3(sf::Color color)
+{
+  float r = ((float) color.r) / 255.0f;
+  float g = ((float) color.g) / 255.0f;
+  float b = ((float) color.b) / 255.0f;
+  return glm::vec3(r,g,b);
+}
+
 sf::Color Scene::Vec3ToColor(glm::vec3 color)
 {
   unsigned char r = (unsigned char) glm::clamp(color.r * 255.0f, 0.0f, 255.0f);
@@ -187,9 +195,11 @@ void Scene::Draw(sf::RenderWindow &window)
             //Print percentage
             float percentage = float((x+WindowWidth/2) * WindowHeight + y + WindowHeight/2) / (WindowWidth*WindowHeight);
             if(percentage - lastShownPercentage > percentageStep) 
-            { lastShownPercentage = percentage; cout << (percentage*100.0f) << "%" << endl; }
+            { lastShownPercentage = percentage; cout << (percentage*100.0f)/2 << "%" << endl; }
         }
     }
+
+    DepthOfField(10.0);
 
     sf::Texture texture; texture.loadFromImage(frameBuffer);
     texture.setSmooth(true);
@@ -197,4 +207,64 @@ void Scene::Draw(sf::RenderWindow &window)
     sprite.setScale(1.0f / MSAA, 1.0f / MSAA);
     window.draw(sprite);
     window.display();
+}
+
+void Scene::DepthOfField(double focusDepth) 
+{
+
+    float lastShownPercentage = 0.0f; float percentageStep = 0.005f;
+    for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
+    {
+        for(int y = -WindowHeight/2; y < WindowHeight/2; ++y)
+        {
+          double distanceToFocus = abs(GetDepthAt(x,y) - focusDepth);
+          int radius = ceil(distanceToFocus) * 2;
+          if (radius % 2 == 0) ++radius;
+          radius = min(radius, 10);
+          //if (radius != 10) cout << radius << endl;
+          radius = 10;
+          vector< vector<double> > kernel; 
+          GetGaussianKernel(radius, kernel); 
+          glm::vec3 color = glm::vec3(0);
+          for (int i = 0; i < radius; ++i)
+          {
+            for (int j = 0; j < radius; ++j)
+            {
+              int ix = x + i - radius/2  + WindowWidth/2, iy = y + j - radius/2 + WindowHeight/2;
+              ix = min(WindowWidth, max(0, ix));
+              iy = min(WindowHeight, max(0, iy));
+              //cout << "a   " << ix << "," << iy << endl;
+              color += ColorToVec3(frameBuffer.getPixel(ix, iy)) * float(kernel[i][j]);
+              //cout << "b" << endl;
+            }
+          }
+          frameBuffer.setPixel(x + WindowWidth/2, y + WindowHeight/2, Vec3ToColor(color));
+            
+            float percentage = float((x+WindowWidth/2) * WindowHeight + y + WindowHeight/2) / (WindowWidth*WindowHeight);
+            if(percentage - lastShownPercentage > percentageStep) 
+            { lastShownPercentage = percentage; cout << (percentage*100.0f)/2 + 50.0f << "%" << endl; }
+
+      }
+    }   
+}
+
+void Scene::GetGaussianKernel(int r, vector < vector<double> >& kernel) 
+{
+  double sigma = 1;
+  kernel = vector< vector<double> > (r, vector<double>(r));
+  double mean = r/2;
+  double sum = 0.0; // For accumulating the kernel values
+  for (int x = 0; x < r; ++x) 
+      for (int y = 0; y < r; ++y) {
+          kernel[x][y] = exp( -0.5 * (pow((x-mean)/sigma, 2.0) + pow((y-mean)/sigma,2.0)) )
+                           / (2 * M_PI * sigma * sigma);
+
+          // Accumulate the kernel values
+          sum += kernel[x][y];
+      }
+
+  // Normalize the kernel
+  for (int x = 0; x < r; ++x) 
+      for (int y = 0; y < r; ++y)
+          kernel[x][y] /= sum;
 }
