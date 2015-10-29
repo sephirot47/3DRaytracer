@@ -65,6 +65,11 @@ zzerraction()
 		NLA = 1;
 	>>
 
+MATERIALS
+	<<
+		NLA = MATERIALS;
+	>>
+
 SCENE
 	<<
 		NLA = SCENE;
@@ -88,6 +93,11 @@ SCENE
 \}
 	<<
 		NLA = RBRACE;
+	>>
+
+:
+	<<
+		NLA = COLON;
 	>>
 
 \=
@@ -119,31 +129,6 @@ SCENE
 	<<
 		NLA = SPACE;
     zzskip();  
-	>>
-
-Cube
-	<<
-		NLA = CUBE;
-	>>
-
-Sphere
-	<<
-		NLA = SPHERE;
-	>>
-
-DLight
-	<<
-		NLA = DLIGHT;
-	>>
-
-PLight
-	<<
-		NLA = PLIGHT;
-	>>
-
-Material
-	<<
-		NLA = MATERIAL;
 	>>
 
 %%

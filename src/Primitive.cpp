@@ -3,7 +3,7 @@
 Primitive::Primitive()
 {
   center = glm::dvec3(0.0);
-  material = Material();
+  material = new Material();
 }
 
 Primitive::~Primitive() {}

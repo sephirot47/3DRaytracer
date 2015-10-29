@@ -49,7 +49,7 @@ bool Sphere::GetIntersection(const Ray &ray, Intersection &intersectionResult)
     {
         intersectionResult.point = solution1;
         intersectionResult.normal = glm::normalize(intersectionResult.point - center);
-        intersectionResult.material = &material;
+        intersectionResult.material = material;
         return true;
     }
 
@@ -65,6 +65,6 @@ bool Sphere::GetIntersection(const Ray &ray, Intersection &intersectionResult)
     else intersectionResult.point = solution2;
 
     intersectionResult.normal = glm::normalize(intersectionResult.point - center);
-    intersectionResult.material = &material;
+    intersectionResult.material = material;
     return true;
 }

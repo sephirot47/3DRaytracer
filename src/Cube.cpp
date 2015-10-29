@@ -58,6 +58,6 @@ bool Cube::GetIntersection(const Ray &ray, Intersection &intersectionResult)
   else if (abs(p.z - lowestCorner.z) < epsilon) intersectionResult.normal = glm::dvec3(0.0, 0.0, -1.0);
   else intersectionResult.normal = glm::dvec3(0.0,  0.0, 1.0);
 
-  intersectionResult.material = &material;
+  intersectionResult.material = material;
   return true;
 }

@@ -133,6 +133,7 @@ int main()
 
 #lexclass START
 
+#token MATERIALS "MATERIALS"
 #token SCENE "SCENE"
 
 //General stuff
@@ -140,6 +141,7 @@ int main()
   #token RPAREN "\)"
   #token LBRACE "\{"
   #token RBRACE "\}"
+  #token COLON ":"
   #token EQUAL "\="
   #token COMMA ","
   #token ID "[a-zA-Z]([a-zA-Z]|[0-9])*"
@@ -148,33 +150,21 @@ int main()
   #token SPACE "[\ \n]" << zzskip();>>
 //
 
-/////////////////////////////////
-#token CUBE "Cube"
-#token SPHERE "Sphere"
-#token DLIGHT "DLight"
-#token PLIGHT "PLight"
-#token MATERIAL "Material"
-//////////////////////////////////
-
-
 /////////////
-program: SCENE^ (object)*;
+program: (materials | ) scene <<#0=createASTlist(_sibling);>>;
+    materials: MATERIALS^ (material)*;
+    scene: SCENE^ (object)*;
+
+material: ID^  (inheritance |) propertyList;
+inheritance: COLON^ ID;
 
 object: ID^ propertyList;
 
 propertyList: LBRACE! (property (COMMA! property)* | ) RBRACE!;
-    property: ID^ EQUAL! (number | vec3);
+    property: ID^ EQUAL! (number | vec3 | ID);
     
 number: (FLOAT | INT);
 vec3: LPAREN^ number COMMA! number COMMA! number RPAREN!;
-
-/*
-center=(0,0,0),
-dir=(0,0,0),
-dimensions=(0,0,0)
-radius=0
-*/
-
 
 
 

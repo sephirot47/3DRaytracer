@@ -38,8 +38,8 @@ float PointLight::GetSpecular(const Scene& scene, const Intersection& intersecti
   if(dot > epsilon)
   {
       dot = glm::pow(dot, intersection.material->shininess);
-      f = dot * attenuation * this->intensity;
-      f = glm::clamp(f, 0.0, 1.0);
+      f = dot * this->intensity;
+      f = glm::clamp(f, 0.0, 1.0) * attenuation;
   }
   return float(f);
 }

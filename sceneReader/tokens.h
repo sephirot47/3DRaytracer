@@ -9,27 +9,48 @@
  * ANTLR Version 1.33MR33
  */
 #define zzEOF_TOKEN 1
-#define SCENE 2
-#define LPAREN 3
-#define RPAREN 4
-#define LBRACE 5
-#define RBRACE 6
-#define EQUAL 7
-#define COMMA 8
-#define ID 9
-#define FLOAT 10
-#define INT 11
-#define SPACE 12
-#define CUBE 13
-#define SPHERE 14
-#define DLIGHT 15
-#define PLIGHT 16
-#define MATERIAL 17
+#define MATERIALS 2
+#define SCENE 3
+#define LPAREN 4
+#define RPAREN 5
+#define LBRACE 6
+#define RBRACE 7
+#define COLON 8
+#define EQUAL 9
+#define COMMA 10
+#define ID 11
+#define FLOAT 12
+#define INT 13
+#define SPACE 14
 
 #ifdef __USE_PROTOS
 void program(AST**_root);
 #else
 extern void program();
+#endif
+
+#ifdef __USE_PROTOS
+void materials(AST**_root);
+#else
+extern void materials();
+#endif
+
+#ifdef __USE_PROTOS
+void scene(AST**_root);
+#else
+extern void scene();
+#endif
+
+#ifdef __USE_PROTOS
+void material(AST**_root);
+#else
+extern void material();
+#endif
+
+#ifdef __USE_PROTOS
+void inheritance(AST**_root);
+#else
+extern void inheritance();
 #endif
 
 #ifdef __USE_PROTOS
@@ -66,4 +87,7 @@ extern void vec3();
 extern SetWordType zzerr1[];
 extern SetWordType zzerr2[];
 extern SetWordType zzerr3[];
+extern SetWordType zzerr4[];
 extern SetWordType setwd1[];
+extern SetWordType zzerr5[];
+extern SetWordType setwd2[];

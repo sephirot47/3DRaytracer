@@ -9,7 +9,7 @@ class Primitive
 {
 public:
     glm::dvec3 center;
-    Material material;
+    Material *material;
 
     Primitive();
     virtual ~Primitive();

@@ -29,7 +29,8 @@ glm::vec3 Light::LightIt(const Scene& scene, glm::vec3 pixelColor, const Interse
   do
   {
     lightRay.origin = lightInter.point + lightRay.dir * epsilon;
-    scene.RayTrace(lightRay, lightInter);
+    
+    if(!scene.RayTrace(lightRay, lightInter)) break;
     
     d2 = glm::length(lightInter.point - lightRayOrigin);
     arrivedToDest = abs(d2 - d1) <= epsilon || (lightInter.material->alpha >= 1.0);

@@ -1,52 +1,67 @@
+MATERIALS
+MatRed
+{
+    roughness = 0.9,
+    shininess = 20,
+    ambient = (0.3, 0.0, 0.0),
+    diffuse = (0.6, 0.0, 0.0),
+    specular = (1.0, 1.0, 1.0)
+}
+
+MatBlue : MatRed
+{
+    alpha = 0.3
+}
+
+MatGreen
+{
+    roughness = 0.9,
+    shininess = 20,
+    ambient = (0.0, 0.3, 0.0),
+    diffuse = (0.0, 0.6, 0.0),
+    specular = (1.0, 1.0, 1.0)
+}
+
 SCENE
 Sphere 
 { 
-    center=(0,4,15), 
-    radius=3 
+    center = (0,4,15), 
+    radius = 3,
+    material = MatGreen
 }
 
 Cube 
 { 
-    center=(-5.0,0,15.0),
-    dimensions=(1.5,1.5,1.2) 
+    center = (-5.0,0,15.0),
+    dimensions = (1.5,1.5,1.2),
+    material = MatRed
 }
 
 Cube 
 { 
-    center=(7.0,5.0,15.0), 
-    dimensions=(0.5,3.0,0.2) 
+    center = (7.0,5.0,15.0), 
+    dimensions = (0.5,3.0,0.2),
+    material = MatBlue
 }
 
 Cube
 { 
-    center=(3.0,-5.0,15.0),
-    dimensions=(0.5,5.0,0.2) 
+    center = (3.0,-5.0,15.0),
+    dimensions = (0.5,5.0,0.2),
+    material = MatBlue 
 }
 
 Cube 
 {
-    center=(5.0,0.0,15.0),
-    dimensions=(0.5,5.0,0.2) 
+    center = (5.0,0.0,15.0),
+    dimensions = (0.5,5.0,0.2),
+    material =  MatRed
 }
 
-DLight 
+PLight 
 {
-    dir=(0.0, 1.0, 1.0),
-    intensity=0.8,
-    color=(0,1,0)
-}
-
-
-DLight 
-{
-    dir=(0.5, -1.0, 1.0),
-    intensity=0.8,
-    color=(1,1,0)
-}
-
-DLight 
-{
-    dir=(-1.0, -1.0, 1.0),
-    intensity=0.8,
-    color=(1,0,0)
+    center = (-1.0, -2.0, 0.0),
+    intensity = 0.8,
+    range = 15.0,
+    color = (1,1,1)
 }

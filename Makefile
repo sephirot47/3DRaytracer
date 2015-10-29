@@ -36,7 +36,7 @@ obj/PointLight.o: src/PointLight.cpp
 obj/Material.o: src/Material.cpp
 	g++ $(OPTIONS) -c src/Material.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o obj/Material.o
 
-obj/SceneReader.o: src/SceneReader.cpp
+obj/SceneReader.o: src/SceneReader.cpp sceneReader/sceneReader.g
 	cd sceneReader; make
 	g++ $(OPTIONS) -c sceneReader/sceneReader.c -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system -o obj/SceneReader.o 
 
