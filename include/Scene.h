@@ -36,6 +36,7 @@ public:
   static int MSAA;
   static int WindowWidth, WindowHeight;
   static glm::vec3 ClearColor;
+  static double InfiniteDepth;
 
   vector<Primitive*> primitives;
   vector<Light*> lights;

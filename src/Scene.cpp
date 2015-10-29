@@ -15,40 +15,13 @@ double Scene::RFov = Scene::Fov * 3.1415926535f/180.0; //rads
 double Scene::ZNear = 5.0;
 double Scene::ViewportWidth  = Scene::ZNear * tan(Scene::RFov/2);
 double Scene::ViewportHeight = Scene::ViewportWidth / Scene::AspectRatio;
-
+double Scene::InfiniteDepth = 999999999.0;
 Scene::Scene()
 {
     srand(time(0));
     
     frameBuffer.create(WindowWidth, WindowHeight);
     timeCount = 0.0;
-
-    DirectionalLight *light4 = new DirectionalLight();
-    //light4->center = glm::dvec3(0.0,0.0,2.0);
-    light4->color = glm::vec3(1, 0., 0.5);
-    light4->dir = glm::dvec3(0, 1, 0);
-    light4->intensity = 0.8;
-    //lights.push_back(light4);
-    
-    DirectionalLight *light = new DirectionalLight();
-    //light4->center = glm::dvec3(0.0,0.0,2.0);
-    light->color = glm::vec3(1, 1, 1);
-    light->dir = glm::normalize( glm::dvec3(-0.8, -1, 0.8) );
-    light->intensity = 0.4;
-    //lights.push_back(light);
-    
-    PointLight *light2 = new PointLight();
-    light2->color = glm::vec3(1, 1, 1);
-    light2->range = 15.0;
-    light2->center = glm::vec3(2, 4, 10);
-    //light2->dir = glm::dvec3(-1, 1, 1);
-    light2->intensity = 0.5;
-    //lights.push_back(light2);
-    
-    /*glm::dvec3 center(0,0,10);
-      glm::dvec3 dimensions(1,1,1);
-      Cube *c = new Cube(center, dimensions);
-      primitives.push_back(c);*/
       
     depthBuffer = vector<double>(WindowWidth * WindowHeight);
     ClearDepthBuffer();
@@ -71,7 +44,7 @@ void Scene::GetRayFromPixel(int pixelX, int pixelY, Ray &ray)
 
 void Scene::ClearDepthBuffer()
 {
-    for(int i = 0; i < depthBuffer.size(); ++i) depthBuffer[i] = 999999999.0;
+    for(int i = 0; i < depthBuffer.size(); ++i) depthBuffer[i] = Scene::InfiniteDepth;
 }
 
 void Scene::ClearFrameBuffer(sf::Color clearColor) {
@@ -211,38 +184,38 @@ void Scene::Draw(sf::RenderWindow &window)
 
 void Scene::DepthOfField(double focusDepth) 
 {
-
     float lastShownPercentage = 0.0f; float percentageStep = 0.005f;
     for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
     {
         for(int y = -WindowHeight/2; y < WindowHeight/2; ++y)
         {
-          double distanceToFocus = abs(GetDepthAt(x,y) - focusDepth);
-          int radius = ceil(distanceToFocus) * 2;
-          if (radius % 2 == 0) ++radius;
-          radius = min(radius, 10);
-          //if (radius != 10) cout << radius << endl;
-          radius = 10;
-          vector< vector<double> > kernel; 
-          GetGaussianKernel(radius, kernel); 
-          glm::vec3 color = glm::vec3(0);
-          for (int i = 0; i < radius; ++i)
-          {
-            for (int j = 0; j < radius; ++j)
+          float depth = GetDepthAt(x,y);
+          if (depth < Scene::InfiniteDepth*0.99) { 
+            double distanceToFocus = abs(depth - focusDepth);
+
+            int radius = ceil(distanceToFocus) * MSAA;
+            if (radius % 2 == 0) ++radius;
+            radius = min(radius, 60);
+
+            vector< vector<double> > kernel; 
+            GetGaussianKernel(radius, kernel); 
+            glm::vec3 color = glm::vec3(0);
+            for (int i = 0; i < radius; ++i)
             {
-              int ix = x + i - radius/2  + WindowWidth/2, iy = y + j - radius/2 + WindowHeight/2;
-              ix = min(WindowWidth, max(0, ix));
-              iy = min(WindowHeight, max(0, iy));
-              //cout << "a   " << ix << "," << iy << endl;
-              color += ColorToVec3(frameBuffer.getPixel(ix, iy)) * float(kernel[i][j]);
-              //cout << "b" << endl;
+              for (int j = 0; j < radius; ++j)
+              {
+                int ix = x + i - radius/2  + WindowWidth/2, iy = y + j - radius/2 + WindowHeight/2;
+                ix = min(WindowWidth, max(0, ix));
+                iy = min(WindowHeight, max(0, iy));
+                color += ColorToVec3(frameBuffer.getPixel(ix, iy)) * float(kernel[i][j]);
+              }
             }
+            frameBuffer.setPixel(x + WindowWidth/2, y + WindowHeight/2, Vec3ToColor(color));
           }
-          frameBuffer.setPixel(x + WindowWidth/2, y + WindowHeight/2, Vec3ToColor(color));
             
-            float percentage = float((x+WindowWidth/2) * WindowHeight + y + WindowHeight/2) / (WindowWidth*WindowHeight);
-            if(percentage - lastShownPercentage > percentageStep) 
-            { lastShownPercentage = percentage; cout << (percentage*100.0f)/2 + 50.0f << "%" << endl; }
+          float percentage = float((x+WindowWidth/2) * WindowHeight + y + WindowHeight/2) / (WindowWidth*WindowHeight);
+          if(percentage - lastShownPercentage > percentageStep) 
+          { lastShownPercentage = percentage; cout << (percentage*100.0f)/2 + 50.0f << "%" << endl; }
 
       }
     }   
@@ -265,6 +238,7 @@ void Scene::GetGaussianKernel(int r, vector < vector<double> >& kernel)
 
   // Normalize the kernel
   for (int x = 0; x < r; ++x) 
-      for (int y = 0; y < r; ++y)
-          kernel[x][y] /= sum;
+      for (int y = 0; y < r; ++y) 
+          kernel[x][y] = 1.0f/(r*r);
+          //kernel[x][y] /= sum;
 }
