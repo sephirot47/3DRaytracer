@@ -14,7 +14,7 @@ bool paused = false;
 int main()
 { 
   Scene scene;
-  sf::RenderWindow window(sf::VideoMode(Scene::WindowWidth/Scene::MSAA, Scene::WindowHeight/Scene::MSAA), "3D Raycaster");
+  sf::RenderWindow window(sf::VideoMode(Scene::WindowWidth/Scene::MSAA, Scene::WindowHeight/Scene::MSAA), "3D Raycaster", sf::Style::Titlebar | sf::Style::Close);
   
   SceneReader::ReadScene(scene, "./sceneReader/scene.txt");
   
