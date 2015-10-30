@@ -2,10 +2,10 @@ CAMERA
 {
     FOV = 45,
     MSAA = 2,
-    windowWidth = 700,
+    windowWidth = 750,
     windowHeight = 500,
     depthOfField = 15.0,
-    clearColor = (1.0,0.1,0.4) 
+    clearColor = (0.1,0.1,0.4) 
 }
 
 MATERIALS
@@ -43,8 +43,10 @@ ShinyRed : Shiny
     specular = (1.0, 1.0, 1.0)   
 }
 
-Golden : Shiny
+Golden 
 {
+    roughness = 0.9,
+    shininess = 15,
     ambient = (0.2, 0.2, 0.0),
     diffuse = (0.5, 0.5, 0.0),
     specular = (0.9, 0.9, 0.7)   
@@ -53,14 +55,14 @@ Golden : Shiny
 SCENE
 Sphere 
 { 
-    center = (0,4,15), 
+    center = (0,4,30), 
     radius = 3,
     material = Golden
 }
 
 Sphere 
 { 
-    center = (-4.6,4,15), 
+    center = (-2,4,15), 
     radius = 1,
     material = ShinyRed
 }

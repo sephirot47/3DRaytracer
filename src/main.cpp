@@ -27,7 +27,7 @@ int main(int argc, char **args)
                                         sf::Style::Titlebar | sf::Style::Close);
 
 
-    scene.Draw(window);  
+     
       
   while (window.isOpen())
   {
@@ -44,7 +44,7 @@ int main(int argc, char **args)
             }
         }
     }
-
+     scene.Draw(window);
   }
   return 0;
 }
