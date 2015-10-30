@@ -134,6 +134,7 @@ int main()
 #lexclass START
 
 #token MATERIALS "MATERIALS"
+#token CAMERA "CAMERA"
 #token SCENE "SCENE"
 
 //General stuff
@@ -151,7 +152,8 @@ int main()
 //
 
 /////////////
-program: (materials | ) scene <<#0=createASTlist(_sibling);>>;
+program: (camera | ) (materials | ) scene <<#0=createASTlist(_sibling);>>;
+    camera: CAMERA^ propertyList;
     materials: MATERIALS^ (material)*;
     scene: SCENE^ (object)*;
 

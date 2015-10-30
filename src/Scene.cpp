@@ -10,12 +10,14 @@ glm::vec3 Scene::ClearColor = glm::vec3(0.5, 0.5, 1.0);
 double Scene::AspectRatio = double(Scene::WindowWidth) / Scene::WindowHeight;
 
 double Scene::Fov  = 90; //degrees
+double Scene::DepthOfField = 5.0;
 double Scene::RFov = Scene::Fov * 3.1415926535f/180.0; //rads
 
 double Scene::ZNear = 5.0;
 double Scene::ViewportWidth  = Scene::ZNear * tan(Scene::RFov/2);
 double Scene::ViewportHeight = Scene::ViewportWidth / Scene::AspectRatio;
 double Scene::InfiniteDepth = 999999999.0;
+
 Scene::Scene()
 {
     srand(time(0));
@@ -172,7 +174,7 @@ void Scene::Draw(sf::RenderWindow &window)
         }
     }
 
-    DepthOfField(10.0);
+    ApplyDepthOfField();
 
     sf::Texture texture; texture.loadFromImage(frameBuffer);
     texture.setSmooth(true);
@@ -182,7 +184,7 @@ void Scene::Draw(sf::RenderWindow &window)
     window.display();
 }
 
-void Scene::DepthOfField(double focusDepth)
+void Scene::ApplyDepthOfField()
 {
     sf::Image originalFrameBuffer;
     originalFrameBuffer.create(frameBuffer.getSize().x, frameBuffer.getSize().y);
@@ -194,9 +196,9 @@ void Scene::DepthOfField(double focusDepth)
         for(int y = -WindowHeight/2; y < WindowHeight/2; ++y)
         {
           float depth = GetDepthAt(x,y);
-          if (true or depth < Scene::InfiniteDepth*0.99)
+          //if (depth < Scene::InfiniteDepth*0.99)
           {
-            double distanceToFocus = abs(depth - focusDepth);
+            double distanceToFocus = abs(depth - DepthOfField);
 
             int radius = ceil(distanceToFocus) * MSAA;
             if (radius % 2 == 0) ++radius;
@@ -248,4 +250,28 @@ void Scene::GetGaussianKernel(int r, vector < vector<double> >& kernel)
       for (int y = 0; y < r; ++y) 
           //kernel[x][y] = 1.0f/(r*r);
           kernel[x][y] /= sum;
+}
+
+
+void Scene::SetCamera(double _FOV, double _DepthOfField, int _MSAA, int _windowWidth, int _windowHeight)
+{
+    Fov = _FOV;
+    MSAA = _MSAA;
+    DepthOfField = _DepthOfField;
+    WindowWidth  = _windowWidth  * _MSAA;
+    WindowHeight = _windowHeight * _MSAA;
+
+    AspectRatio = double(WindowWidth) / WindowHeight;
+    RFov = Fov * 3.1415926535f/180.0; //rads
+
+    //ZNear = 5.0;
+    //InfiniteDepth = 999999999.0;
+    ViewportWidth  = ZNear * tan(RFov/2);
+    ViewportHeight = ViewportWidth / AspectRatio;
+
+    frameBuffer.create(WindowWidth, WindowHeight);
+    timeCount = 0.0;
+
+    depthBuffer = vector<double>(WindowWidth * WindowHeight);
+    ClearDepthBuffer();
 }

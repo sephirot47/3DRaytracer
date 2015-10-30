@@ -10,23 +10,30 @@
  */
 #define zzEOF_TOKEN 1
 #define MATERIALS 2
-#define SCENE 3
-#define LPAREN 4
-#define RPAREN 5
-#define LBRACE 6
-#define RBRACE 7
-#define COLON 8
-#define EQUAL 9
-#define COMMA 10
-#define ID 11
-#define FLOAT 12
-#define INT 13
-#define SPACE 14
+#define CAMERA 3
+#define SCENE 4
+#define LPAREN 5
+#define RPAREN 6
+#define LBRACE 7
+#define RBRACE 8
+#define COLON 9
+#define EQUAL 10
+#define COMMA 11
+#define ID 12
+#define FLOAT 13
+#define INT 14
+#define SPACE 15
 
 #ifdef __USE_PROTOS
 void program(AST**_root);
 #else
 extern void program();
+#endif
+
+#ifdef __USE_PROTOS
+void camera(AST**_root);
+#else
+extern void camera();
 #endif
 
 #ifdef __USE_PROTOS
@@ -90,4 +97,5 @@ extern SetWordType zzerr3[];
 extern SetWordType zzerr4[];
 extern SetWordType setwd1[];
 extern SetWordType zzerr5[];
+extern SetWordType zzerr6[];
 extern SetWordType setwd2[];

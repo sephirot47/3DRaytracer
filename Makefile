@@ -4,7 +4,6 @@ all: main.exe
 
 main.exe: obj/main.o obj/Scene.o obj/Sphere.o obj/Ray.o obj/Primitive.o obj/Cube.o obj/DirectionalLight.o obj/PointLight.o  obj/Light.o obj/Material.o obj/SceneReader.o  sceneReader/scan.o sceneReader/err.o
 	g++ $(OPTIONS) obj/main.o obj/Scene.o obj/Primitive.o obj/Sphere.o obj/Cube.o obj/Ray.o obj/DirectionalLight.o obj/PointLight.o obj/Light.o obj/Material.o obj/SceneReader.o sceneReader/scan.o sceneReader/err.o -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o main.exe
-	./main.exe
 
 obj/main.o: src/main.cpp
 	g++ $(OPTIONS) -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system -c src/main.cpp -o obj/main.o

@@ -70,6 +70,11 @@ MATERIALS
 		NLA = MATERIALS;
 	>>
 
+CAMERA
+	<<
+		NLA = CAMERA;
+	>>
+
 SCENE
 	<<
 		NLA = SCENE;

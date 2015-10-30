@@ -31,13 +31,18 @@ private:
   static map<string, Material*> materialsMap;
   static glm::vec3 ReadVec3 (void* vec);
   static glm::dvec3 ReadDVec3 (void* vec);
-  
+
+  static void ReadCamera(Scene& scene, void* astCamera);
+  static void ReadMaterial(void* astMaterial);
+
   static void ReadCube(Scene& scene, void* astCube);
   static void ReadSphere(Scene& scene, void* astSphere);
   static void ReadDLight(Scene& scene, void* astDLight);
   static void ReadPLight(Scene& scene, void* astPLight);
-  static void ReadMaterial(void* astMaterial);
-  
+
+  static void UnrecognizedPropertyWarning(string propertyName);
+  static void Warning(string msg);
+
 public:
   virtual ~SceneReader() {}
   static void ReadScene(Scene& scene, string filename);

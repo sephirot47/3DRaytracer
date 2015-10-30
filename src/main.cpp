@@ -11,12 +11,19 @@
 using namespace std;
 bool paused = false;
 
-int main()
+int main(int argc, char **args)
 { 
+  string sceneFileName = "";
+  if(argc >= 2) sceneFileName = args[1];
+
   Scene scene;
-  sf::RenderWindow window(sf::VideoMode(Scene::WindowWidth/Scene::MSAA, Scene::WindowHeight/Scene::MSAA), "3D Raycaster", sf::Style::Titlebar | sf::Style::Close);
-  
-  SceneReader::ReadScene(scene, "./sceneReader/scene1.txt");
+  if(sceneFileName != "") SceneReader::ReadScene(scene, sceneFileName);
+
+  sf::RenderWindow window(sf::VideoMode(Scene::GetWindowWidth()/Scene::GetMSAA(),
+                                        Scene::GetWindowHeight()/Scene::GetMSAA()),
+                                        "3D Raytracer",
+                                        sf::Style::Titlebar | sf::Style::Close);
+
   
   scene.Draw(window);
   while (window.isOpen())

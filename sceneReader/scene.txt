@@ -1,3 +1,12 @@
+CAMERA
+{
+    FOV = 45,
+    MSAA = 2,
+    windowWidth = 500,
+    windowHeight = 500,
+    depthOfField = 5.0
+}
+
 MATERIALS
 MatRed
 {

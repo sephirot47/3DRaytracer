@@ -1,3 +1,12 @@
+CAMERA
+{
+    FOV = 90;
+    MSAA = 2;
+    windowWidth = 500.0;
+    windowHeight = 500.0;
+    depthOfField = 5.0
+}
+
 MATERIALS
 Mirror
 {
