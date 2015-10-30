@@ -181,7 +181,7 @@ void Scene::Render()
             //Print percentage
             float percentage = float((x+WindowWidth/2) * WindowHeight + y + WindowHeight/2) / (WindowWidth*WindowHeight);
             if(percentage - lastShownPercentage > percentageStep) 
-            { lastShownPercentage = percentage; cout << (percentage*100.0f)/2 << "%" << endl; }
+            { lastShownPercentage = percentage; cout << (DepthOfFieldEnabled ? (percentage*100.0f)/2 : (percentage*100.0f)) << "%" << endl; }
         }
     } 
 

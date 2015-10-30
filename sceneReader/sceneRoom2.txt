@@ -27,11 +27,11 @@ MatWallMirror : MatWalls
 Glass
 {
     roughness = 0.2,
-    shininess = 10,
-    ambient = (0.5,0.5,0.5),
-    diffuse = (0.5,0.5,0.5),
-    specular = (0.5,0.5,0.5),
-    alpha = 0.4,
+    shininess = 30,
+    ambient = (0.3,0.3,0.3),
+    diffuse = (0.8,0.8,0.8),
+    specular = (1.0, 1.0, 1.0),
+    alpha = 0.6,
     refraction = 0.05
 }
 
@@ -55,7 +55,7 @@ MatSphere2 : MatSphere
 
 MatSphere3 : MatSphere
 {
-    roughness = 1.0,
+    roughness = 0.95,
     ambient = (0.0, 0.0, 0.3),
     diffuse = (0.0, 0.0, 0.8),
     specular = (1.0, 1.0, 1.0),
@@ -66,10 +66,10 @@ MatSphere3 : MatSphere
 MatMirror
 {
     alpha = 0.95,
-    ambient = (1,1,1),
-    diffuse = (1,1,1),
-    specular = (1,1,1),
-    roughness = 0.01,
+    ambient = (0,0,0),
+    diffuse = (0.7,0.7,0),
+    specular = (1,1,0),
+    roughness = 0.3,
     shininess = 50,
 }
 
@@ -78,6 +78,13 @@ Cube
 {
     center = (0,-5,0),
     dimensions = (1000, 1, 1000),
+    material = MatWalls
+}
+
+Cube
+{
+    center = (0,0,600),
+    dimensions = (1000, 1000, 1),
     material = MatWalls
 }
 
@@ -91,13 +98,21 @@ Sphere
 
 Sphere
 {
-    center = (-5.5, -1.5, 20),
+    center = (-15.5, -1.0, 30),
     radius = 3,
     material = MatSphere2
 }
+
+Sphere
+{
+    center = (0, 10, 20),
+    radius = 3,
+    material = MatMirror
+}
+
 Cube
 {
-    center = (6.5, -1.5, 15),
+    center = (16.5, -1.0, 30),
     dimensions = (3,3,3),
     material = MatSphere3
 }
@@ -119,17 +134,25 @@ DLight
 
 PLight
 {
+    center = (0.0, 100.0, 400.0),
+    intensity = 0.5,
+    range = 200.0,
+    color = (1,1,1)
+}
+
+PLight
+{
     center = (0.0, 9.0, 5.0),
-    intensity = 0.05,
+    intensity = 0.1,
     range = 20.0,
     color = (1,1,1)
 }
 
 PLight
 {
-    center = (-1.0, 8.0, 5.0),
-    intensity = 0.6,
-    range = 5.0,
-    color = (1,0.3,0.3)
+    center = (-1.0, 6.0, 5.0),
+    intensity = 1.0,
+    range = 15.0,
+    color = (1,0,1)
 }
 

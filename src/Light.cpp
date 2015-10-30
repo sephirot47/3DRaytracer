@@ -47,7 +47,7 @@ glm::vec3 Light::LightIt(const Scene& scene, glm::vec3 pixelColor, const Interse
   if( abs(d2 - d1) <= epsilon)
   {
     diffuse = lightInter.material->diffuse * GetDiffuse(scene, lightInter, lightRay);
-    specular = lightInter.material->specular * GetSpecular(scene, lightInter, lightRay);
+    specular = lightInter.material->specular * GetSpecular(scene, lightInter, lightRay) + glm::vec3(float(rand()%1000)/1000 * float(lightInter.material->roughness) * 0.02f);
   }
   
   glm::vec3 finalApportation = (diffuse + specular) * (this->color - colorSubstraction);

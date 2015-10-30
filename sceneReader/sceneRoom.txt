@@ -1,9 +1,9 @@
 CAMERA
 {
-    FOV = 90,
+    FOV = 85,
     MSAA = 2,
-    windowWidth = 700,
-    windowHeight = 700,
+    windowWidth = 900,
+    windowHeight = 800,
     depthOfField = 8.0,
     clearColor = (1,1,1),
     depthOfFieldEnabled = true
@@ -31,7 +31,7 @@ MatSphere
     ambient = (0.3, 0.0, 0.0),
     diffuse = (0.6, 0.0, 0.0),
     specular = (1.0, 1.0, 1.0),
-    alpha = 0.95
+    alpha = 0.96
 }
 
 MatSphere2 : MatSphere

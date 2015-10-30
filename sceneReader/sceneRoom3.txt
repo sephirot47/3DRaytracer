@@ -1,0 +1,97 @@
+CAMERA
+{
+    FOV = 60,
+    MSAA = 2,
+    windowWidth = 700,
+    windowHeight = 700,
+    depthOfField = 10.0,
+    clearColor = (0,0,0),
+    depthOfFieldEnabled = false
+}
+
+MATERIALS
+Mat
+{
+    roughness = 0.95,
+    shininess = 3,
+    ambient = (0.3, 0.3, 0.1),
+    diffuse = (0.6, 0.6, 0.2),
+    specular = (1, 1, 0.3),
+    alpha = 1.0,
+    refraction = 40.0
+}
+
+MatMirror
+{
+    alpha = 1.0,
+    ambient = (1,1,1),
+    diffuse = (1,1,1),
+    specular = (1,1,1),
+    roughness = 0.3,
+    shininess = 50,
+}
+
+
+SCENE
+
+Sphere
+{
+    center = (0, 0, 10),
+    radius = 3,
+    material = Mat
+}
+
+Cube
+{
+    center = (0, -10, 10),
+    dimensions = (6,6,6),
+    material = MatMirror
+}
+
+PLight
+{
+    center = (-20, 0, 0),
+    intensity = 0.8,
+    range = 10.0,
+    color = (1,0.1,1)
+}
+
+PLight
+{
+    center = (0, 20, 0),
+    intensity = 0.3,
+    range = 10.0,
+    color = (1,0,0)
+}
+
+PLight
+{
+    center = (20, 0, 0),
+    intensity = 0.3,
+    range = 10.0,
+    color = (0.1,1,1)
+}
+
+PLight
+{
+    center = (0, -20, 0),
+    intensity = 0.3,
+    range = 10.0,
+    color = (0,0,0.1)
+}
+
+
+PLight
+{
+    center = (0, 10, 0),
+    intensity = 0.6,
+    range = 10.0,
+    color = (1,1,1)
+}
+
+DLight
+{
+    dir = (0, 1, 1),
+    intensity = 0.5,
+    color = (1,1,1)
+}
