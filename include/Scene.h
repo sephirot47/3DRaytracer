@@ -32,6 +32,8 @@ private:
   void SetDepthAt(int pixelX, int pixelY, double depth);
   void ApplyDepthOfField();
   void GetGaussianKernel(int r, vector < vector<double> >& kernel);
+  glm::vec3 GetPixelColor(Ray& ray, int bounces, bool inVoid);
+  glm::vec3 GetIndirectLightning(const Intersection &intersection);
 
 public:
 
@@ -55,7 +57,7 @@ public:
   
   void SetCamera(double FOV, double DepthOfField, int MSAA, int windowWidth, int windowHeight);
 
-  glm::vec3 GetPixelColor(Ray& ray, int bounces, bool inVoid);
+  
   bool RayTrace(const Ray& ray, Intersection &intersection) const;
   static sf::Color Vec3ToColor(glm::vec3 color);
   static glm::vec3 ColorToVec3(sf::Color color);

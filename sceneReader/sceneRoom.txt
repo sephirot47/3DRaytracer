@@ -1,9 +1,9 @@
 CAMERA
 {
-    FOV = 85,
+    FOV = 90,
     MSAA = 2,
-    windowWidth = 900,
-    windowHeight = 800,
+    windowWidth = 1100,
+    windowHeight = 650,
     depthOfField = 8.0,
     clearColor = (1,1,1),
     depthOfFieldEnabled = true
@@ -123,8 +123,8 @@ Sphere
 PLight
 {
     center = (-2.0, 8.0, 5.0),
-    intensity = 0.6,
-    range = 5.0,
+    intensity = 0.4,
+    range = 2.0,
     color = (1,1,0.3)
 }
 

@@ -107,10 +107,10 @@ glm::dvec3 Scene::GetRandomVector()
     return glm::normalize(randVector);
 }
 
-glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces, bool inVoid)
+glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces, bool inVoid, bool indirectLightning = false)
 {
     Intersection intersection;
-    glm::vec3 pixelColor;
+    glm::vec3 percentageixelColor;
     if(RayTrace(ray, intersection))
     {
         bool calcBounceColor = (bounces < 6 && intersection.material->roughness < 1.0);
@@ -124,7 +124,7 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces, bool inVoid)
         bounceRay.dir = glm::normalize( bounceRay.dir + roughnessVector);
         
         glm::vec3 bounceColor = calcBounceColor ? GetPixelColor(bounceRay, bounces + 1, inVoid) : ClearColor;
-        pixelColor = intersection.material->ambient;
+        pixelColor = indirectLightning ? GetIndirectLightning(intersection) : intersection.material->ambient;
         //Apply light
         for(Light *light : lights)
         {
@@ -145,6 +145,21 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces, bool inVoid)
         return pixelColor;
     }
     return ClearColor;
+}
+
+glm::vec3 Scene::GetIndirectLightning(const Intersection &intersection)
+{
+  glm::vec3 color(0);
+  int nRays = 100;
+  for (int i = 0; i < nRays; ++i) 
+  {
+    glm::dvec3 dir = GetRandomVector();
+    Ray r(intersection.point, dir);
+    Intersection indirectInter;
+    color += GetPixelColor(r, 999999, indirectInter, false);
+  }
+  color /= nRays;
+  return color;
 }
 
 void Scene::Draw(sf::RenderWindow &window)
@@ -174,7 +189,7 @@ void Scene::Render()
             if(RayTrace(ray, intersection))
             {
                 SetDepthAt(x, y, intersection.point.z);
-                glm::vec3 pixelColor = GetPixelColor(ray, 0, true);
+                glm::vec3 pixelColor = GetPixelColor(ray, 0, true, true);
                 frameBuffer.setPixel(x + WindowWidth/2, y + WindowHeight/2, Vec3ToColor(pixelColor));
             }
             
