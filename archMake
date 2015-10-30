@@ -1,5 +1,6 @@
 OPTIONS=-O2 -I/usr/include/pccts
-	
+CPPFLAGS=-I/usr/include/pccts -std=c++11
+
 all: main.exe
 
 main.exe: obj/main.o obj/Scene.o obj/Sphere.o obj/Ray.o obj/Primitive.o obj/Cube.o obj/DirectionalLight.o obj/PointLight.o  obj/Light.o obj/Material.o obj/SceneReader.o  sceneReader/scan.o sceneReader/err.o
@@ -36,10 +37,10 @@ obj/Material.o: src/Material.cpp
 	g++ $(OPTIONS) -c src/Material.cpp -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system  -o obj/Material.o
 
 obj/SceneReader.o: src/SceneReader.cpp sceneReader/sceneReader.g
-	cd sceneReader; make
-	g++ $(OPTIONS) -c sceneReader/sceneReader.c -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system -o obj/SceneReader.o 
+#	cd sceneReader; make
+	echo "HOLA"
+	g++ $(OPTIONS) -I./sceneReader/include -c sceneReader/sceneReader.c -std=c++11 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system -o obj/SceneReader.o 
 
 clean:
-	cd sceneReader; make clean
+#	cd sceneReader; make clean
 	rm -rf obj/*.o *.exe
-

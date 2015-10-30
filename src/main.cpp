@@ -17,15 +17,18 @@ int main(int argc, char **args)
   if(argc >= 2) sceneFileName = args[1];
 
   Scene scene;
+
   if(sceneFileName != "") SceneReader::ReadScene(scene, sceneFileName);
+  scene.Render();
 
   sf::RenderWindow window(sf::VideoMode(Scene::GetWindowWidth()/Scene::GetMSAA(),
                                         Scene::GetWindowHeight()/Scene::GetMSAA()),
                                         "3D Raytracer",
                                         sf::Style::Titlebar | sf::Style::Close);
 
-  
-  scene.Draw(window);
+
+    scene.Draw(window);  
+      
   while (window.isOpen())
   {
     sf::Event event;
@@ -41,6 +44,7 @@ int main(int argc, char **args)
             }
         }
     }
+
   }
   return 0;
 }

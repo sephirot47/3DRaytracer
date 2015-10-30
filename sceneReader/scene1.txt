@@ -1,10 +1,11 @@
 CAMERA
 {
-    FOV = 90;
-    MSAA = 2;
-    windowWidth = 500.0;
-    windowHeight = 500.0;
-    depthOfField = 5.0
+    FOV = 45,
+    MSAA = 2,
+    windowWidth = 700,
+    windowHeight = 500,
+    depthOfField = 15.0,
+    clearColor = (1.0,0.1,0.4) 
 }
 
 MATERIALS
@@ -19,7 +20,7 @@ Mirror
 Mate
 {
     roughness = 0.95,
-    shininess = 1,
+    shininess = 1
 }
 
 MateGreen : Mate
@@ -29,40 +30,67 @@ MateGreen : Mate
     specular = (1.0, 1.0, 1.0)
 }
 
+Shiny
+{
+    roughness = 0.85,
+    shininess = 25   
+}
+
+ShinyRed : Shiny
+{
+    ambient = (0.3, 0.0, 0.0),
+    diffuse = (0.6, 0.0, 0.0),
+    specular = (1.0, 1.0, 1.0)   
+}
+
+Golden : Shiny
+{
+    ambient = (0.2, 0.2, 0.0),
+    diffuse = (0.5, 0.5, 0.0),
+    specular = (0.9, 0.9, 0.7)   
+}
+
 SCENE
 Sphere 
 { 
     center = (0,4,15), 
     radius = 3,
-    material = Mirror
+    material = Golden
+}
+
+Sphere 
+{ 
+    center = (-4.6,4,15), 
+    radius = 1,
+    material = ShinyRed
 }
 
 Cube 
 { 
     center = (-5.0,0,10.0),
     dimensions = (1.5,1.5,1.2),
-    material = Mate
+    material = MateGreen
 }
 
 Cube 
 { 
     center = (7.0,5.0,6.0), 
     dimensions = (0.5,3.0,0.2),
-    material = MateGreen
+    material = Mate
 }
 
 Cube
 { 
     center = (3.0,-5.0,35.0),
     dimensions = (0.5,5.0,0.2),
-    material = Mate
+    material = MateGreen 
 }
 
 Cube 
 {
     center = (5.0,0.0,15.0),
     dimensions = (0.5,5.0,0.2),
-    material =  MateGreen
+    material =  Mate
 }
 
 PLight 

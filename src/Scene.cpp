@@ -148,6 +148,16 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces, bool inVoid)
 
 void Scene::Draw(sf::RenderWindow &window)
 {
+  sf::Texture texture; texture.loadFromImage(frameBuffer);
+  texture.setSmooth(true);
+  sf::Sprite sprite; sprite.setTexture(texture);
+  sprite.setScale(1.0f / MSAA, 1.0f / MSAA);
+  window.draw(sprite);
+  window.display();
+}
+
+void Scene::Render()
+{
     ClearFrameBuffer( Vec3ToColor(ClearColor) );
     ClearDepthBuffer();
 
@@ -172,16 +182,9 @@ void Scene::Draw(sf::RenderWindow &window)
             if(percentage - lastShownPercentage > percentageStep) 
             { lastShownPercentage = percentage; cout << (percentage*100.0f)/2 << "%" << endl; }
         }
-    }
+    } 
 
     ApplyDepthOfField();
-
-    sf::Texture texture; texture.loadFromImage(frameBuffer);
-    texture.setSmooth(true);
-    sf::Sprite sprite; sprite.setTexture(texture);
-    sprite.setScale(1.0f / MSAA, 1.0f / MSAA);
-    window.draw(sprite);
-    window.display();
 }
 
 void Scene::ApplyDepthOfField()

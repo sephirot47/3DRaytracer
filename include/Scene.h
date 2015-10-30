@@ -47,6 +47,7 @@ public:
   virtual ~Scene();
 
   void Draw(sf::RenderWindow &window);
+  void Render();
   
   glm::dvec3 GetRandomVector();
   
