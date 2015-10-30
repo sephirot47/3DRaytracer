@@ -182,20 +182,25 @@ void Scene::Draw(sf::RenderWindow &window)
     window.display();
 }
 
-void Scene::DepthOfField(double focusDepth) 
+void Scene::DepthOfField(double focusDepth)
 {
+    sf::Image originalFrameBuffer;
+    originalFrameBuffer.create(frameBuffer.getSize().x, frameBuffer.getSize().y);
+    originalFrameBuffer.copy(frameBuffer, 0, 0);
+
     float lastShownPercentage = 0.0f; float percentageStep = 0.005f;
     for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
     {
         for(int y = -WindowHeight/2; y < WindowHeight/2; ++y)
         {
           float depth = GetDepthAt(x,y);
-          if (depth < Scene::InfiniteDepth*0.99) { 
+          if (true or depth < Scene::InfiniteDepth*0.99)
+          {
             double distanceToFocus = abs(depth - focusDepth);
 
             int radius = ceil(distanceToFocus) * MSAA;
             if (radius % 2 == 0) ++radius;
-            radius = min(radius, 60);
+            radius = min(radius, 15);
 
             vector< vector<double> > kernel; 
             GetGaussianKernel(radius, kernel); 
@@ -207,7 +212,7 @@ void Scene::DepthOfField(double focusDepth)
                 int ix = x + i - radius/2  + WindowWidth/2, iy = y + j - radius/2 + WindowHeight/2;
                 ix = min(WindowWidth, max(0, ix));
                 iy = min(WindowHeight, max(0, iy));
-                color += ColorToVec3(frameBuffer.getPixel(ix, iy)) * float(kernel[i][j]);
+                color += ColorToVec3(originalFrameBuffer.getPixel(ix, iy)) * float(kernel[i][j]);
               }
             }
             frameBuffer.setPixel(x + WindowWidth/2, y + WindowHeight/2, Vec3ToColor(color));
@@ -223,14 +228,16 @@ void Scene::DepthOfField(double focusDepth)
 
 void Scene::GetGaussianKernel(int r, vector < vector<double> >& kernel) 
 {
-  double sigma = 1;
+  double sigma = 25;
   kernel = vector< vector<double> > (r, vector<double>(r));
   double mean = r/2;
   double sum = 0.0; // For accumulating the kernel values
   for (int x = 0; x < r; ++x) 
-      for (int y = 0; y < r; ++y) {
-          kernel[x][y] = exp( -0.5 * (pow((x-mean)/sigma, 2.0) + pow((y-mean)/sigma,2.0)) )
-                           / (2 * M_PI * sigma * sigma);
+      for (int y = 0; y < r; ++y)
+      {
+          //kernel[x][y] = exp( -0.5 * (pow((x-mean)/(sigma), 2.0) + pow((y-mean)/(sigma),2.0)) ) / (2 * M_PI * sigma * sigma);
+          kernel[x][y] = exp( -1.0 * ( (x-mean)*(x-mean) + (y-mean)*(y-mean)) / (2.0*sigma*sigma) )
+                         / (2 * M_PI * sigma * sigma);
 
           // Accumulate the kernel values
           sum += kernel[x][y];
@@ -239,6 +246,6 @@ void Scene::GetGaussianKernel(int r, vector < vector<double> >& kernel)
   // Normalize the kernel
   for (int x = 0; x < r; ++x) 
       for (int y = 0; y < r; ++y) 
-          kernel[x][y] = 1.0f/(r*r);
-          //kernel[x][y] /= sum;
+          //kernel[x][y] = 1.0f/(r*r);
+          kernel[x][y] /= sum;
 }
