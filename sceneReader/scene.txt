@@ -1,10 +1,12 @@
 CAMERA
 {
-    FOV = 45,
+    FOV = 90,
     MSAA = 2,
-    windowWidth = 500,
-    windowHeight = 500,
-    depthOfField = 5.0
+    windowWidth = 700,
+    windowHeight = 700,
+    depthOfField = -1.0,
+    clearColor = (0,0,0),
+    depthOfFieldEnabled = false
 }
 
 MATERIALS

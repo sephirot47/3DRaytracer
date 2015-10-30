@@ -1,6 +1,6 @@
 CAMERA
 {
-    FOV = 45,
+    FOV = 90,
     MSAA = 2,
     windowWidth = 750,
     windowHeight = 500,

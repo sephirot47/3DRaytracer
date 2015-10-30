@@ -11,6 +11,7 @@ double Scene::AspectRatio = double(Scene::WindowWidth) / Scene::WindowHeight;
 
 double Scene::Fov  = 90; //degrees
 double Scene::DepthOfField = 5.0;
+bool   Scene::DepthOfFieldEnabled = true;
 double Scene::RFov = Scene::Fov * 3.1415926535f/180.0; //rads
 
 double Scene::ZNear = 5.0;
@@ -184,7 +185,7 @@ void Scene::Render()
         }
     } 
 
-    ApplyDepthOfField();
+    if(DepthOfFieldEnabled) ApplyDepthOfField();
 }
 
 void Scene::ApplyDepthOfField()
@@ -204,6 +205,7 @@ void Scene::ApplyDepthOfField()
             double distanceToFocus = abs(depth - DepthOfField);
 
             int radius = ceil(distanceToFocus) * MSAA;
+            //radius *= radius;
             if (radius % 2 == 0) ++radius;
             radius = min(radius, 15);
 

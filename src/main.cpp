@@ -25,9 +25,6 @@ int main(int argc, char **args)
                                         Scene::GetWindowHeight()/Scene::GetMSAA()),
                                         "3D Raytracer",
                                         sf::Style::Titlebar | sf::Style::Close);
-
-
-     
       
   while (window.isOpen())
   {

@@ -90,6 +90,12 @@ void SceneReader::ReadCamera(Scene& scene, void* astCamera)
         else if(property->text == "windowHeight")  windowHeight = atoi(property->down->kind.c_str());
         else if(property->text == "depthOfField")  depthOfField = atof(property->down->kind.c_str());
         else if(property->text == "clearColor")  Scene::ClearColor = ReadVec3(property->down);
+        else if(property->text == "depthOfFieldEnabled")
+        {
+            if(property->down->text == "True" || property->down->text == "true") Scene::DepthOfFieldEnabled = true;
+            else if(property->down->text == "False" || property->down->text == "false") Scene::DepthOfFieldEnabled = false;
+            else UnrecognizedPropertyWarning(property->down->text);
+        }
         else UnrecognizedPropertyWarning(property->text);
 
         property = property->right;

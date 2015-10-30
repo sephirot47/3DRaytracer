@@ -35,6 +35,8 @@ private:
 
 public:
 
+  static bool DepthOfFieldEnabled;
+
   static glm::vec3 ClearColor;
   static double InfiniteDepth;
 

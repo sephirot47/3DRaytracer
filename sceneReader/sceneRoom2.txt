@@ -1,0 +1,135 @@
+CAMERA
+{
+    FOV = 90,
+    MSAA = 2,
+    windowWidth = 700,
+    windowHeight = 700,
+    depthOfField = 10.0,
+    clearColor = (0.4,0.7,0.9),
+    depthOfFieldEnabled = false
+}
+
+MATERIALS
+MatWalls
+{
+    roughness = 1.0,
+    shininess = 15,
+    ambient = (0.1, 0.1, 0.1),
+    diffuse = (0.4, 0.4, 0.4),
+    specular = (0.1, 0.1, 0.1)
+}
+
+MatWallMirror : MatWalls
+{
+    roughness = 0.1
+}
+
+Glass
+{
+    roughness = 0.2,
+    shininess = 10,
+    ambient = (0.5,0.5,0.5),
+    diffuse = (0.5,0.5,0.5),
+    specular = (0.5,0.5,0.5),
+    alpha = 0.4,
+    refraction = 0.05
+}
+
+MatSphere
+{
+    roughness = 0.5,
+    shininess = 15,
+    ambient = (0.3, 0.0, 0.0),
+    diffuse = (0.6, 0.0, 0.0),
+    specular = (1.0, 1.0, 1.0),
+    alpha = 0.98
+}
+
+MatSphere2 : MatSphere
+{
+    roughness = 0.9,
+    ambient = (0.0, 0.3, 0.0),
+    diffuse = (0.0, 0.9, 0.0),
+    specular = (1.0, 1.0, 1.0),
+}
+
+MatSphere3 : MatSphere
+{
+    roughness = 1.0,
+    ambient = (0.0, 0.0, 0.3),
+    diffuse = (0.0, 0.0, 0.8),
+    specular = (1.0, 1.0, 1.0),
+    shininess = 20,
+    alpha = 1.0
+}
+
+MatMirror
+{
+    alpha = 0.95,
+    ambient = (1,1,1),
+    diffuse = (1,1,1),
+    specular = (1,1,1),
+    roughness = 0.01,
+    shininess = 50,
+}
+
+SCENE
+Cube
+{
+    center = (0,-5,0),
+    dimensions = (1000, 1, 1000),
+    material = MatWalls
+}
+
+
+Sphere
+{
+    center = (0, -1, 10),
+    radius = 3,
+    material = Glass
+}
+
+Sphere
+{
+    center = (-5.5, -1.5, 20),
+    radius = 3,
+    material = MatSphere2
+}
+Cube
+{
+    center = (6.5, -1.5, 15),
+    dimensions = (3,3,3),
+    material = MatSphere3
+}
+
+PLight
+{
+    center = (-2.0, 8.0, 5.0),
+    intensity = 0.6,
+    range = 5.0,
+    color = (1,1,0.3)
+}
+
+DLight
+{
+    dir = (1,-1,1),
+    intensity = 0.05,
+    color = (1,1,1)
+}
+
+PLight
+{
+    center = (0.0, 9.0, 5.0),
+    intensity = 0.05,
+    range = 20.0,
+    color = (1,1,1)
+}
+
+PLight
+{
+    center = (-1.0, 8.0, 5.0),
+    intensity = 0.6,
+    range = 5.0,
+    color = (1,0.3,0.3)
+}
+
