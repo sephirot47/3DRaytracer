@@ -1,4 +1,4 @@
-OPTIONS=-O2 -I/usr/include/pccts
+OPTIONS==-O2 -I/usr/include/pccts
 	
 all: main.exe
 

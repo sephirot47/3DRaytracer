@@ -31,7 +31,7 @@ Scene::Scene()
 
     sphereVectors = vector<glm::dvec3>();
 
-    int n = 70;
+    int n = 120;
     double alpha = 4.0 * M_PI/n;
     double d = sqrt(alpha);
     int Mv = round(M_PI/d);
@@ -173,7 +173,9 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces, bool inVoid, bool indirect
 
 glm::vec3 Scene::GetIndirectLightning(const Intersection &intersection, glm::vec3 ownColor)
 {
-  glm::vec3 color(0);
+  glm::dvec3 color(0);
+  int n = 0;
+  //return ownColor;
   int nRays = sphereVectors.size();
   for (int i = 0; i < nRays; ++i) 
   {
@@ -181,18 +183,23 @@ glm::vec3 Scene::GetIndirectLightning(const Intersection &intersection, glm::vec
     Ray r(intersection.point, dir);
     Intersection indirectInter;
     if (RayTrace(r, indirectInter)) {
-      if (false andabs(glm::length(intersection.point - indirectInter.point)) < 0.1) 
+      //color += indirectInter.material->ambient;
+      if (abs(glm::length(intersection.point - indirectInter.point)) < 0.1) 
       {
-        color += ownColor;
+        //color += ownColor;
       } 
       else 
       {
+        ++n;
         color += GetPixelColor(r, 999999, false);  
       }
+    } else {
+      ++n;
+      color += ClearColor;
     }
   }
 
-  color /= nRays;
+  color = color / double(n);
   return color;
 }
 
@@ -206,15 +213,13 @@ void Scene::Draw(sf::RenderWindow &window)
   window.display();
 }
 
-void Scene::Render()
+void Scene::RenderColumns(int n, int mod)
 {
     ClearFrameBuffer( Vec3ToColor(ClearColor) );
     ClearDepthBuffer();
 
-    timeCount += 0.01f;
-
     float lastShownPercentage = 0.0f; float percentageStep = 0.00005f;
-    for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
+    for(int x = -WindowWidth/2 + n; x < WindowWidth/2; x += mod)
     {
         for(int y = -WindowHeight/2; y < WindowHeight/2; ++y)
         {
@@ -235,6 +240,16 @@ void Scene::Render()
     } 
 
     if(DepthOfFieldEnabled) ApplyDepthOfField();
+}
+
+void Scene::Render() {
+  //RenderColumns(0,10);
+  int nThreads = 3;
+  thread threads[nThreads];
+  for (int i = 0; i < nThreads; ++i)
+  {
+    threads[i] = thread(&Scene::RenderColumns,i, nThreads);
+  }
 }
 
 void Scene::ApplyDepthOfField()
