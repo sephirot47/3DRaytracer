@@ -33,8 +33,9 @@ private:
   void ApplyDepthOfField();
   void GetGaussianKernel(int r, vector < vector<double> >& kernel);
   glm::vec3 GetPixelColor(Ray& ray, int bounces, bool inVoid, bool indirectLight = false);
-  glm::vec3 GetIndirectLightning(const Intersection &intersection);
-
+  glm::vec3 GetIndirectLightning(const Intersection &intersection, glm::vec3 ownColor);
+  vector<glm::dvec3> sphereVectors;
+  
 public:
 
   static bool DepthOfFieldEnabled;

@@ -28,6 +28,26 @@ Scene::Scene()
       
     depthBuffer = vector<double>(WindowWidth * WindowHeight);
     ClearDepthBuffer();
+
+    sphereVectors = vector<glm::dvec3>();
+
+    int n = 70;
+    double alpha = 4.0 * M_PI/n;
+    double d = sqrt(alpha);
+    int Mv = round(M_PI/d);
+    double dv = M_PI/Mv, dy = alpha/dv;
+    for (int i = 0; i < Mv; ++i) {
+      double v = M_PI*(i + 0.5)/Mv;
+      double My = round(2*M_PI*sin(v)/dy);
+      for (int j = 0; j < My; ++j) {
+        double y = 2*M_PI*j/My;
+        sphereVectors.push_back(glm::dvec3(
+          sin(v)*cos(y),
+          sin(v)*sin(y),
+          cos(v)
+          ));
+      }
+    }
 }
 
 Scene::~Scene()
@@ -124,7 +144,8 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces, bool inVoid, bool indirect
         bounceRay.dir = glm::normalize( bounceRay.dir + roughnessVector);
         
         glm::vec3 bounceColor = calcBounceColor ? GetPixelColor(bounceRay, bounces + 1, inVoid) : ClearColor;
-        glm::vec3 pixelColor = indirectLightning ? GetIndirectLightning(intersection) : glm::vec3(0); //intersection.material->ambient;
+        glm::vec3 pixelColor = glm::vec3(0);
+
         //Apply light
         for(Light *light : lights)
         {
@@ -142,22 +163,35 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces, bool inVoid, bool indirect
             refractionRay.origin = intersection.point + epsilon * refractionRay.dir;
             pixelColor = float(alpha) * pixelColor + float(1.0-alpha) * GetPixelColor(refractionRay, bounces+1, !inVoid);
         }
+
+        if (indirectLightning) pixelColor += GetIndirectLightning(intersection, pixelColor);
+        
         return pixelColor;
     }
     return ClearColor;
 }
 
-glm::vec3 Scene::GetIndirectLightning(const Intersection &intersection)
+glm::vec3 Scene::GetIndirectLightning(const Intersection &intersection, glm::vec3 ownColor)
 {
   glm::vec3 color(0);
-  int nRays = 600;
+  int nRays = sphereVectors.size();
   for (int i = 0; i < nRays; ++i) 
   {
-    glm::dvec3 dir = GetRandomVector();
+    glm::dvec3 dir = sphereVectors[i];
     Ray r(intersection.point, dir);
     Intersection indirectInter;
-    color += GetPixelColor(r, 999999, false);
+    if (RayTrace(r, indirectInter)) {
+      if (false andabs(glm::length(intersection.point - indirectInter.point)) < 0.1) 
+      {
+        color += ownColor;
+      } 
+      else 
+      {
+        color += GetPixelColor(r, 999999, false);  
+      }
+    }
   }
+
   color /= nRays;
   return color;
 }
@@ -179,7 +213,7 @@ void Scene::Render()
 
     timeCount += 0.01f;
 
-    float lastShownPercentage = 0.0f; float percentageStep = 0.005f;
+    float lastShownPercentage = 0.0f; float percentageStep = 0.00005f;
     for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
     {
         for(int y = -WindowHeight/2; y < WindowHeight/2; ++y)
@@ -209,7 +243,7 @@ void Scene::ApplyDepthOfField()
     originalFrameBuffer.create(frameBuffer.getSize().x, frameBuffer.getSize().y);
     originalFrameBuffer.copy(frameBuffer, 0, 0);
 
-    float lastShownPercentage = 0.0f; float percentageStep = 0.005f;
+    float lastShownPercentage = 0.0f; float percentageStep = 0.00005f;
     for(int x = -WindowWidth/2; x < WindowWidth/2; ++x)
     {
         for(int y = -WindowHeight/2; y < WindowHeight/2; ++y)
