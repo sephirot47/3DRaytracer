@@ -31,7 +31,7 @@ Scene::Scene()
 
     sphereVectors = vector<glm::dvec3>();
 
-    int n = 20;
+    int n = 200;
     double alpha = 4.0 * M_PI/n;
     double d = sqrt(alpha);
     int Mv = round(M_PI/d);
@@ -178,7 +178,7 @@ glm::vec3 Scene::GetIndirectLightning(const Intersection &intersection, glm::vec
   
   for (int i = 0; i < nRays; ++i) 
   {
-    glm::dvec3 dir = sphereVectors[i];
+    glm::dvec3 dir = sphereVectors[i] + (GetRandomVector() * 0.05);
     glm::dvec3 origen = intersection.point + intersection.normal * 0.01;
     Ray r(origen, dir);
     Intersection indirectInter;
