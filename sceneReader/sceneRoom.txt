@@ -6,7 +6,7 @@ CAMERA
     windowHeight = 650,
     depthOfField = 8.0,
     clearColor = (1,1,1),
-    depthOfFieldEnabled = true
+    depthOfFieldEnabled = false
 }
 
 MATERIALS

@@ -31,7 +31,7 @@ Scene::Scene()
 
     sphereVectors = vector<glm::dvec3>();
 
-    int n = 120;
+    int n = 20;
     double alpha = 4.0 * M_PI/n;
     double d = sqrt(alpha);
     int Mv = round(M_PI/d);
@@ -86,8 +86,8 @@ void Scene::SetDepthAt(int pixelX, int pixelY, double depth)
 }
 
 bool Scene::RayTrace(const Ray& ray, Intersection &intersection) const
-{
-  double minDist;
+{		
+  double minDist = 99999999999.0;
   Intersection inter;
   bool intersected = false;
   for(Primitive *primitive : primitives)
@@ -174,32 +174,29 @@ glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces, bool inVoid, bool indirect
 glm::vec3 Scene::GetIndirectLightning(const Intersection &intersection, glm::vec3 ownColor)
 {
   glm::dvec3 color(0);
-  int n = 0;
-  //return ownColor;
   int nRays = sphereVectors.size();
+  
   for (int i = 0; i < nRays; ++i) 
   {
     glm::dvec3 dir = sphereVectors[i];
-    Ray r(intersection.point, dir);
+    glm::dvec3 origen = intersection.point + intersection.normal * 0.01;
+    Ray r(origen, dir);
     Intersection indirectInter;
     if (RayTrace(r, indirectInter)) {
-      //color += indirectInter.material->ambient;
-      if (abs(glm::length(intersection.point - indirectInter.point)) < 0.1) 
+      if (abs(glm::length(intersection.point - indirectInter.point)) < 0.05) 
       {
-        //color += ownColor;
+        color += ownColor;
       } 
       else 
       {
-        ++n;
-        color += GetPixelColor(r, 999999, false);  
+        color += GetPixelColor(r, 999999, false) * (1.0f - float (indirectInter.material->roughness));  
       }
     } else {
-      ++n;
       color += ClearColor;
     }
   }
 
-  color = color / double(n);
+  color = color / double (nRays);
   return color;
 }
 
@@ -213,12 +210,13 @@ void Scene::Draw(sf::RenderWindow &window)
   window.display();
 }
 
-void Scene::RenderColumns(int n, int mod)
+void Scene::RenderColumns(int n)
 {
+    int mod = 3;
     ClearFrameBuffer( Vec3ToColor(ClearColor) );
     ClearDepthBuffer();
 
-    float lastShownPercentage = 0.0f; float percentageStep = 0.00005f;
+    float lastShownPercentage = 0.0f; float percentageStep = 0.005f;
     for(int x = -WindowWidth/2 + n; x < WindowWidth/2; x += mod)
     {
         for(int y = -WindowHeight/2; y < WindowHeight/2; ++y)
@@ -235,21 +233,23 @@ void Scene::RenderColumns(int n, int mod)
             //Print percentage
             float percentage = float((x+WindowWidth/2) * WindowHeight + y + WindowHeight/2) / (WindowWidth*WindowHeight);
             if(percentage - lastShownPercentage > percentageStep) 
-            { lastShownPercentage = percentage; cout << (DepthOfFieldEnabled ? (percentage*100.0f)/2 : (percentage*100.0f)) << "%" << endl; }
+            { lastShownPercentage = percentage; cout <<  n << ": " << (DepthOfFieldEnabled ? (percentage*100.0f)/2 : (percentage*100.0f)) << "%" << endl; }
         }
     } 
-
-    if(DepthOfFieldEnabled) ApplyDepthOfField();
 }
 
 void Scene::Render() {
-  //RenderColumns(0,10);
   int nThreads = 3;
   thread threads[nThreads];
   for (int i = 0; i < nThreads; ++i)
   {
-    threads[i] = thread(&Scene::RenderColumns,i, nThreads);
+    threads[i] = thread(&Scene::RenderColumns, this, i);
   }
+  
+  for (int i = 0; i < nThreads; ++i) threads[i].join();
+  
+  
+  if(DepthOfFieldEnabled) ApplyDepthOfField();
 }
 
 void Scene::ApplyDepthOfField()
