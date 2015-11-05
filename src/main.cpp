@@ -26,7 +26,9 @@ int main(int argc, char **args)
                                         Scene::GetWindowHeight()/Scene::GetMSAA()),
                                         "3D Raytracer",
                                         sf::Style::Titlebar | sf::Style::Close);
-      
+  
+  
+  scene.Save("./img.png");
   while (window.isOpen())
   {
     sf::Event event;
@@ -44,5 +46,6 @@ int main(int argc, char **args)
     }
      scene.Draw(window);
   }
+  
   return 0;
 }

@@ -57,6 +57,7 @@ public:
 
   void Draw(sf::RenderWindow &window);
   void Render();
+  void Save(string path);
   
   glm::dvec3 GetRandomVector();
   
@@ -73,6 +74,9 @@ public:
   static int GetMSAA() { return MSAA; }
   static int GetWindowWidth() { return WindowWidth; }
   static int GetWindowHeight() { return WindowHeight; }
+  static glm::dvec3 GetCameraRotation() { return CameraRotation; }
+  static glm::dvec3 GetCameraPosition() { return CameraPosition; }
+    
 };
 
 #endif

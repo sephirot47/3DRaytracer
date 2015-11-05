@@ -81,6 +81,8 @@ void SceneReader::ReadCamera(Scene& scene, void* astCamera)
     int windowWidth = Scene::GetWindowWidth();
     int windowHeight = Scene::GetWindowHeight();
     double depthOfField = Scene::GetDepthOfField();
+    glm::dvec3 cameraPosition = Scene::GetCameraPosition();
+    glm::dvec3 cameraRotation = Scene::GetCameraRotation();
 
     while(property != nullptr)
     {
@@ -90,6 +92,8 @@ void SceneReader::ReadCamera(Scene& scene, void* astCamera)
         else if(property->text == "windowHeight")  windowHeight = atoi(property->down->kind.c_str());
         else if(property->text == "depthOfField")  depthOfField = atof(property->down->kind.c_str());
         else if(property->text == "clearColor")  Scene::ClearColor = ReadVec3(property->down);
+        else if(property->text == "position")  cameraPosition = ReadVec3(property->down);
+        else if(property->text == "rotation")  cameraRotation = ReadVec3(property->down);
         else if(property->text == "depthOfFieldEnabled")
         {
             if(property->down->text == "True" || property->down->text == "true") Scene::DepthOfFieldEnabled = true;
@@ -101,7 +105,7 @@ void SceneReader::ReadCamera(Scene& scene, void* astCamera)
         property = property->right;
     }
 
-    scene.SetCamera(FOV, depthOfField, MSAA, windowWidth, windowHeight);
+    scene.SetCamera(cameraPosition, cameraRotation, FOV, depthOfField, MSAA, windowWidth, windowHeight);
 }
 
 

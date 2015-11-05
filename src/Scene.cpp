@@ -19,8 +19,8 @@ double Scene::ViewportWidth  = Scene::ZNear * tan(Scene::RFov/2);
 double Scene::ViewportHeight = Scene::ViewportWidth / Scene::AspectRatio;
 double Scene::InfiniteDepth = 999999999.0;
 
-glm::dvec3 Scene::CameraPosition = glm::dvec3(1,1,2);
-glm::dvec3 Scene::CameraRotation = glm::dvec3(0,M_PI/6,0);
+glm::dvec3 Scene::CameraPosition = glm::dvec3(0,0,0);
+glm::dvec3 Scene::CameraRotation = glm::dvec3(0,0,0);
 
 Scene::Scene()
 {
@@ -219,6 +219,11 @@ void Scene::Draw(sf::RenderWindow &window)
   window.draw(sprite);
   window.display();
 }
+
+void Scene::Save(string path)
+{
+    frameBuffer.saveToFile(path);
+}    
 
 void Scene::RenderColumns(int n)
 {

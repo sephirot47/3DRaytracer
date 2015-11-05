@@ -1,21 +1,22 @@
 all: sceneReader.o scan.o err.o
 
-sceneReader.o: dlg scan.c mode.h sceneReader.g
+sceneReader.o: dlg scan.cpp mode.h sceneReader.g
 	g++ -std=c++11 -Wno-write-strings -I/usr/include/pccts -c sceneReader.c -o sceneReader.o
 
-scan.o: dlg scan.c
-	g++ -std=c++11 -Wno-write-strings -I/usr/include/pccts -c scan.c -o scan.o
+scan.o: dlg scan.cpp
+	g++ -std=c++11 -Wno-write-strings -I/usr/include/pccts -c scan.cpp -o scan.o
 
-err.o: dlg err.c
-	g++ -std=c++11 -Wno-write-strings -I/usr/include/pccts -c err.c -o err.o
+err.o: dlg err.cpp
+	g++ -std=c++11 -Wno-write-strings -I/usr/include/pccts -c err.cpp -o err.o
 
-dlg: antlr err.c tokens.h parser.dlg
-	dlg -ci parser.dlg scan.c
+dlg: antlr tokens.h parser.dlg
+	dlg -ci parser.dlg scan.cpp
+	mv err.c err.cpp
 	
 antlr: sceneReader.g
 	antlr -gt sceneReader.g
 	
 clean: 
-	rm -rf *.c *.o *.h *.exe *.dlg *~
+	rm -rf *.cpp *.o *.h *.exe *.dlg *~
 	clear
 	clear
