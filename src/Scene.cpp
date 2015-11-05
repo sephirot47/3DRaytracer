@@ -19,6 +19,9 @@ double Scene::ViewportWidth  = Scene::ZNear * tan(Scene::RFov/2);
 double Scene::ViewportHeight = Scene::ViewportWidth / Scene::AspectRatio;
 double Scene::InfiniteDepth = 999999999.0;
 
+glm::dvec3 Scene::CameraPosition = glm::dvec3(1,1,2);
+glm::dvec3 Scene::CameraRotation = glm::dvec3(0,M_PI/6,0);
+
 Scene::Scene()
 {
     srand(time(0));
@@ -62,7 +65,14 @@ void Scene::GetRayFromPixel(int pixelX, int pixelY, Ray &ray)
   double y = -ViewportHeight * ( double(pixelY) / (WindowHeight/2) );
   double z = ZNear;
 
-  ray.dir = glm::dvec3(x,y,z);
+  ray.origin = CameraPosition;
+  glm::vec4 dir(x,y,z,1);
+  glm::mat4 transform(1.0);
+  transform = glm::rotate(transform, float(CameraRotation.x), glm::vec3(1,0,0));
+  transform = glm::rotate(transform, float(CameraRotation.y), glm::vec3(0,1,0));
+  transform = glm::rotate(transform, float(CameraRotation.z), glm::vec3(0,0,1));
+  dir = transform*dir;
+  ray.dir = glm::normalize(glm::dvec3(dir.x,dir.y,dir.z));
 }
 
 void Scene::ClearDepthBuffer()
@@ -322,13 +332,16 @@ void Scene::GetGaussianKernel(int r, vector < vector<double> >& kernel)
 }
 
 
-void Scene::SetCamera(double _FOV, double _DepthOfField, int _MSAA, int _windowWidth, int _windowHeight)
+void Scene::SetCamera(glm::dvec3 _Position, glm::dvec3 _Rotation, double _FOV, double _DepthOfField, int _MSAA, int _WindowWidth, int _WindowHeight)
 {
     Fov = _FOV;
     MSAA = _MSAA;
     DepthOfField = _DepthOfField;
-    WindowWidth  = _windowWidth  * _MSAA;
-    WindowHeight = _windowHeight * _MSAA;
+    WindowWidth  = _WindowWidth  * _MSAA;
+    WindowHeight = _WindowHeight * _MSAA;
+
+    CameraPosition = _Position;
+    CameraRotation = _Rotation;
 
     AspectRatio = double(WindowWidth) / WindowHeight;
     RFov = Fov * 3.1415926535f/180.0; //rads

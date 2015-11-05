@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <iostream>
@@ -22,6 +23,7 @@ private:
   sf::Image frameBuffer;
 
   static double AspectRatio, ZNear, ViewportWidth, ViewportHeight;
+  static glm::dvec3 CameraPosition, CameraRotation;
   static double Fov, RFov, DepthOfField;
   static int MSAA, WindowWidth, WindowHeight;
 
@@ -58,7 +60,7 @@ public:
   
   glm::dvec3 GetRandomVector();
   
-  void SetCamera(double FOV, double DepthOfField, int MSAA, int windowWidth, int windowHeight);
+  void SetCamera(glm::dvec3 CameraPosition, glm::dvec3 CameraRotation, double FOV, double DepthOfField, int MSAA, int WindowWidth, int WindowHeight);
 
   
   bool RayTrace(const Ray& ray, Intersection &intersection) const;
