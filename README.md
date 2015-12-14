@@ -1,2 +1,2 @@
-# 3DRaycaster
-3D Raycaster made using SFML
+# 3DRaytracer
+3D Raytracer from scratch.
