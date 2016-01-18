@@ -1,6 +1,16 @@
 # 3DRaytracer
 3D Raytracer in C++ from scratch.
-Currently supporting indirect lighting, reflection, refraction, transparency, depth of field, own scene format with materials definition and materials inheritance, etc. 
+Currently supporting:
+-Indirect lighting
+-Reflection
+-Refraction
+-Transparency
+-Depth of field
+-Scene file format with materials definition and materials inheritance
 
-It can also load scenes from an own defined format. There are some in the repo. You can specify primitives and materials, and there is even material inheritance. 
+You can render a scene doing: 
+  make
+  ./main.exe  sceneFile
+
+There are sceneFiles in the "exampleScenes" directory.
 Sadly, to make the file parser, we used quite an ancient version of ANTLR, and it's very difficult to find the libs to compile it :(
