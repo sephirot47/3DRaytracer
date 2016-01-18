@@ -6,7 +6,7 @@
 -Refraction  <br />
 -Transparency  <br />
 -Depth of field  <br />
--Anti-Aliasing  <br />
+-Anti-Aliasing (MSAA 2x) <br />
 -Scene file format with materials definition and materials inheritance
 
 ### You can render a scene executing: 
