@@ -12,8 +12,7 @@ using namespace std;
 bool paused = false;
 
 int main(int argc, char **args)
-{ 
-  
+{
   string sceneFileName = "";
   if(argc >= 2) sceneFileName = args[1];
 

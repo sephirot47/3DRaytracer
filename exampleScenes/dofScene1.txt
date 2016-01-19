@@ -1,0 +1,146 @@
+CAMERA
+{
+    FOV = 90,
+    MSAA = 2,
+    windowWidth = 700,
+    windowHeight = 700,
+    depthOfField = 2.0,
+    clearColor = (0.1,0.1,0.3),
+    depthOfFieldEnabled = true
+}
+
+MATERIALS
+MatWalls
+{
+    roughness = 1.0,
+    shininess = 15,
+    ambient = (0.1, 0.1, 0.3),
+    diffuse = (0.3, 0.3, 0.6),
+    specular = (0.6, 0.6, 0.7)
+}
+
+MatWallMirror : MatWalls
+{
+    roughness = 0.1
+}
+
+MatSphere
+{
+    roughness = 0.5,
+    shininess = 15,
+    ambient = (0.3, 0.0, 0.0),
+    diffuse = (0.6, 0.0, 0.0),
+    specular = (1.0, 1.0, 1.0),
+    alpha = 1.0
+}
+
+MatSphere1 : MatSphere
+{
+    roughness = 0.9,
+    ambient = (0.0, 0.0, 0.3),
+    diffuse = (0.0, 0.0, 0.7),
+    specular = (1.0, 1.0, 1.0)
+}
+
+MatSphere2 : MatSphere
+{
+    roughness = 0.9,
+    ambient = (0.2, 0.3, 0.4),
+    diffuse = (0.2, 0.7, 0.4),
+    specular = (1.0, 1.0, 1.0)
+}
+
+MatSphere3 : MatSphere
+{
+    alpha = 1.0,
+    ambient = (0.1, 0.1, 0.3),
+    diffuse = (0.3, 0.3, 0.6),
+    specular = (1.0, 1.0, 1.0),
+    shininess = 50
+}
+
+MatSphere4 : MatSphere
+{
+    alpha = 1.0,
+    ambient = (0.3, 0.1, 0.1),
+    diffuse = (0.6, 0.3, 0.3),
+    specular = (1.0, 1.0, 1.0),
+    shininess = 50,
+    roughness = 1.0
+}
+
+MatFloor : MatWalls
+{
+    roughness = 0.8
+}
+
+MatMirror
+{
+    alpha = 1.0,
+    ambient = (1,1,1),
+    diffuse = (1,1,1),
+    specular = (1,1,1),
+    roughness = 0.01,
+    shininess = 50,
+}
+
+SCENE
+
+Cube
+{
+    center = (0,-5,0),
+    dimensions = (30, 1, 30),
+    material = MatFloor
+}
+
+Cube
+{
+    center = (0,0,10),
+    dimensions = (30, 30, 1),
+    material = MatWalls
+}
+
+Sphere
+{
+    center = (3, -2, 7),
+    radius = 1.0,
+    material = MatSphere2
+}
+
+Sphere
+{
+    center = (0, -2, 5),
+    radius = 1.5,
+    material = MatSphere3
+}
+
+Sphere
+{
+    center = (-1, 0, 2),
+    radius = 1.0,
+    material = MatSphere4
+}
+
+
+PLight
+{
+    center = (-2.0, 5.0, 2.0),
+    intensity = 0.1,
+    range = 30.0,
+    color = (1,1,0.3)
+}
+
+DLight
+{
+    dir = (0,-1,1),
+    intensity = 0.1,
+    color = (1,1,1)
+}
+
+PLight
+{
+    center = (2.0, 5.0, 2.0),
+    intensity = 0.1,
+    range = 30.0,
+    color = (1,0.3,0.3)
+}

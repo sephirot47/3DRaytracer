@@ -137,7 +137,7 @@ glm::dvec3 Scene::GetRandomVector()
     return glm::normalize(randVector);
 }
 
-glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces, bool inVoid, bool indirectLightning /* = false*/)
+glm::vec3 Scene::GetPixelColor(Ray& ray, int bounces, bool inVoid, bool indirectLightning)
 {
     Intersection intersection;
     glm::vec3 percentageixelColor;
@@ -225,14 +225,13 @@ void Scene::Save(string path)
     frameBuffer.saveToFile(path);
 }    
 
-void Scene::RenderColumns(int n)
+void Scene::RenderColumns(int iThread, int nThreads)
 {
-    int mod = 3;
     ClearFrameBuffer( Vec3ToColor(ClearColor) );
     ClearDepthBuffer();
 
     float lastShownPercentage = 0.0f; float percentageStep = 0.005f;
-    for(int x = -WindowWidth/2 + n; x < WindowWidth/2; x += mod)
+    for(int x = -WindowWidth/2 + iThread; x < WindowWidth/2; x += nThreads)
     {
         for(int y = -WindowHeight/2; y < WindowHeight/2; ++y)
         {
@@ -241,24 +240,24 @@ void Scene::RenderColumns(int n)
             if(RayTrace(ray, intersection))
             {
                 SetDepthAt(x, y, intersection.point.z);
-                glm::vec3 pixelColor = GetPixelColor(ray, 0, true, true);
+                glm::vec3 pixelColor = GetPixelColor(ray, 0, true, false);
                 frameBuffer.setPixel(x + WindowWidth/2, y + WindowHeight/2, Vec3ToColor(pixelColor));
             }
             
             //Print percentage
             float percentage = float((x+WindowWidth/2) * WindowHeight + y + WindowHeight/2) / (WindowWidth*WindowHeight);
             if(percentage - lastShownPercentage > percentageStep) 
-            { lastShownPercentage = percentage; cout <<  n << ": " << (DepthOfFieldEnabled ? (percentage*100.0f)/2 : (percentage*100.0f)) << "%" << endl; }
+            { lastShownPercentage = percentage; cout << iThread << ": " << (DepthOfFieldEnabled ? (percentage*100.0f)/2 : (percentage*100.0f)) << "%" << endl; }
         }
     } 
 }
 
 void Scene::Render() {
-  int nThreads = 3;
+  int nThreads = 8;
   thread threads[nThreads];
   for (int i = 0; i < nThreads; ++i)
   {
-    threads[i] = thread(&Scene::RenderColumns, this, i);
+    threads[i] = thread(&Scene::RenderColumns, this, i, nThreads);
   }
   
   for (int i = 0; i < nThreads; ++i) threads[i].join();

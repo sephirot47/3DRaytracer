@@ -38,7 +38,7 @@ private:
   glm::vec3 GetPixelColor(Ray& ray, int bounces, bool inVoid, bool indirectLight = false);
   glm::vec3 GetIndirectLightning(const Intersection &intersection, glm::vec3 ownColor);
   vector<glm::dvec3> sphereVectors;
-  void RenderColumns(int n);
+  void RenderColumns(int iThread, int nThreads);
   
 public:
 

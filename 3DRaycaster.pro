@@ -180,5 +180,17 @@ OTHER_FILES += \
     sceneReader/scene1.txt \
     archMake \
     Makefile \
-    sceneReader/sceneRoom.txt
+    sceneReader/sceneRoom.txt \
+    exampleScenes/sceneTest.txt \
+    exampleScenes/sceneTemplate.txt \
+    exampleScenes/sceneRoom4.txt \
+    exampleScenes/sceneRoom3.txt \
+    exampleScenes/sceneRoom2.txt \
+    exampleScenes/sceneRoom.txt \
+    exampleScenes/scene1.txt \
+    exampleScenes/scene.txt \
+    exampleScenes/program.txt \
+    exampleScenes/reflectionScene.txt \
+    exampleScenes/reflectionScene1.txt \
+    exampleScenes/dofScene1.txt
 
